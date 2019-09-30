@@ -12,5 +12,5 @@ output:
   rmarkdown::html_vignette:
     fig_caption: yes
     css: mystyles.css
-#    include:
-#      after_body: _footer.html
+#include:
+ #      after_body: _footer.html

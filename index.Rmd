@@ -1,6 +1,6 @@
 ---
-title: "Vignette Title"
-author: "Vignette Author"
+title: "HOME"
+author: "Nicola Makaroff"
 date: "`r Sys.Date()`"
 output: html_document
 ---
