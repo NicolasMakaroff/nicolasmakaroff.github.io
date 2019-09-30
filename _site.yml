@@ -6,13 +6,13 @@ navbar:
       href: index.html
     - text: "About"
       href: about.html
-output_dir: "."
-output:
-  html_document:
-    theme: yeti
-    highlight: textmate
-  rmarkdown::html_vignette:
-    fig_caption: yes
-    css: mystyles.css
+#output_dir: "."
+#output:
+ # html_document:
+  #  theme: yeti
+   # highlight: textmate
+#  rmarkdown::html_vignette:
+ #   fig_caption: yes
+  #  css: mystyles.css
 #include:
  #      after_body: _footer.html
