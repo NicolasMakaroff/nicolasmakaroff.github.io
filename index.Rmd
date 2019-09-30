@@ -1,8 +1,5 @@
 ---
 title: "HOME"
-author: "Nicola Makaroff"
-date: "`r Sys.Date()`"
-output: html_document
 ---
 
 # Hello world
