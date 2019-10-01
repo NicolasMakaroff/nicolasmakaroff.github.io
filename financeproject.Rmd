@@ -1,3 +1,398 @@
 ---
 title: "Finance Project"
 ---
+```{r}
+library(reticulate)
+```
+
+
+# Cox-Ross-Rubinstein Model
+
+Let  $t_{0}=0$, $t_{N}=T$ and $t_{i+1}-t{i}=\delta$ with $(t_{i}) _{0 \leqslant i \leqslant N}, \forall i \in \{1,...,N-1\}$ where $\delta=\frac{T}{N}$.
+We define for the rest of the subject the following variables : 
+
+* __The price of the risk-free asset :__ $S_{t_{i}}^{0}=(1+r_{N})^{i}, \forall i \in \{0,...,N\}$
+* __The price of the risk asset :__ 
+  * $S_{0}^{(N)}=s > 0$
+  * $S_{t_{i}}^{(N)}=T_{i}^{(N)}S_{t_{i-1}}^{(N)}, \forall i \in \{1,...,N\}$
+
+
+
+#### Question 1
+
+
+Let $\mathbb{Q}$ be the risk-neutral probability and $\mathcal{F}_{k}=\sigma(S_{t_{i}})$.
+Define $q_{N}=\mathbb{Q}[T_{1}^{(N)}=1+\textit{h}_{N}]$
+On one side we know that $S_{t_1}^{(N)}$ is a martingales under $\mathbb{Q}$ and with the definition $\tilde{S}_{t_1}^{(N)} = \frac{s\times T_{1}^{(N)}}{1+r_N}$ and $\mathbb{E}[\tilde{S}_{t_1}^{(N)}|\mathcal{F}_0]=S_0^{(N)}=s$
+And on the other side $T_1^{(N)}(\Omega)=\{1+b_N,1+h_N\}$ 
+Then $$\forall s>0, s=\frac{1}{1+r_N}(s(1+h_N)q_N + s(1+b_N)(1-q_N))$$
+Finally $$q_N=\frac{r_N - b_N}{h_N - b_N}$$
+
+
+Soit $\mathbb{Q}$ tq $\mathbb{E}[\frac{S_{t_{i+1}}}{S_{t_{i}}}/F_{t_{i}}]=\mathbb{E}[\frac{S^{o}_{t_{i+1}}}{S_{t_{i}}}/F_{t_{i}}]=\mathbb{E}[\frac{T_{i+1}S_{ti}}{S_{ti}}/\mathcal{F}_{i}]$
+
+Let $\frac{1}{(1+r_{n})^{N}}\mathbb{E}[f(S_{t_{N}})]$ donc $S_{tN}=s(1+h_{N})^{X}(1+b_{N})^{N-X}$ donc $S_{t_{0}}=s$ Ainsi $X~\mathcal{B}(N,q_{N})$
+
+
+#### Question 2
+
+
+Let $p_{(N)}=\frac{1}{(1+r_N)^N}\mathbb{E}[f(S_{t_N}^{(N)})]$
+We see that : $\forall k \in \{1,...,N\}, S_{t_N}^{(N)}= (\prod\limits_{i=1}^{N} T_i^{(N)})\times s$
+Moreover: $$ \mathbb{E}_{\mathbb{Q}}[f(S_{t_N}^{(N)}]=\sum\limits_{\alpha\in S_{t_N}^{(N)}(\Omega)}f(\alpha)\mathbb{Q}(S_{t_N}^{(N)}=\alpha)$$
+But the $(T_i^{(N)})_{i\in\{1,...,N\}}$ are i.i.d and are equals to either $( 1+h_N)$ or $(1+b_N)$ with z probability of, resp. , $(q_N)$ et $(1-q_N)$ then with the definition we have:
+$\forall\alpha\in S_{t_N}^{(N)}(\Omega), \exists (i,j)\in\mathbb{N}^2 | i+j = N$ et $\alpha=(1+h_N)^i(1+b_N)^j s$, 
+$$\mathbb{E}_{\mathbb{Q}}[f(S_{t_N}^{(N)})]=\sum\limits_{(i,j)\in\mathbb{N}^2}^{i+j=N} f((1+h_N)^i(1+b_N)^j s)q_N^i (1-q_N)^j$$
+$$= \sum\limits_{i=0}^N \dbinom{N}{i} ((1+h_N)^i(1+b_N)^{N-i}q_N^i(1-q_N)^{N-i}$$
+Finally: $$p_{(N)}=\frac{1}{(1+r_N)^N}\times\sum\limits_{i=0}^N \dbinom{N}{i} ((1+h_N)^i(1+b_N)^{N-i}q_N^i(1-q_N)^{N-i}$$
+
+
+
+### First pricer
+
+#### Question 
+
+
+[language=Python,caption={Implémentation de Price1}]
+```{python}
+from scipy import special
+
+def price1(N,rN,hN,bN,s,f):
+    qN = (rN-bN)/(hN-bN)
+    return 1.0/((1.0+rN)**N) * sum([special.comb(N,i)*f(s*((1+hN)**i)*((1+bN)**(N-i)))*(qN**i)*((1-qN)**(N-i)) for i in range(N)])
+    
+def f(x):
+    return max(x-90,0)
+
+```
+```
+The output for the following value $s=100$, $h_N=0.05$, $b_N=-0.05$, $r_N=0.01$, $N=30$ et $f(x)=max(x-90,0)$
+```
+
+\begin{center}
+\includegraphics[width=10cm]{../price1.png}
+\captionof{figure}{Pricer1}
+\end{center}
+
+
+### Second Pricer
+
+#### Question 
+
+
+[language=Python,caption=Implémentation de Price2]
+```{python}
+def price2(N,rN,hN,bN,s,f):
+    cst=1/(1+rN)
+    qN=(rN-bN)/(hN-bN)
+    M =np.zeros((N+2,N+2),float)
+    for i in range(1,N+1):
+        M[i,N+1]=f(s*(1+hN)**(N-i+1)*(1+bN)**(i-1)) 
+    for j in range(N,0,-1):
+        for k in range(1,j+1):
+            M[k,j]=cst*(M[k,j+1]*qN+M[k+1,j+1]*(1-qN)) 
+    
+    return M[1,1] 
+```
+
+#### Question
+
+\begin{center}
+\includegraphics[width=10cm]{../price2.png}
+\captionof{figure}{Pricer2}
+\end{center}
+
+
+\begin{center}
+\includegraphics[width=10cm]{../arbre.png}
+\captionof{figure}{Tree of the value of price2}
+\end{center}
+
+### Comparison
+
+#### Question
+
+[language=Python,caption=Comparaison de Price1 et Price2]
+```{python}
+import random
+
+def compare(rN,hN,bN,s,f):
+    N=random.randint(5,15)
+    print(N)
+    print(price1(N,rN,hN,bN,s,f))
+    print(price2(N,rN,hN,bN,s,f))
+```
+
+
+\begin{center}
+\includegraphics[width=10cm]{../comparer.png}
+\captionof{figure}{Comparer}
+\end{center}
+
+### The financial cover
+
+On the final date, our portfolio must verify :
+$$\alpha_{N-1}(S_{t_{N-1}}^{(N)})S_{t_N}^{(N)} +\beta_{N-1}(S_{t_{N-1}}^{(N)})S_{t_N}^{0}=f(S_{t_N}^{(N)})$$
+
+In this section, we suppose that at the $T$ date, we are two states:
+
+* $S_{t_N}^{(N)}=(1+h_N)S_{t_{N-1}}^{(N)}$
+* $S_{t_N}^{(N)}=(1+b_N)S_{t_{N-1}}^{(N)}$
+
+
+
+We have the following system : 
+$$\alpha_{N-1}(S_{t_{N-1}}^{(N)})(1 + h_N)S_{t_{N-1}}^{(N)} +\beta_{N-1}(S_{t_{N-1}}^{(N)})S_{t_N}^{0}=f((1+h_N)S_{t_{N-1}}^{(N)})$$
+
+$$\alpha_{N-1}(S_{t_{N-1}}^{(N)})(1+b_N)S_{t_{N-1}}^{(N)} +\beta_{N-1}(S_{t_{N-1}}^{(N)})S_{t_N}^{0}=f((1+b_N)S_{t_{N-1}}^{(N)})$$
+
+
+
+Which gives us : 
+
+
+$$\alpha_{N-1}(S_{t_{N-1}}^{(N)})S_{t_{N-1}}^{(N)}(h_N - b_N)=f((1 + h_N)S_{t_{N-1}}^{(N)}) - f((1 + b_N)S_{t_{N-1}}^{(N)})$$
+$$\beta_{N-1}(S_{t_{N-1}}^{(N)})S_{t_N}^{0}(b_N - h_N)=f((1+b_N)S_{t_{N-1}}^{(N)})(1+h_N) - f((1+h_N)S_{t_{N-1}}^{(N)})(1+b_N)$$
+
+
+Finally, we get :
+
+
+$$\alpha_{N-1}(S_{t_{N-1}}^{(N)}) = \frac{f((1 + h_N)S_{t_{N-1}}^{(N)}) - f((1 + b_N)S_{t_{N-1}}^{(N)})}{S_{t_{N-1}}^{(N)}(h_N - b_N)}$$
+$$\beta_{N-1}(S_{t_{N-1}}^{(N)}) = \frac{f((1+b_N)S_{t_{N-1}}^{(N)})(1+h_N) - f((1+h_N)S_{t_{N-1}}^{(N)})(1+b_N)}{(1+r_N)^N(b_N - h_N)}$$
+
+
+
+#### Question
+$$\alpha_{k-1}(S_{t_{k-1}}^{(N)})(1 + h_N)S_{t_{k-1}}^{(N)} +\beta_{k-1}(S_{t_{k-1}}^{(N)})S_{t_k}^{0}=v_k((1+h_N)S_{t_{k-1}}^{(N)})$$
+
+$$\alpha_{k-1}(S_{t_{k-1}}^{(N)})(1+b_N)S_{t_{k-1}}^{(N)} +\beta_{k-1}(S_{t_{k-1}}^{(N)})S_{t_k}^{0}=f((1+b_N)S_{t_{k-1}}^{(N)})$$
+
+By the same method we obtain : 
+ 
+$$\alpha_{k-1}(S_{t_{N-1}}^{(N)}) = \frac{v_k((1 + h_N)S_{t_{k-1}}^{(N)}) - v((1 + b_N)S_{t_{k-1}}^{(N)})}{S_{t_{k-1}}^{(N)}(h_N - b_N)}$$
+
+And, 
+ 
+$$\beta_{k-1}(S_{t_{k-1}}^{(N)}) = \frac{v((1+b_N)S_{t_{k-1}}^{(N)})(1+h_N) - v((1+h_N)S_{t_{k-1}}^{(N)})(1+b_N)}{(1+r_N)^N(b_N - h_N)}$$
+
+
+#### Question
+
+[language=Python,caption=Comparison of Price1 and Price2]
+```{python}
+def couverture(N,s,rN,hN,bN,f):
+    Sh = price2(N,rN,hN,bN,(1+hN)*s,f);
+    Sb = price2(N,rN,hN,bN,(1+bN)*s,f);
+    alpha =  (Sh-Sb)/(s*(hN-bN));
+    beta = (Sh(1+bN)-Sb(1+hN))/((1+rN)**N *(bN-hN));
+    print(alpha)
+    print(beta)
+```
+
+\begin{center}
+\includegraphics[width=10cm]{../couverture.png}
+\captionof{figure}{Output of couverture}
+\end{center}
+
+# Black-Scholes' Model
+### The modal
+
+Îto's formula is given by :
+```
+Let g be a function in $C^2$. Then the differential of the processus $g(S_t)$ satisfies:
+$$dg(S_t)=g^{'}(S_t)dS_t + \frac{|\sigma S_t|^2}{2}g^{''}(S_t)dt$$
+```
+
+#### Question
+We apply the previous lemma with  $S_t \longrightarrow ln(S_t)$. Then, we have :
+$$dln(S_t) = \frac{1}{S_t}dS_t + \frac{|\sigma S_t|^2}{2}(-\frac{1}{S_t^2})dt$$
+But: $ dS_t = S_t(rdt+\sigma dB_t)$
+Then : $$ dln(S_t) = rdt + \sigma dB_t - \frac{\sigma^2}{2}dt$$
+Then : $$ \frac{dln(S_t)}{dt} = r + \sigma\frac{B_t}{dt} - \frac{\sigma^2}{2}$$
+An indefinite integration on $t$ and an evaluation in $0$ gives us :
+$$ln(S_t) = rt +\sigma B_t - \frac{\sigma^2}{2}t + c^{te} \text{ with } c^{te}= ln(s)$$
+by applying the exponential function (continous), we finally get :
+$$ S_t = \exp(rt + \sigma B_t - \frac{\sigma^2}{2}t )  \times s$$
+
+
+### A pricer with Monte-Carlo Method
+
+The price formula of an asset is given by : $p:=\mathbb{E}[e^{-rT}f(S_t)]$
+
+Let $(\xi_i)_{1\leqslant i \leqslant n}$ be a sequence of random variables on some probability space $(\Omega,\mathcal{F},\mathbb{P})$. They are supposed $i.i.d$ and they follow a $normal$ $distribution$ with parameter $m=0$, $\sigma=1$. We define :
+$$\hat{p}_{(N)}:=\frac{1}{n}\sum_{i=1}^{n}e^{-rT}f(s\times\exp((r-\frac{\sigma^2}{2})T+\sigma\sqrt{T}\xi_i))$$
+
+#### Question 
+[language=Python,caption=Price3]
+```{python}
+def price3(n, s, r, o, T, f):
+    return 1.0 / n * exp(-r * T) * sum([f(s * exp((r - o*o/2.0)*T + o * sqrt(T) * ksi)) for ksi in rnorm(0.0, 1.0, n)])
+```
+
+#### Question
+
+{Plot of Price3}
+
+Let start with two results quite useful for what's to come.
+Let $X_1,X_2,...$ be a sequence of random variables on some probability space $(\Omega,\mathcal{F},\mathbb{P})$. They are supposed $identically$ $distributed$. Define $S_n=X_1+ ... +X_n$. The $Strong$ $Law$ $of$ $Large$ $Numbers$ specifies :
+```
+If the $X_n$ are independent and identically distributed and have finite mean then 
+$$ \mathbb{P}[\lim_{n}n^{-1}S_n=\mathbb{E}[X_1]]=1$$
+```
+
+
+If the $X_n$ are independent and let $f$ be a measurable function then the $f(X_n)$ are independent.
+
+
+#### Question
+
+Let $X_1,X_2,...$ be a sequence of random variables define by $(e^{-rT}f(s\times\exp((r+\frac{\sigma^2}{2})T + \sigma\sqrt{T}\xi_i)))_{i\in\{1,...,n\}}$. 
+We have with the hypotheses that $(\xi_i)_{i\in\{1,...,\}}$ are $i.i.d$. 
+Therefore the $X_n$ are i.i.d. \
+Moreover we should check if $\mathbb{E}[X_1]$ exits but if we do obtain p in the end then everything will be demonstrated.
+We can apply the $Strong$ $Law$ $of$ $Large$ $Number$ which gives us :
+$$\mathbb{P}[\lim_{n}\frac{1}{n}\sum_{i=0}^{n}X_i = \mathbb{E}[X_1]]=1 \text{ i.e } \frac{1}{n}\sum_{i=0}^{n}X_i \underset{p.s}{\longrightarrow} \mathbb{E}[X_1]$$
+We shall now show that $\mathbb{E}[X_1]=p$.
+Let start from $\mathbb{E}[X_1]$ 
+We know that $B$ is a brownien movement so  $B_t - B_s \sim \mathcal{N}(0,t-s)$. 
+Then with $s=0$ comes  $B_T - B_s \sim \mathcal{N}(0,T-s)$. 
+But $B_0=0$ and we divide by $\sqrt{T}$ to obtain $\frac{B_T}{\sqrt{T}}\sim\mathcal{N}(0,1)$. 
+Therefore we define $\xi_1=\frac{B_T}{\sqrt{T}}$. 
+And finally we do have by applying question 11. result  (and $\mathbb{E}[X_1]$ does exist)
+$$\mathbb{E}[X_1]= \mathbb{E}[e^{-rT}f(s\times\exp((r-\frac{\sigma^2}{2})T + \sigma B_T] = \mathbb{E}[e^{-rT}f(S_T)]=p$$
+To conclude : 
+$$\hat{p}_{(N)} \underset{p.s}{\longrightarrow} p$$
+
+
+### Pricer by a close formula
+#### Question
+
+[language=Python,caption=Put function]
+```{python}
+def put(s,r,sigma,T,K):
+    d = 1/(sigma*sqrt(T))*(log(s/K)+(r+sigma**2/2)*T);
+    va = norm()
+    F1 = va.cdf(-d+sigma*sqrt(T))
+    F2 = va.cdf(-d)
+    return -s*F2+K*exp(-r*T)*F1
+```
+
+#### Question
+
+
+\begin{center}
+\includegraphics[width=10cm]{../put.png}
+\captionof{figure}{Output of put}
+\end{center}
+
+#### Question
+
+\begin{center}
+\includegraphics[width=10cm]{../price3xput.png}
+\caption{figure}{Comparison between Price3 and Put}
+\end{center}
+
+#### Question
+
+\begin{center}
+\includegraphics[width=10cm]{../3D.png}
+\captionof{figure}{3D Output of put}
+\end{center}
+\section{Price convergence}
+#### Question
+
+\begin{center}
+\includegraphics[width=10cm]{../price22.png}
+\captionof{figure}{Convergence of Price2}
+\end{center}
+
+We see that $Price2$ seems to converge to the value of $put$.
+
+# Black-Scholes' PDE
+
+All along this section, we will consider the Black-Scholes' equation given by : 
+$$ \frac{\partial P}{\partial t} + rS \frac{\partial P}{\partial S} + \frac{1}{2}\sigma^2S^2\frac{\partial^2 P}{\partial S^2} = rP $$
+
+A few notation : 
+\begin{itemize}
+\item $\forall n \in {0,...,N}, t_n = n\Delta T$ where $\Delta T = \frac{T}{N}$
+\item $\forall i \in {0,...,M+1}, s_i = i\Delta s$ where $\Delta s = \frac{L}{M+1}$
+\item To simplify the notation, we will write $P(t_n,S_i)$ as $P_i^n$
+\end{itemize}
+
+
+### Finite difference explicite method
+
+
+
+$$\frac{\partial P_i^n}{\partial T} \approx \frac{P_i^{n+1}-P_i^n}{\Delta T}$$
+$$\frac{\partial P_i^n}{\partial s} \approx \frac{P_{i}^{n}-P_{i-1}^n}{\Delta s}$$
+$$\frac{\partial^2 P_i^n}{\partial s^2} \approx \frac{P_{i+1}^{n}-2P_i^n+P_{i-1}^n}{\Delta s^2}$$
+
+Therefore, we have : 
+$$ P_i^{n+1} = rP_i^{n+1}\Delta T + P_i^n - rS\frac{\Delta T}{2\Delta s}(P_{i}^n - P_{i-1}^n) - \frac{1}{2}\sigma^2S^2\frac{\Delta T}{\Delta s^2}(P_{i+1}^n-2P_i^n+P_{i-1}^n)$$
+$$ (1-r\Delta T)P_i^{n+1} = (\frac{rS\Delta T}{\Delta s}-\frac{\sigma^2S^2\Delta T}{2\Delta s^2})P_{i-1}^n 
+(-rS\Delta T +1+ \frac{\sigma^2S^2\Delta T}{\Delta s^2})P_i^n +( - \frac{\sigma^2S^2\Delta T}{2\Delta s^2})P_{i+1}^n$$
+
+
+
+
+### Finite difference implicite method
+
+$$\frac{\partial P_i^{n}}{\partial T} \approx \frac{P_i^{n+1}-P_i^n}{\Delta T}$$
+$$\frac{\partial P_i^{n}}{\partial s} \approx \frac{P_{i}^{n+1}-P_{i-1}^{n+1}}{\Delta s}$$
+$$\frac{\partial^2 P_i^{n}}{\partial s^2} \approx \frac{P_{i+1}^{n+1}-2P_i^{n+1}+P_{i-1}^{n+1}}{\Delta s^2}$$
+
+Therefore, we have:
+
+$$P_i^n=(\frac{-rS\Delta T }{\Delta s}+\frac{\sigma^2S^2\Delta T}{2\Delta s^2})P_{i-1}^{n+1} + (-r\Delta T + 1 - \frac{\sigma^2S^2\Delta T}{\Delta s^2}-\frac{rS\Delta T}{\Delta S})P_i^{n+1} +(\frac{\sigma^2S^2\Delta T}{2\Delta s^2})P_{i+1}^{n+1}$$
+
+
+
+
+### Crank-Nicholson method
+
+The Crank-Nicholson method result of taking the mean of the two previous interpretation (implicite and explicite). It gives us :
+$$(I_d + \Delta T B)P^{n+1}=(I_d +\Delta T A)P^n +\frac{1}{2}(Cond_1 + Cond_2)$$
+
+Let assume that $(I_d + \Delta T B)$ is inversible then we should come with the following equation :
+$$P^{n+1}=(I_d + \Delta T B)^{-1}[(I_d +\Delta T A)P^n +\frac{1}{2}(Cond_1 + Cond_2)]$$
+
+
+### Linear algebra Redefinition
+
+We now rewrite this equation using linear algebra:
+
+$$BP^{n+1} = AP^n + Cond_i,$$ 
+
+$$ \text{ where } A = \left(\begin{array}{cccccc}A_{0,0} & A_{0,1} & 0 & .. & .. & 0 \\A_{1,0} & .. & .. & .. &  & : \\0 & .. & .. & .. & .. & 0 \\: & .. & .. & .. & .. & 0 \\: &  & .. & .. & .. & A_{M,M+1} \\0 & .. & .. & 0 & A_{M+1,M} & A_{M+1,M+1}\end{array}\right)$$ $$\text{ and } B = \left(\begin{array}{cccccc}B_{0,0} & B_{0,1} & 0 & .. & .. & 0 \\B_{1,0} & .. & .. & .. &  & : \\0 & .. & .. & .. & .. & : \\: & .. & .. & .. & .. & 0 \\: &  & .. & .. & .. & A_{M,M+1} \\0 & .. & .. & 0 & B_{M+1,M} & B_{M+1,M+1}\end{array}\right) $$ $$\text{ and } Cond_i=\left(\begin{array}{c}P(t_i,s_0) \\0 \\: \\: \\0 \\P(t_i,s_{M+1})\end{array}\right)$$
+
+_For the explicite version, we get:_
+$\forall j\in \{1,...,M\},$
+$$A_{j,j+1}=\frac{\sigma^2s_j^2}{2\Delta s^2} \text{, } A_{j,j}=\frac{1}{\Delta T} + \frac{rs_j}{\Delta s} + \frac{\sigma^2s_j^2}{\Delta s^2} \text{ and } A_{j,j+1}=-\frac{rs_j}{\Delta s} - \frac{\sigma^2s_j^2}{2\Delta s^2}$$
+and $$ B_{j,j-1}=0 \text{, } B_{j,j}=-r +\frac{1}{\Delta T} \text{ and } B_{j,j+1}=0$$ 
+
+
+_For the implicite version, it is:_
+$\forall j\in \{1,...,M\},$
+$$A_{j,j-1}=0 \text{, } A_{j,j}=\frac{1}{\Delta T} \text{ and } A_{j,j+1}=0$$
+and $$ B_{j,j-1}=\frac{\sigma^2 s_j^2}{2\Delta s^2} \text{, } B_{j,j}=-r + \frac{1}{\Delta T} - \frac{rs_j}{\Delta s} - \frac{\sigma^2s_j^2}{\Delta s^2} \text{ and } B_{j,j+1}=\frac{rs_j}{\Delta s} + \frac{\sigma^2s_j^2}{\Delta s^2}$$ 
+
+_And finally, for Crank-Nicholson:_
+$\forall j\in \{1,...,M\},$
+$$A_{j,j-1}=-\frac{\sigma^2s_j^2}{4\Delta s^2} \text{, } A_{j,j}=\frac{1}{\Delta T} + \frac{rs_j}{2\Delta s} +\frac{\sigma^2s_j^2}{2\Delta s^2} \text{ and } A_{j,j+1}= -\frac{rs_j}{2\Delta s} - \frac{\sigma^2s_j^2}{4\Delta s^2}$$
+and $$B_{j,j-1}= \frac{\sigma^2s_j^2}{4\Delta s^2} \text{, } B_{j,j} = -r + \frac{1}{\Delta T} - \frac{rs_j}{2\Delta s} -\frac{\sigma^2 s_j^2}{2\Delta s^2} \text{ and } B_{j,j+1}=\frac{rs_j}{2\Delta s} + \frac{\sigma^2s_j^2}{4\Delta s^2}$$
+
+For all three preceding situation, we initialize :
+$$A_{0,0}=A_{0,1}=A_{M+1,M}=A_{M+1,M+1}=B_{0,0}=B_{0,1}=B_{M+1,M}=B_{M+1,M+1}=0$$
+
+\begin{center}
+\includegraphics[width=10cm]{../Q20.png}
+
+\end{center}
+
+### CFL condition
+Pour la méthode explicit, le schéma est stable si le pas de temps est de l’ordre du carré du pas d’espace. 
+\newline Autrement dit, si :
+$$\Delta t\approx \Delta s^2$$
