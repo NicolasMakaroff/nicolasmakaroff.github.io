@@ -8,13 +8,14 @@ In the __School Project__, we can find some math project and the description of 
 
 #### Mathematics Project
 
-1. [Finance Project]()
+1. [Finance Project](https://nicolasmakaroff.github.io/financeproject.html)
 2. Statistics TP & Project
-  1. [TP1]()
-  2. [TP2]()
-  3. [TP3]()
-  4. [TP4]()
-  5. [Statistics Project]()
+
+    1. [TP1]()
+    2. [TP2]()
+    3. [TP3]()
+    4. [TP4]()
+    5. [Statistics Project]()
 
 #### Computer Science Project
 
