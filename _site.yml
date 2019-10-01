@@ -22,10 +22,11 @@ navbar:
       href: schoolproject.html
       menu:
       - text: "First year"
-        href: firstyear.html
         menu:
+        - text: "Maths Project"
         - text: "Finance Project"
-          href: financeproject.html  
+          href: financeproject.html
+      - text: "---------"
     - text: "About"
       href: about.html
 output_dir: "."
