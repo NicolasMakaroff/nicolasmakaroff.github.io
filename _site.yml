@@ -1,13 +1,19 @@
 name: "Nicolas Makaroff"
 navbar:
   title: "HOME"
-  left:
+  right:
     - text: "Home"
       href: index.html
     - text: "DataScIIEnce"
       href: datascIIEnce.html
     - text: "School Project"
       href: schoolproject.html
+      menu:
+      - text: "First year"
+        href: firstyear.html
+        menu:
+        - text: "Finance Project"
+          href: financeproject.html  
     - text: "About"
       href: about.html
 output_dir: "."

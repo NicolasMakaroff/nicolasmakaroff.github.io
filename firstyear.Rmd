@@ -1,0 +1,20 @@
+---
+title: "First year"
+author: "Nicolas Makaroff"
+date: "01/10/2019"
+output: html_document
+---
+
+In this section, we can find some math project and the description of computer science project.
+
+### Mathematics Project
+
+1. [Finance Project]()
+2. Statistics TP & Project
+  1. [TP1]()
+  2. [TP2]()
+  3. [TP3]()
+  4. [TP4]()
+  5. [Statistics Project]()
+
+### Computer Science Project

@@ -1,7 +1,6 @@
 ---
 title: "datascIIEnce"
 author: "Nicolas Makaroff"
-date: "30/09/2019"
 output: html_document
 ---
 
