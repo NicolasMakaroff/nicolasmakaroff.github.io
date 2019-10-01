@@ -9,9 +9,10 @@
 <meta name="generator" content="pandoc" />
 
 
+<meta name="author" content="Nicolas Makaroff" />
 
 
-<title>About</title>
+<title>MAKAROFF_NICOLAS_TPSTAT3</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -333,12 +334,99 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">About</h1>
+<h1 class="title toc-ignore">MAKAROFF_NICOLAS_TPSTAT3</h1>
+<h4 class="author"><em>Nicolas Makaroff</em></h4>
+<h4 class="date"><em>15/03/2019</em></h4>
 
 </div>
 
 
-<p><strong>Github</strong> : <strong>Gitlab</strong> : <strong>Linkedin</strong> : <a href="linkedin.com/nicolas-makaroff">lien linkedin</a></p>
+<div id="maximum-de-vraisemblance" class="section level1">
+<h1>1. Maximum de vraisemblance</h1>
+<div id="a-estimation-de-p" class="section level2">
+<h2>1.a Estimation de p</h2>
+<pre><code>##  [1] 1 1 1 1 1 1 0 1 1 1</code></pre>
+<p>Une estimation rapide de <span class="math inline">\(p\)</span> est de trouver le paramêtre qui maximise la vraisemblance.</p>
+</div>
+<div id="b" class="section level2">
+<h2>1.b</h2>
+</div>
+<div id="c" class="section level2">
+<h2>1.c</h2>
+<p><img src="tp3_files/figure-html/unnamed-chunk-3-1.png" width="480" /></p>
+<p>On remarque que la vraisemblance forme un pic autour d’une valeur particulière qui est la valeur de p. Cette valeur reste malheureusement peu précise car l’échantillon pris est très petit. ## 1.d</p>
+<pre><code>## $maximum
+## [1] 0.8999978
+## 
+## $objective
+## [1] 0.03874205</code></pre>
+<p>On trouve finalement une valeur pour <span class="math inline">\(p=0.7\)</span>.</p>
+</div>
+<div id="e" class="section level2">
+<h2>1.e</h2>
+<pre><code>## [1] 0.8244372</code></pre>
+<p><img src="tp3_files/figure-html/unnamed-chunk-5-1.png" width="50%" /></p>
+<p>On remarque que plus N est grand plus on se rapproche de la valeur attendue avec un meilleur écart. Pour combattre l’instabilité on passe à la log-vraisemblance : <span class="math display">\[\log(L_n(x))=\sum\limits_i \log(f(x_i;p))\]</span></p>
+<pre><code>## [1] 0.7027864</code></pre>
+<p><img src="tp3_files/figure-html/unnamed-chunk-6-1.png" width="50%" /></p>
+<p>On remarque que les points sont de moins en moins dispercé (la figure prend la forme d’un cône) plus on se rapproche d’un n grand.</p>
+</div>
+<div id="f" class="section level2">
+<h2>1.f</h2>
+<pre><code>## $maximum
+## [1] 0.580002
+## 
+## $objective
+## [1] 2.852948e-30</code></pre>
+<p><img src="tp3_files/figure-html/unnamed-chunk-7-1.png" width="50%" /></p>
+</div>
+</div>
+<div id="ajuster-dune-loi-normale-decart-type" class="section level1">
+<h1>2 Ajuster d’une loi normale d’écart type</h1>
+<div id="a" class="section level2">
+<h2>2.a</h2>
+<pre><code>##  [1] 1.18588160 1.61245954 1.43854084 2.26201535 1.15539791 2.08174195
+##  [7] 0.66604855 1.65373824 1.97258890 1.20461017 2.87367804 0.86066981
+## [13] 1.89588306 3.31244297 1.11070782 2.20650038 3.17575122 1.86782109
+## [19] 1.20203729 0.91117442 0.40015766 0.97416285 1.31807683 2.88798696
+## [25] 0.61158871 0.04974274 2.29677394 0.96685834 1.42335119 2.14758274</code></pre>
+</div>
+<div id="b-1" class="section level2">
+<h2>2.b</h2>
+<p><img src="tp3_files/figure-html/unnamed-chunk-9-1.png" width="480" /></p>
+</div>
+<div id="c-1" class="section level2">
+<h2>2.c</h2>
+<pre><code>## $maximum
+## [1] 1.590865
+## 
+## $objective
+## [1] 8.79174e-23</code></pre>
+<p>On trouve alors une valeur pour</p>
+</div>
+<div id="d" class="section level2">
+<h2>2.d</h2>
+<pre><code>## [1] 3.496243</code></pre>
+<p><img src="tp3_files/figure-html/unnamed-chunk-11-1.png" width="50%" /></p>
+<p>On remarque que comme dans le cas de l’exercice 1, il faut passer à la log-vraisemblance.</p>
+<pre><code>## [1] 1.998964</code></pre>
+<p><img src="tp3_files/figure-html/unnamed-chunk-12-1.png" width="33%" /></p>
+<p>On remarque encore une fois l’apparition d’un cône pour n de plus en plus grand et une convergence du paramètre <span class="math inline">\(\mu\)</span> vers <span class="math inline">\(2\)</span> la valeur théorique.</p>
+</div>
+</div>
+<div id="ajuster-une-loi-a-plusieurs-parametres" class="section level1">
+<h1>3 Ajuster une loi à plusieurs paramètres</h1>
+<p>Un calcul donne rapidement : <span class="math inline">\(f(x)=\lambda\exp^{-\lambda(x-L)}=\lambda\exp^{-\lambda x}\times\exp^{-\lambda L}\)</span> Ce qui permet de créer facilement un échantillon.</p>
+<p><img src="tp3_files/figure-html/unnamed-chunk-15-1.png" width="384" /></p>
+<pre><code>## lambda_max      l_max 
+##          4          6</code></pre>
+<p>Il a fallu dans ce cas gérer des valeurs du gradient valant <span class="math inline">\(-\infty\)</span> mais le résultat obtenu au tracé ne semble pas juste car pas centré sur les valeurs de <span class="math inline">\(\lambda\)</span> et <span class="math inline">\(L\)</span> attendues.</p>
+<p><img src="tp3_files/figure-html/unnamed-chunk-16-1.png" width="384" /></p>
+<pre><code>##        x0 alpha_max 
+##      -2.0       0.4</code></pre>
+<pre><code>##     x0_max  alpha_max 
+## -1.9797980  0.4242424</code></pre>
+</div>
 
 
 

@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Nicolas Makaroff" />
+
+
+<title>MAKAROFF_NICOLAS_TPSTAT4</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 45px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h2 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h3 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h4 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h5 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h6 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"><div><img src="DataScienceLogo.png"height=30 width=30></img>   HOME</div></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="datascIIEnce.html">DataScIIEnce</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    School Project
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-submenu">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">First year</a>
+      <ul class="dropdown-menu" role="menu">
+        <li class="dropdown-header">Maths Project</li>
+        <li>
+          <a href="financeproject.html">Finance Project</a>
+        </li>
+        <li class="dropdown-submenu">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Statistics</a>
+          <ul class="dropdown-menu" role="menu">
+            <li>
+              <a href="tp2.html">TP2</a>
+            </li>
+            <li class="dropdown-header">TP3</li>
+            <li>
+              <a href="tp4.html">TP4</a>
+            </li>
+            <li>
+              <a href="projectstat.html">Project</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li class="divider"></li>
+  </ul>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">MAKAROFF_NICOLAS_TPSTAT4</h1>
+<h4 class="author"><em>Nicolas Makaroff</em></h4>
+<h4 class="date"><em>19/04/2019</em></h4>
+
+</div>
+
+
+<div id="test-de-student" class="section level1">
+<h1>Test de Student</h1>
+<div id="question-1" class="section level2">
+<h2>Question 1</h2>
+<div id="a" class="section level3">
+<h3>(a)</h3>
+<p>Sous les hypothèses <span class="math inline">\(H_0\)</span>: <span class="math inline">\(\mu=\mu_0\)</span> et <span class="math inline">\(H_1\)</span>: <span class="math inline">\(\mu=\mu_1\)</span>, <span class="math inline">\(\alpha\)</span> correspond à la probabilité de l’Erreur de première espèce appellé aussi <strong>seuil</strong> ou encore <strong>niveau de signification du test</strong>. Cette valeur représente la probabilité de rejeter l’hypothèse <span class="math inline">\(h_0\)</span> à tord. Elle s’exprime mathématiquement par : <span class="math inline">\(\mathbb{P}[\text{choisir } H_1 | H_0 \text{vraie}]\)</span></p>
+</div>
+<div id="b" class="section level3">
+<h3>(b)</h3>
+<p>Afin de trouver la statistique de test, on applique le test de Nieman-Pearson : <span class="math inline">\(\Lambda(x_1,x_2,...,x_n) = \frac{L(x_1,...,x_n;\mu_1)}{L(x_1,...,x_n;\mu_0)}\)</span> et on en déduira la zone de rejet : <span class="math inline">\(W=\{(x_1,...,x_n)|\Lambda(x_1,x_2,...,x_n) =\frac{L(x_1,...,x_n;\mu_1)}{L(x_1,...,x_n;\mu_0)} &gt; K_{\alpha}\)</span> avec <span class="math inline">\(K_{\alpha}\)</span> choisi tel que <span class="math inline">\(\mathbb{P}[\Lambda &gt; K_{\alpha}]=\alpha\)</span> On obtient <span class="math inline">\(\Lambda_n= \frac{\sqrt{n}(\bar{X_n}-\mu_0)}{S_n}\)</span> Sous l’hypothèse <span class="math inline">\(H_0\)</span>, <span class="math inline">\(\Lambda_n\)</span> suit une loi de Student à <span class="math inline">\(n-1\)</span> degré de liberté : <span class="math inline">\(T_{n-1}\)</span>. Ainsi, <span class="math inline">\(P_{H0}(W) = P_{H0}(\Lambda_n &gt;K_\alpha)=1-F_{T_{n-1}}(K_\alpha)=\alpha\)</span> où <span class="math inline">\(F_{T_{n-1}}\)</span> est la fonction de répartition de <span class="math inline">\(T_{n-1}\)</span>. On en déduit que <span class="math inline">\(K_{\alpha}=F_{T_{n-1}}^{-1}(1-\alpha)\)</span> Finalement, on rejette l’hypothèse <span class="math inline">\(H_0\)</span> si <span class="math inline">\(\bar{X_n} &gt; \mu_0 + \frac{S_n}{\sqrt{n}}F_{T_{n-1}}(1-\alpha)\)</span>.</p>
+</div>
+<div id="c" class="section level3">
+<h3>(c)</h3>
+<p>La rêgle de décision ici est de choisir entre <span class="math inline">\(S_n\leadsto \mathcal{N}(\mu_0,?)\)</span> ou <span class="math inline">\(\leadsto \mathcal{N}(\mu_1,?)\)</span></p>
+<pre class="r"><code>#alpha : risque de première espèce
+Delta &lt;- function(Sn,alpha,mu0,mu1){
+  n&lt;- length(Sn)
+  emp_Xn &lt;- 1.0 / n *sum(Sn)
+  sigma &lt;- 1.0 / (n-1) * sum((Sn - emp_Xn)**2)
+  lambda &lt;- sqrt(n / sigma) * (emp_Xn - mu0)
+  Ka &lt;- qt(p=1.0 - alpha, df=n-1)
+  return (lambda &gt;  Ka)
+}
+
+if (Delta(rnorm(20,1,sqrt(2)),0.05,1,1.5)){
+  print(&quot;H0 est rejeté : mu = mu1&quot;)
+}else{
+  print(&quot;H0 n&#39;est pas rejeté : mu = mu0&quot;)
+}</code></pre>
+<pre><code>## [1] &quot;H0 n&#39;est pas rejeté : mu = mu0&quot;</code></pre>
+</div>
+</div>
+<div id="question-2" class="section level2">
+<h2>Question 2</h2>
+<div id="a-1" class="section level3">
+<h3>(a)</h3>
+<pre class="r"><code>acc &lt;- 0
+for (i in 1:100){
+  if (Delta(rnorm(20,1,sqrt(2)),0.05,1,1.5)){
+   acc &lt;- acc + 1
+  }
+}
+print(paste(&quot;nombre de rejet du test = &quot;,acc,sep = &quot;&quot;))</code></pre>
+<pre><code>## [1] &quot;nombre de rejet du test = 7&quot;</code></pre>
+<p>On remarque que le nombre de rejet varie accès peu et qu’il vaut généralement 4.</p>
+</div>
+<div id="b-1" class="section level3">
+<h3>(b)</h3>
+<pre class="r"><code>alpha_list &lt;- c(0.2,0.1,0.05,0.01)
+for (i in alpha_list){
+  Ka &lt;- qt(p=1.0 - i, df=20-1)
+  print(Ka)
+}</code></pre>
+<pre><code>## [1] 0.8609506
+## [1] 1.327728
+## [1] 1.729133
+## [1] 2.539483</code></pre>
+<p>La valeur de <span class="math inline">\(\alpha\)</span> influe directement sur la zone de rejet du test. Ainsi si <span class="math inline">\(\alpha\)</span> augmente <span class="math inline">\(K_{\alpha}\)</span> va diminuer.</p>
+</div>
+<div id="c-1" class="section level3">
+<h3>(c)</h3>
+<pre class="r"><code>for(i in alpha_list){
+    acc &lt;- 0
+    for(j in 1:100){
+      if(Delta(rnorm(20,1,sqrt(2)),i,1,1.5))
+        acc &lt;- acc + 1
+    }
+    print(paste(&quot;alpha = &quot;,i,&quot; nombre de rejet du test = &quot;,acc,sep = &quot;&quot;))
+}</code></pre>
+<pre><code>## [1] &quot;alpha = 0.2 nombre de rejet du test = 27&quot;
+## [1] &quot;alpha = 0.1 nombre de rejet du test = 10&quot;
+## [1] &quot;alpha = 0.05 nombre de rejet du test = 2&quot;
+## [1] &quot;alpha = 0.01 nombre de rejet du test = 0&quot;</code></pre>
+</div>
+</div>
+<div id="question-3" class="section level2">
+<h2>Question 3</h2>
+<div id="a-2" class="section level3">
+<h3>(a)</h3>
+<pre class="r"><code>for(i in alpha_list){
+    acc &lt;- 0
+    for(j in 1:100){
+      if(Delta(rnorm(20,1.5,sqrt(2)),i,1,1.5))
+        acc &lt;- acc + 1
+    }
+    print(paste(&quot;alpha = &quot;,i,&quot; nombre de rejet du test = &quot;,acc,sep = &quot;&quot;))
+}</code></pre>
+<pre><code>## [1] &quot;alpha = 0.2 nombre de rejet du test = 77&quot;
+## [1] &quot;alpha = 0.1 nombre de rejet du test = 59&quot;
+## [1] &quot;alpha = 0.05 nombre de rejet du test = 38&quot;
+## [1] &quot;alpha = 0.01 nombre de rejet du test = 22&quot;</code></pre>
+<p>On remarque dans un premier que logiquement que rejeté beaucoup plus que précédemment. D’autre part, <span class="math inline">\(\alpha\)</span> influe encore car plus <span class="math inline">\(\alpha\)</span> est grand plus on se trompe sur le testde décision.</p>
+</div>
+<div id="b-2" class="section level3">
+<h3>(b)</h3>
+<p>La puissance d’un test, notée <span class="math inline">\(\beta\)</span>, est la probabilité de rejeter <span class="math inline">\(H_0\)</span> lorsque <span class="math inline">\(H_1\)</span> est vraie <span class="math inline">\((\beta =\mathbb{P}[\text{choisir } H_1 | H_0 \text{vraie}]\)</span></p>
+<p>Dans le cas présent, on a : <span class="math inline">\(\beta =P_{H_1}(W) = P_{H_1}(\Lambda_n &gt;K_{\alpha})=1-F_{T_{n-1}}\frac{\sqrt{n}(\mu - \mu_0)}{S_n} + F_{T_{n-1}}^{-1}(1-\alpha)\)</span></p>
+</div>
+<div id="c-2" class="section level3">
+<h3>(c)</h3>
+<pre class="r"><code>mu_liste &lt;- c(1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0)
+test &lt;- c()
+for(i in mu_liste){
+    acc &lt;- 0
+    for(j in 1:100){
+      if(Delta(rnorm(20,1.5,sqrt(2)),0.05,1,i))
+        acc &lt;- acc +1 #nombre de mauvaise décision
+    }
+    test &lt;- c(test,acc)
+    print(paste(&quot;alpha = &quot;,i,&quot; nombre de rejet du test = &quot;,acc,sep = &quot;&quot;))
+}</code></pre>
+<pre><code>## [1] &quot;alpha = 1.2 nombre de rejet du test = 50&quot;
+## [1] &quot;alpha = 1.3 nombre de rejet du test = 39&quot;
+## [1] &quot;alpha = 1.4 nombre de rejet du test = 47&quot;
+## [1] &quot;alpha = 1.5 nombre de rejet du test = 39&quot;
+## [1] &quot;alpha = 1.6 nombre de rejet du test = 56&quot;
+## [1] &quot;alpha = 1.7 nombre de rejet du test = 45&quot;
+## [1] &quot;alpha = 1.8 nombre de rejet du test = 55&quot;
+## [1] &quot;alpha = 1.9 nombre de rejet du test = 46&quot;
+## [1] &quot;alpha = 2 nombre de rejet du test = 46&quot;</code></pre>
+<pre class="r"><code>plot(mu_liste,100 - test,xlab = &quot;Valeurs prises par mu1&quot;,ylab = &quot;nombre de rejet obtenu&quot;,main = &quot;Pourcentage de bonne décision&quot;,type = &quot;l&quot;)</code></pre>
+<p><img src="tp4_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+</div>
+<div id="question-4" class="section level2">
+<h2>Question 4</h2>
+<div id="a-3" class="section level3">
+<h3>(a)</h3>
+<pre class="r"><code>t.test(rnorm(20,1,sqrt(2)),mu = 1,var.equal = FALSE)</code></pre>
+<pre><code>## 
+##  One Sample t-test
+## 
+## data:  rnorm(20, 1, sqrt(2))
+## t = 1.6988, df = 19, p-value = 0.1057
+## alternative hypothesis: true mean is not equal to 1
+## 95 percent confidence interval:
+##  0.8561642 2.3834221
+## sample estimates:
+## mean of x 
+##  1.619793</code></pre>
+<p><span class="math inline">\(t\)</span> est la valeur correspondant à la statistique donnée par Neyman-Pearson. <span class="math inline">\(df\)</span> est le degré de liberté de la loi de Student.</p>
+</div>
+<div id="b-3" class="section level3">
+<h3>(b)</h3>
+<p>On sait que la zone de rejet est de la forme : <span class="math inline">\(\bar{X}_n &gt; \mu_0 + \frac{S_n}{\sqrt{n}}F_{n-1}^{-1}\)</span> D’autre part la <span class="math inline">\(p-value = 1 - F^T_{n-1}(t)\)</span>. On reconnait alors dans la p-value la valeur habituel notée <span class="math inline">\(1 - alpha\)</span> correspondant à la précision.</p>
+</div>
+<div id="c-3" class="section level3">
+<h3>(c)</h3>
+<pre class="r"><code>for (i in alpha_list){
+  test &lt;- t.test(rnorm(20,1,sqrt(2)),mu = 1, conf.level = 1 - i)
+  print(test)
+}</code></pre>
+<pre><code>## 
+##  One Sample t-test
+## 
+## data:  rnorm(20, 1, sqrt(2))
+## t = 0.36811, df = 19, p-value = 0.7169
+## alternative hypothesis: true mean is not equal to 1
+## 80 percent confidence interval:
+##  0.6085267 1.6918094
+## sample estimates:
+## mean of x 
+##  1.150168 
+## 
+## 
+##  One Sample t-test
+## 
+## data:  rnorm(20, 1, sqrt(2))
+## t = 0.01764, df = 19, p-value = 0.9861
+## alternative hypothesis: true mean is not equal to 1
+## 90 percent confidence interval:
+##  0.5444968 1.4648925
+## sample estimates:
+## mean of x 
+##  1.004695 
+## 
+## 
+##  One Sample t-test
+## 
+## data:  rnorm(20, 1, sqrt(2))
+## t = 0.31428, df = 19, p-value = 0.7567
+## alternative hypothesis: true mean is not equal to 1
+## 95 percent confidence interval:
+##  0.4249319 1.7782804
+## sample estimates:
+## mean of x 
+##  1.101606 
+## 
+## 
+##  One Sample t-test
+## 
+## data:  rnorm(20, 1, sqrt(2))
+## t = -0.77938, df = 19, p-value = 0.4454
+## alternative hypothesis: true mean is not equal to 1
+## 99 percent confidence interval:
+##  -0.1784777  1.6738630
+## sample estimates:
+## mean of x 
+## 0.7476926</code></pre>
+</div>
+<div id="d" class="section level3">
+<h3>(d)</h3>
+<p>Calculons l’intervalle de confiance : IC : En utilisant le théorème centrale limite pour se ramener à une loi normale centrée réduite, on obtient alors : <span class="math inline">\(1-\alpha = \mathbb{P}[\bar{x}_n\in[t_{1-\frac{\alpha}{2}}^{n-1}\times\frac{\sqrt{S_n}}{\sqrt{n-1}}]]\)</span></p>
+<p>En récupérant les valeurs de la question, on remarque <span class="math inline">\(1\)</span> appartient un nombre de fois qui correspond à la précision du test voulue selon <span class="math inline">\(\alpha\)</span>.</p>
+</div>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
