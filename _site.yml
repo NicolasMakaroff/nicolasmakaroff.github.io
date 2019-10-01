@@ -6,6 +6,18 @@ navbar:
       href: index.html
     - text: "DataScIIEnce"
       href: datascIIEnce.html
+      menu:
+        - text: "Heading 1"
+        - text: "Page A"
+          href: page-a.html
+        - text: "Page B"
+          href: page-b.html
+        - text: "---------"
+        - text: "Heading 2"
+        - text: "Page C"
+          href: page-c.html
+        - text: "Page D"
+          href: page-d.html
     - text: "School Project"
       href: schoolproject.html
       menu:
