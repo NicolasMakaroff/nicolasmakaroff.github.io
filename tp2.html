@@ -322,6 +322,18 @@ $(document).ready(function () {
     <li class="divider"></li>
   </ul>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Personal Project
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="preypredator.html">Prey-Predator Simulation</a>
+    </li>
+  </ul>
+</li>
 <li>
   <a href="datascIIEnce.html">DataScIIEnce</a>
 </li>
@@ -419,7 +431,7 @@ moy_norm_hist &lt;- function(law,title){
   }
 }
 mean(gen_echan_gauss(100,1000,1,2))</code></pre>
-<pre><code>## [1] 2.853775</code></pre>
+<pre><code>## [1] 2.181456</code></pre>
 <pre class="r"><code>#moy_empirique(gen_echan_gauss(10000,10000,1,2))
 moy_norm &lt;- function(n,N,mu,sigma){
   Xn &lt;- gen_echan_gauss(n,N,mu,sigma)[1,]

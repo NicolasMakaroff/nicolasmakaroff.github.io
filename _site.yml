@@ -23,6 +23,10 @@ navbar:
           - text: "Project"
             href: projectstat.html
       - text: "---------"
+    - text: "Personal Project"
+      menu:
+      - text: "Prey-Predator Simulation"
+        href: preypredator.html 
     - text: "DataScIIEnce"
       href: datascIIEnce.html
     - text: "About"
