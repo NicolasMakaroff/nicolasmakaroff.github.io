@@ -1,7 +1,7 @@
 ---
 title: "Finance Project"
 ---
-```{r}
+```{r,include=FALSE}
 library(reticulate)
 ```
 
@@ -18,7 +18,7 @@ We define for the rest of the subject the following variables :
 
 
 
-#### Question 1
+#### __Question 1__
 
 
 Let $\mathbb{Q}$ be the risk-neutral probability and $\mathcal{F}_{k}=\sigma(S_{t_{i}})$.

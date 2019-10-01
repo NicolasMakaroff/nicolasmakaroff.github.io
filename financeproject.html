@@ -323,7 +323,6 @@ $(document).ready(function () {
 </div>
 
 
-<pre class="r"><code>library(reticulate)</code></pre>
 <div id="cox-ross-rubinstein-model" class="section level1">
 <h1>Cox-Ross-Rubinstein Model</h1>
 <p>Let <span class="math inline">\(t_{0}=0\)</span>, <span class="math inline">\(t_{N}=T\)</span> and <span class="math inline">\(t_{i+1}-t{i}=\delta\)</span> with <span class="math inline">\((t_{i}) _{0 \leqslant i \leqslant N}, \forall i \in \{1,...,N-1\}\)</span> where <span class="math inline">\(\delta=\frac{T}{N}\)</span>. We define for the rest of the subject the following variables :</p>
@@ -336,7 +335,7 @@ $(document).ready(function () {
 </ul></li>
 </ul>
 <div id="question-1" class="section level4">
-<h4>Question 1</h4>
+<h4><strong>Question 1</strong></h4>
 <p>Let <span class="math inline">\(\mathbb{Q}\)</span> be the risk-neutral probability and <span class="math inline">\(\mathcal{F}_{k}=\sigma(S_{t_{i}})\)</span>. Define <span class="math inline">\(q_{N}=\mathbb{Q}[T_{1}^{(N)}=1+\textit{h}_{N}]\)</span> On one side we know that <span class="math inline">\(S_{t_1}^{(N)}\)</span> is a martingales under <span class="math inline">\(\mathbb{Q}\)</span> and with the definition <span class="math inline">\(\tilde{S}_{t_1}^{(N)} = \frac{s\times T_{1}^{(N)}}{1+r_N}\)</span> and <span class="math inline">\(\mathbb{E}[\tilde{S}_{t_1}^{(N)}|\mathcal{F}_0]=S_0^{(N)}=s\)</span> And on the other side <span class="math inline">\(T_1^{(N)}(\Omega)=\{1+b_N,1+h_N\}\)</span> Then <span class="math display">\[\forall s&gt;0, s=\frac{1}{1+r_N}(s(1+h_N)q_N + s(1+b_N)(1-q_N))\]</span> Finally <span class="math display">\[q_N=\frac{r_N - b_N}{h_N - b_N}\]</span></p>
 <p>Soit <span class="math inline">\(\mathbb{Q}\)</span> tq <span class="math inline">\(\mathbb{E}[\frac{S_{t_{i+1}}}{S_{t_{i}}}/F_{t_{i}}]=\mathbb{E}[\frac{S^{o}_{t_{i+1}}}{S_{t_{i}}}/F_{t_{i}}]=\mathbb{E}[\frac{T_{i+1}S_{ti}}{S_{ti}}/\mathcal{F}_{i}]\)</span></p>
 <p>Let <span class="math inline">\(\frac{1}{(1+r_{n})^{N}}\mathbb{E}[f(S_{t_{N}})]\)</span> donc <span class="math inline">\(S_{tN}=s(1+h_{N})^{X}(1+b_{N})^{N-X}\)</span> donc <span class="math inline">\(S_{t_{0}}=s\)</span> Ainsi <span class="math inline">\(X~\mathcal{B}(N,q_{N})\)</span></p>
