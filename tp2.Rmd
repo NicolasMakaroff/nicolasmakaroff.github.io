@@ -4,7 +4,11 @@ author: "Nicolas Makaroff"
 date: "01/03/2019"
 ---
 
-#1 - Théorème Central Limite et Estimation de Monte Carlo
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 1 - Théorème Central Limite et Estimation de Monte Carlo
 ### Avant-propos
 
   Pour la suite de l'exercice, on définit trois fonctions permettant d'une part pour un vecteur donné de calculer la moyenne empirique et la variance empirique, et d'autre part pour une loi donné de créer un échantillon de taille $N=1000$.

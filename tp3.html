@@ -308,7 +308,9 @@ $(document).ready(function () {
             <li>
               <a href="tp2.html">TP2</a>
             </li>
-            <li class="dropdown-header">TP3</li>
+            <li>
+              <a href="tp3.html">TP3</a>
+            </li>
             <li>
               <a href="tp4.html">TP4</a>
             </li>
@@ -345,29 +347,50 @@ $(document).ready(function () {
 <h1>1. Maximum de vraisemblance</h1>
 <div id="a-estimation-de-p" class="section level2">
 <h2>1.a Estimation de p</h2>
-<pre><code>##  [1] 1 1 1 1 1 1 0 1 1 1</code></pre>
+<pre><code>##  [1] 1 1 1 0 1 1 1 1 0 1</code></pre>
 <p>Une estimation rapide de <span class="math inline">\(p\)</span> est de trouver le paramêtre qui maximise la vraisemblance.</p>
 </div>
 <div id="b" class="section level2">
 <h2>1.b</h2>
+<pre class="r"><code>source(&quot;L_bern.R&quot;)</code></pre>
 </div>
 <div id="c" class="section level2">
 <h2>1.c</h2>
+<pre class="r"><code>vect_p=seq(0,1,length.out=100)
+vect_vraisemblance &lt;- sapply(vect_p,function(vect_p) L_bern(X_N,vect_p))
+plot(vect_vraisemblance)</code></pre>
 <p><img src="tp3_files/figure-html/unnamed-chunk-3-1.png" width="480" /></p>
 <p>On remarque que la vraisemblance forme un pic autour d’une valeur particulière qui est la valeur de p. Cette valeur reste malheureusement peu précise car l’échantillon pris est très petit. ## 1.d</p>
+<pre class="r"><code>interval=c(0,1)
+optimize(function(vect_p) L_bern(X_N,vect_p),interval,lower=min(interval),upper=max(interval),maximum = TRUE)</code></pre>
 <pre><code>## $maximum
-## [1] 0.8999978
+## [1] 0.799982
 ## 
 ## $objective
-## [1] 0.03874205</code></pre>
+## [1] 0.006710886</code></pre>
 <p>On trouve finalement une valeur pour <span class="math inline">\(p=0.7\)</span>.</p>
 </div>
 <div id="e" class="section level2">
 <h2>1.e</h2>
-<pre><code>## [1] 0.8244372</code></pre>
+<pre class="r"><code>library(knitr)
+knitr::opts_chunk$set(echo=FALSE,message=FALSE,warning=FALSE)
+p    &lt;- 0.7 ; N0   &lt;- 10 ;Nn   &lt;- 2000 ; n    &lt;- 200
+N    &lt;- 0 * 1:n 
+res   &lt;- 0 * 1:n 
+step &lt;- (Nn - N0) / (n - 1)
+for (i in 1:n) {
+  N[i]  &lt;- as.integer(N0 + (i - 1) * step)
+  X_Ni  &lt;- rbinom(n=N[i], size=1, prob=p)
+  px    &lt;- optimize(function(px) { L_bern(X_Ni, px) }, interval=c(0, 1),lower=min(interval),upper=max(interval),maximum=TRUE)
+  res[i] &lt;- px$maximum
+}
+plot(N, res,ylab=&quot;&quot;)
+title(main=&quot;Approximation de p en fonction de la taille de l&#39;échantillon&quot;,ylab = &quot;Valeur de p&quot;)
+mean(res) </code></pre>
+<pre><code>## [1] 0.8171259</code></pre>
 <p><img src="tp3_files/figure-html/unnamed-chunk-5-1.png" width="50%" /></p>
 <p>On remarque que plus N est grand plus on se rapproche de la valeur attendue avec un meilleur écart. Pour combattre l’instabilité on passe à la log-vraisemblance : <span class="math display">\[\log(L_n(x))=\sum\limits_i \log(f(x_i;p))\]</span></p>
-<pre><code>## [1] 0.7027864</code></pre>
+<pre><code>## [1] 0.7018313</code></pre>
 <p><img src="tp3_files/figure-html/unnamed-chunk-6-1.png" width="50%" /></p>
 <p>On remarque que les points sont de moins en moins dispercé (la figure prend la forme d’un cône) plus on se rapproche d’un n grand.</p>
 </div>
@@ -385,11 +408,11 @@ $(document).ready(function () {
 <h1>2 Ajuster d’une loi normale d’écart type</h1>
 <div id="a" class="section level2">
 <h2>2.a</h2>
-<pre><code>##  [1] 1.18588160 1.61245954 1.43854084 2.26201535 1.15539791 2.08174195
-##  [7] 0.66604855 1.65373824 1.97258890 1.20461017 2.87367804 0.86066981
-## [13] 1.89588306 3.31244297 1.11070782 2.20650038 3.17575122 1.86782109
-## [19] 1.20203729 0.91117442 0.40015766 0.97416285 1.31807683 2.88798696
-## [25] 0.61158871 0.04974274 2.29677394 0.96685834 1.42335119 2.14758274</code></pre>
+<pre><code>##  [1]  2.7987108  1.9032554  0.7308736 -0.1894372  2.2556616  1.6564092
+##  [7]  2.4504241  2.4949005  3.1392722  2.7344316  2.9902661  0.5437343
+## [13]  2.7545147  1.8916701  2.1193545  1.0509596  3.1730409  2.1523798
+## [19]  4.0752905 -0.1357257  3.2581577  2.7063606  2.6319575  2.6716116
+## [25]  2.8070095  2.1601133  1.8202888  1.1016084  3.8892355  1.3501997</code></pre>
 </div>
 <div id="b-1" class="section level2">
 <h2>2.b</h2>
@@ -398,18 +421,18 @@ $(document).ready(function () {
 <div id="c-1" class="section level2">
 <h2>2.c</h2>
 <pre><code>## $maximum
-## [1] 1.590865
+## [1] 2.166223
 ## 
 ## $objective
-## [1] 8.79174e-23</code></pre>
+## [1] 1.817338e-23</code></pre>
 <p>On trouve alors une valeur pour</p>
 </div>
 <div id="d" class="section level2">
 <h2>2.d</h2>
-<pre><code>## [1] 3.496243</code></pre>
+<pre><code>## [1] 3.511784</code></pre>
 <p><img src="tp3_files/figure-html/unnamed-chunk-11-1.png" width="50%" /></p>
 <p>On remarque que comme dans le cas de l’exercice 1, il faut passer à la log-vraisemblance.</p>
-<pre><code>## [1] 1.998964</code></pre>
+<pre><code>## [1] 1.99758</code></pre>
 <p><img src="tp3_files/figure-html/unnamed-chunk-12-1.png" width="33%" /></p>
 <p>On remarque encore une fois l’apparition d’un cône pour n de plus en plus grand et une convergence du paramètre <span class="math inline">\(\mu\)</span> vers <span class="math inline">\(2\)</span> la valeur théorique.</p>
 </div>
@@ -425,7 +448,7 @@ $(document).ready(function () {
 <pre><code>##        x0 alpha_max 
 ##      -2.0       0.4</code></pre>
 <pre><code>##     x0_max  alpha_max 
-## -1.9797980  0.4242424</code></pre>
+## -2.0202020  0.4141414</code></pre>
 </div>
 
 

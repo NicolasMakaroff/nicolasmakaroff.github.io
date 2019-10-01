@@ -4,6 +4,10 @@ author: "Nicolas Makaroff"
 date: "15/03/2019"
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
 # 1. Maximum de vraisemblance
 
 ## 1.a  Estimation de p

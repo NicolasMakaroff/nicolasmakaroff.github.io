@@ -309,7 +309,9 @@ $(document).ready(function () {
             <li>
               <a href="tp2.html">TP2</a>
             </li>
-            <li class="dropdown-header">TP3</li>
+            <li>
+              <a href="tp3.html">TP3</a>
+            </li>
             <li>
               <a href="tp4.html">TP4</a>
             </li>
@@ -342,29 +344,216 @@ $(document).ready(function () {
 </div>
 
 
-<p>#1 - Théorème Central Limite et Estimation de Monte Carlo ### Avant-propos</p>
+<div id="theoreme-central-limite-et-estimation-de-monte-carlo" class="section level1">
+<h1>1 - Théorème Central Limite et Estimation de Monte Carlo</h1>
+<div id="avant-propos" class="section level3">
+<h3>Avant-propos</h3>
 <p>Pour la suite de l’exercice, on définit trois fonctions permettant d’une part pour un vecteur donné de calculer la moyenne empirique et la variance empirique, et d’autre part pour une loi donné de créer un échantillon de taille <span class="math inline">\(N=1000\)</span>.</p>
+<pre class="r"><code>N&lt;-1000
+n&lt;-c(5,30,100)
+#Fonction calculant la moyenne empirique pour un vecteur donné
+moy_empirique &lt;- function(vecteur){
+ sum&lt;-0
+ for (i in vecteur){
+   sum&lt;-sum + i
+ }
+ return (sum/(length(vecteur)))
+}
+
+#Calcul de la variance emmpirique pour un vecteur donné
+var_empirique &lt;- function(vecteur){
+  moy&lt;-moy_empirique(vecteur)
+  sum&lt;-0
+  for (i in vecteur){
+    sum &lt;- sum  + (i-moy)*(i-moy)
+  }
+  return ( sum/(length(vecteur)-1))
+}</code></pre>
 <p>On introduit aussi une fonction permettant de calculer la moyenne empirique sur un échantillon en fonction de n’importe quelle loi et compare avec la loi normale.</p>
+</div>
 <div id="simulation-de-1000-echantillon-i.i.d-gaussien" class="section level3">
 <h3>1.1 Simulation de 1000 échantillon i.i.d Gaussien</h3>
+<pre class="r"><code>gen_echan_gauss &lt;- function(n,N,mu,sigma){
+    x &lt;- rnorm(n,mu,sigma)
+    aleatoire &lt;- function(x1,n1){
+      y &lt;- sample(x1,n1,replace=TRUE)
+      moy_sd &lt;- c(moy_empirique(y),var_empirique(y))
+     return(moy_sd)
+    }
+  result &lt;- sapply(1:N,function(w) aleatoire(x,n))
+  
+  return(result)
+}
+hist_mul &lt;- function(n){
+  for (i in n){
+    hist(gen_echan_gauss(i,N,1,2)[1,],breaks=i)
+    t &lt;- seq(-10,10,by=0.5)
+x &lt;- dnorm(t,1,2)
+par(new=TRUE)
+#plot(x)
+curve(dnorm(x,1,2),-5,5)
+  }
+}
+#hist_moy(function(n){return (rnorm(n,mean=1,sd=2))},&quot;Distribution Gausienne N(1,2)&quot;)
+hist_mul(n)</code></pre>
 <p><img src="tp2_files/figure-html/unnamed-chunk-2-1.png" width="384" /><img src="tp2_files/figure-html/unnamed-chunk-2-2.png" width="384" /><img src="tp2_files/figure-html/unnamed-chunk-2-3.png" width="384" /></p>
 <p>Soit <span class="math inline">\(S_{n}=\sum\limits_{i=1}^{n}X_{i}\)</span> tq : <span class="math inline">\(X_{i}\)</span> i.i.d en loi de moyenne <span class="math inline">\(\mu\)</span> et variance <span class="math inline">\(\sigma^{2}\)</span>.</p>
 <p>D’après le théorème centrale limite, comme <span class="math inline">\(N\)</span> est assez grand, on en déduit que <span class="math inline">\(S_{n}\)</span> peut être approchée une loi normal <span class="math inline">\(\mathcal{N}(n\mu,n\sigma^{2})\)</span>.</p>
 <p>On pose : <span class="math inline">\({X_{n}} = \frac{S_{n}}{n}\)</span> Ainsi, pour la moyenne : <span class="math inline">\(\mathbb{E}[ X_{n}]=\mathbb{E}[\frac{S_{n}}{n}]=\frac{1}{n}\mathbb{E}[S_{n}]=\frac{1}{n}\sum\limits_{i=0}^{n}\mathbb{E}[X_{i}]=\mathbb{E}[X_{i}]\)</span> De même pour la variance : <span class="math inline">\(\mathbb{V}[{ X_{n}}]=\mathbb{V}[\frac{S_{n}}{n}]=\frac{1}{n^{2}}\mathbb{V}[S_{n}]=\frac{1}{n^{2}}\sum\limits_{i=0}^{n}\mathbb{V}[X_{i}]=\frac{1}{n}\mathbb{V}[X_{i}]\)</span></p>
 <p>Dans le cas de la question 1. on a : <span class="math inline">\(\mathcal{N}(1,2)\)</span> On note, avec les notations de l’énoncé, <span class="math inline">\((a_{n},b_{n})=(\mathbb{E}[X_i],\sqrt{\frac{1}{n}\mathbb{V}[Xi]})=(\mu,\sqrt\frac{\sigma^{2}}{n})\)</span> Ce qui donne pour le cas présent : <span class="math inline">\((1,\frac{2}{\sqrt{n}})\)</span></p>
 <p>Ainsi, on en déduit que <span class="math inline">\(U_{n}=\frac{{X_{n}} - a_{n}}{b_{n}}\)</span> suit une loi normale centrée réduite <span class="math inline">\(\mathcal{N}(0,1)\)</span>.</p>
-<pre><code>## [1] 2.439176</code></pre>
+<pre class="r"><code>#Fonction que trace l&#39;histogramme pour la loi centrée réduite. Pour varier, j&#39;ai utilisé ici une autre manière de créer un échantillon.
+moy_norm_hist &lt;- function(law,title){
+  for (j in n){
+    sample &lt;-law(j*N)
+    Xn &lt;- moy_empirique(sample)
+    Un &lt;- c()
+    for (i in 1:N){
+      sample2 &lt;- sample[((i-1)*j + 1): (i*j)]
+      ani &lt;- moy_empirique(sample2)
+      bni &lt;- var_empirique(sample2) / sqrt(j)
+      Uni &lt;- (Xn - ani)/ bni
+      Un &lt;- c(Un,Uni)
+    }
+    hist(Un, xlab=paste(&quot;Moyenne empirique centrée réduite pour une taille=&quot;,j),main=title,breaks=j)
+  }
+}
+mean(gen_echan_gauss(100,1000,1,2))</code></pre>
+<pre><code>## [1] 2.453319</code></pre>
+<pre class="r"><code>#moy_empirique(gen_echan_gauss(10000,10000,1,2))
+moy_norm &lt;- function(n,N,mu,sigma){
+  Xn &lt;- gen_echan_gauss(n,N,mu,sigma)[1,]
+  Un &lt;- c()
+  for (i in Xn){
+    an &lt;- mu
+    bn &lt;- sqrt(sigma*sigma/n)
+    Un &lt;- c(Un,(i-an)/bn)
+  }
+  return(Un)
+}
+#hist(moy_norm(1000,10000,1,2),breaks=100)
+#moy_norm_hist(function(n) {return (rnorm(n , mean=1, sd=2))},&quot;Distribution gaussienne N(1,2)&quot;)
+#t &lt;- seq(-10,10,by=0.5)
+#x &lt;- dnorm(t)
+#par(new=TRUE)
+#curve(dnorm(x),-3,3)</code></pre>
 <p>On obtient bien une loi centrée reduite. On remarque que plus n est grand plus la loi suivi ce rapproche de la loi centré réduite.</p>
 </div>
 <div id="loi-de-pareto" class="section level3">
 <h3>1.2 Loi de Pareto</h3>
 <p>Soit <span class="math inline">\(X\)</span> une variable aléatoire suivant une loi de Pareto <span class="math inline">\(\mathcal{P}(a, \alpha)\)</span>,où <span class="math inline">\(\alpha &gt; 2\)</span>. Alors, <span class="math inline">\(\mathbb{E}[X]=\frac{\alpha \times a}{\alpha - 1}\)</span> et <span class="math inline">\(\mathbb{V}[X]=(\frac{\alpha \times a}{\alpha - 1})^2\frac{\alpha}{\alpha - 2}\)</span> On cherche encore une fois à appliquer le théorème centrale limite afin de mettre en avant que la loi de pareto peut-être approchée par un loi normale centrée réduite : On a déja une expression de l’espérance : <span class="math inline">\(\mathbb{E}[X_{i}]=\frac{\alpha\times a}{\alpha - 1}=a_{n}\)</span> Pour l’expression de <span class="math inline">\(b_n\)</span>, on a : <span class="math display">\[b_{n}=\frac{\sigma}{\sqrt{n}}=\frac{\sqrt{\mathbb{V}[X_{i}]}}{\sqrt{n}}=\frac{\frac{\alpha\times a}{\alpha - 1}\frac{(\alpha)^{1/2}}{(\alpha - 2)^{1/2}}}{\sqrt{n}} \]</span></p>
-<p>Plus n est grand, plus la loi moyenne empirique renormalisé semble suivre une loi N(0, 1). <img src="tp2_files/figure-html/unnamed-chunk-4-1.png" width="384" /><img src="tp2_files/figure-html/unnamed-chunk-4-2.png" width="384" /><img src="tp2_files/figure-html/unnamed-chunk-4-3.png" width="384" /><img src="tp2_files/figure-html/unnamed-chunk-4-4.png" width="384" /></p>
+<p>Plus n est grand, plus la loi moyenne empirique renormalisé semble suivre une loi N(0, 1).</p>
+<pre class="r"><code>library(&quot;rmutil&quot;)
+gen_echan_pareto &lt;- function(n,N,a,alpha){
+    x &lt;- rpareto(n,a,alpha)
+    aleatoire &lt;- function(x1,n1){
+      y &lt;- sample(x1,n1,replace=TRUE)
+      moy_sd &lt;- c(moy_empirique(y),var_empirique(y))
+     return(moy_sd)
+    }
+  result &lt;- sapply(1:N,function(w) aleatoire(x,n))
+  
+  return(result)
+}
+
+hist_mul &lt;- function(n){
+  for (i in n){
+    hist(gen_echan_pareto(i,N,1.0,2.5)[1,],breaks=i)
+    t &lt;- seq(-10,10,by=0.5)
+x &lt;- dnorm(t,1,2)
+par(new=TRUE)
+plot(x)
+  }
+}
+gen_echan_law_norm &lt;- function(law,a,alpha){
+  for (i in n){
+    SampleMeans &lt;- sapply(1:N,function(i) moy_empirique(sample(law(i),n,replace=TRUE)))
+    Un &lt;-c()
+    an &lt;- (a*alpha)/(alpha-1)
+    bn &lt;- an*sqrt(alpha/(alpha-2))
+    Un &lt;- (SampleMeans - an)/bn 
+    hist(Un,prob=TRUE,xlab=&quot;moyenne&quot;,breaks=i)
+    curve(dnorm(x,0,1),add=TRUE,col=&quot;blue&quot;,-5,5)
+  }
+}
+l&lt;-c(1000)
+gen_echan_law_norm(function(l) {return (rpareto(l,1,3))},1,3)</code></pre>
+<p><img src="tp2_files/figure-html/unnamed-chunk-4-1.png" width="384" /><img src="tp2_files/figure-html/unnamed-chunk-4-2.png" width="384" /><img src="tp2_files/figure-html/unnamed-chunk-4-3.png" width="384" /></p>
+<pre class="r"><code>#hist_moy(function(n){return (rnorm(n,mean=1,sd=2))},&quot;Distribution Gausienne N(1,2)&quot;)
+#moy_norm_hist(function(n) rpareto(n,1,2.5),&quot;AAA&quot;)
+#hist_mul(n)
+
+moy_norm_pareto &lt;- function(n,N,a,alpha){
+  Xn &lt;- gen_echan_pareto(n,N,a,alpha)[1,]
+  Un &lt;- c()
+  #an &lt;- mean(Xn) 
+  #bn &lt;-sqrt(sd(Xn))
+  an &lt;- alpha*a/(alpha-1)
+  bn &lt;- (alpha*a)/(alpha-1)*sqrt(alpha/(alpha-2))/sqrt(n)
+  for (i in Xn){
+    
+    Un &lt;- c(Un,(i-an)/bn)
+  }
+  return(Un)
+}
+
+hist(moy_norm_pareto(100,1000,1.0,3),breaks=100)</code></pre>
+<p><img src="tp2_files/figure-html/unnamed-chunk-4-4.png" width="384" /></p>
 </div>
 <div id="loi-de-poisson" class="section level3">
 <h3>1.3 Loi de Poisson</h3>
 <p>Soit X une variable aléatoire suivant une loi de Poisson qu’on notera <span class="math inline">\(\mathcal{P}(\lambda)\)</span>. Alors, <span class="math inline">\(\mathbb{E}[X]=\lambda\)</span> et <span class="math inline">\(\mathbb{V}[X]=\lambda\)</span> On cherche de nouveau à impliquer le théorème centrale limite : On a alors rapidement : <span class="math inline">\(a_n=\lambda\)</span> et <span class="math inline">\(b_n=\sqrt{\frac{\lambda}{n}}\)</span></p>
-<p>Comme pour les questions précédentes, on remarque que plus n est grand, plus la loi moyenne empirique normalisé semble suivre une loi N(0, 1). <img src="tp2_files/figure-html/unnamed-chunk-5-1.png" width="192" /><img src="tp2_files/figure-html/unnamed-chunk-5-2.png" width="192" /><img src="tp2_files/figure-html/unnamed-chunk-5-3.png" width="192" /></p>
+<p>Comme pour les questions précédentes, on remarque que plus n est grand, plus la loi moyenne empirique normalisé semble suivre une loi N(0, 1).</p>
+<pre class="r"><code>gen_echan_poisson &lt;- function(n,N,lambda){
+    x &lt;- rpois(n,lambda)
+    aleatoire &lt;- function(x1,n1){
+      y &lt;- sample(x1,n1,replace=TRUE)
+      moy_sd &lt;- c(mean(y),sd(y))
+     return(moy_sd)
+    }
+  result &lt;- sapply(1:N,function(w) aleatoire(x,n))
+  
+  return(result)
+}
+
+hist_mul &lt;- function(n){
+  for (i in n){
+    hist(gen_echan_poisson(i,N,1)[1,],breaks=i)
+    t &lt;- seq(-10,10,by=0.5)
+x &lt;- dnorm(t,1,2)
+par(new=TRUE)
+plot(x)
+  }
+}
+#hist_moy(function(n){return (rnorm(n,mean=1,sd=2))},&quot;Distribution Gausienne N(1,2)&quot;)
+#hist_mul(n)
+gen_echan_law_norm &lt;- function(law,lambda){
+  for (i in n){
+    SampleMeans &lt;- sapply(1:N,function(w) moy_empirique(sample(law(i),n,replace=TRUE)))
+    Un &lt;-c()
+    an &lt;- lambda
+    bn &lt;- lambda/sqrt(i)
+    Un &lt;- (SampleMeans - an)/bn 
+    hist(Un,prob=TRUE,xlab=&quot;moyenne&quot;,breaks=i)
+    curve(dnorm(x,0,1),add=TRUE,col=&quot;blue&quot;,-5,5)
+  }
+}
+
+gen_echan_law_norm(function(n) {return (rpois(n,3))},3)</code></pre>
+<p><img src="tp2_files/figure-html/unnamed-chunk-5-1.png" width="192" /><img src="tp2_files/figure-html/unnamed-chunk-5-2.png" width="192" /><img src="tp2_files/figure-html/unnamed-chunk-5-3.png" width="192" /></p>
+<pre class="r"><code>moy_norm_poisson &lt;- function(n,N,lambda){
+  Xn &lt;- gen_echan_poisson(n,N,lambda)[1,]
+  Un &lt;- c()
+  an &lt;- mean(Xn)
+  bn &lt;- sqrt(sd(gen_echan_poisson(n,N,lambda)[,1]))
+  for (i in Xn){
+    
+    Un &lt;- c(Un,(i-an)/bn)
+  }
+  return(Un)
+}
+
+#hist(moy_norm_poisson(100,1000,1),breaks=100)</code></pre>
 </div>
 <div id="methodologie-destimation" class="section level3">
 <h3>1.4 Méthodologie d’estimation</h3>
@@ -372,6 +561,7 @@ $(document).ready(function () {
 <p>Soit <span class="math inline">\(T : \Omega^n \rightarrow \mathbb{R}\)</span> statistique sur un echantillon de taille n.</p>
 <p>Pour trouver une approximation, on fait : 1. Soit <span class="math inline">\(N \in \mathbb{N}\)</span> tq <span class="math inline">\(N \gg 1\)</span> et soit <span class="math inline">\(N\)</span> échantillons de taille n, notés <span class="math inline">\(X^i = (X^i_1, ..., X^i_n)\)</span> tel que <span class="math inline">\(1 \leq i \leq N\)</span> On introduit :$ T_{N} = _{i=1}<sup>{N}{T(X</sup>{i})} $ D’après le théorème centrale limite, on en déduit que lorsque N devient grand alors: D’une part, on a : <span class="math inline">\(\mathbb{E}[ T_N] \xrightarrow[N \gg 1]{} \mathbb{E}[T(X)]\)</span> et, d’autre part, on a aussi : <span class="math inline">\(\mathbb{V}[ T_N] \xrightarrow[N \gg 1]{} \frac{1}{N}\mathbb{V}[T(X)] \xrightarrow[N \rightarrow +\infty]{} 0\)</span> Avec ce qui précéde, on a finalement $ T_n{ [T(X)] = c^{te}}$.</p>
 <p>N influence a qualité de l’approximation dans le sens où, comme observé dans les précédentes question, plus il est grand plus celle-ci est de bonne qualité.</p>
+</div>
 </div>
 <div id="moyenne-et-dispersion" class="section level1">
 <h1>2. Moyenne et dispersion</h1>

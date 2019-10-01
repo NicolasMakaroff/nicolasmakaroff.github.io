@@ -19,7 +19,7 @@ navbar:
           - text: "TP2"
             href: tp2.html
           - text: "TP3"
-            #href: tp3.html
+            href: tp3.html
           - text: "TP4"
             href: tp4.html
           - text: "Project"
