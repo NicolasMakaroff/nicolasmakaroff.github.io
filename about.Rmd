@@ -5,4 +5,4 @@ title: "About"
 
 __Github__ : 
 __Gitlab__ :
-__Linkedin__ : [lien linkedin](linkedin.com/nicolas-makaroff)
+__Linkedin__ : [<img src="image/log_linkedin.png"height=40 width=40></img>](https://linkedin.com/in/nicolas-makaroff)
