@@ -349,7 +349,7 @@ $(document).ready(function () {
 <h2>1.a Estimation de p</h2>
 <pre class="r"><code>X_N &lt;- rbinom(n=10,size=1,prob=0.7)
 X_N</code></pre>
-<pre><code>##  [1] 0 1 1 0 1 1 0 0 1 1</code></pre>
+<pre><code>##  [1] 0 0 1 1 1 1 1 1 1 1</code></pre>
 <p>Une estimation rapide de <span class="math inline">\(p\)</span> est de trouver le paramêtre qui maximise la vraisemblance.</p>
 </div>
 <div id="b" class="section level2">
@@ -366,10 +366,10 @@ plot(vect_vraisemblance)</code></pre>
 <pre class="r"><code>interval=c(0,1)
 optimize(function(vect_p) L_bern(X_N,vect_p),interval,lower=min(interval),upper=max(interval),maximum = TRUE)</code></pre>
 <pre><code>## $maximum
-## [1] 0.600002
+## [1] 0.799982
 ## 
 ## $objective
-## [1] 0.001194394</code></pre>
+## [1] 0.006710886</code></pre>
 <p>On trouve finalement une valeur pour <span class="math inline">\(p=0.7\)</span>.</p>
 </div>
 <div id="e" class="section level2">
@@ -389,15 +389,21 @@ for (i in 1:n) {
 plot(N, res,ylab=&quot;&quot;)
 title(main=&quot;Approximation de p en fonction de la taille de l&#39;échantillon&quot;,ylab = &quot;Valeur de p&quot;)
 mean(res) </code></pre>
-<pre><code>## [1] 0.8229697</code></pre>
+<pre><code>## [1] 0.8202669</code></pre>
 <p><img src="tp3_files/figure-html/unnamed-chunk-5-1.png" width="50%" /></p>
 <p>On remarque que plus N est grand plus on se rapproche de la valeur attendue avec un meilleur écart. Pour combattre l’instabilité on passe à la log-vraisemblance : <span class="math display">\[\log(L_n(x))=\sum\limits_i \log(f(x_i;p))\]</span></p>
-<pre><code>## [1] 0.6980513</code></pre>
+<pre><code>## [1] 0.6982047</code></pre>
 <p><img src="tp3_files/figure-html/unnamed-chunk-6-1.png" width="50%" /></p>
 <p>On remarque que les points sont de moins en moins dispercé (la figure prend la forme d’un cône) plus on se rapproche d’un n grand.</p>
 </div>
 <div id="f" class="section level2">
 <h2>1.f</h2>
+<pre class="r"><code>data &lt;- read.csv(&quot;/Users/nicolasmakaroff/Downloads/distribution_inconue_2_100_realisations.csv&quot;)
+vect_p=seq(0,1,length.out=100)
+vect_vraisemblance &lt;- sapply(vect_p,function(vect_p) L_bern(data$x,vect_p))
+plot(vect_vraisemblance)
+interval=c(0,1)
+optimize(function(vect_p) L_bern(data$x,vect_p),interval,lower=min(interval),upper=max(interval),maximum = TRUE)</code></pre>
 <pre><code>## $maximum
 ## [1] 0.580002
 ## 
@@ -410,32 +416,75 @@ mean(res) </code></pre>
 <h1>2 Ajuster d’une loi normale d’écart type</h1>
 <div id="a" class="section level2">
 <h2>2.a</h2>
-<pre><code>##  [1] -0.02033051  3.04728511  3.81240920  1.98992642  1.72480701
-##  [6]  1.48325130  2.91459675  0.93412539  0.70047365  3.74499748
-## [11]  3.14436724  2.05152591  2.70037223  3.02650288  2.68969118
-## [16]  2.53628300  1.10581086  1.42031897  1.47185726  2.36431411
-## [21]  3.90650773  0.80257354  3.40931882  1.74854783  0.15240154
-## [26]  4.09099647  1.83801921 -0.49647988  2.96394125  2.34409382</code></pre>
+<pre class="r"><code>X_N &lt;- rnorm(n=30,mean=2,sd=1)
+X_N</code></pre>
+<pre><code>##  [1] 1.9684215 3.0999811 2.4690039 1.6460817 2.2515868 3.3322801 3.7945551
+##  [8] 0.9813170 1.4717377 0.1610053 2.0531774 2.7020414 3.5296802 1.8448604
+## [15] 0.8544708 3.9551314 2.0335064 3.7045165 3.1074084 1.0892047 2.1021841
+## [22] 2.9526931 3.6807002 2.5965159 1.3478581 4.1260017 1.3471974 0.7619649
+## [29] 1.4092328 3.0805469</code></pre>
 </div>
 <div id="b-1" class="section level2">
 <h2>2.b</h2>
+<pre class="r"><code>source(&quot;L_norm.R&quot;)
+vect_p=seq(0,4,length.out=100)
+vect_vraisemblance &lt;- sapply(vect_p,function(vect_p) L_norm(X_N,vect_p,2))
+plot(vect_vraisemblance)</code></pre>
 <p><img src="tp3_files/figure-html/unnamed-chunk-9-1.png" width="480" /></p>
 </div>
 <div id="c-1" class="section level2">
 <h2>2.c</h2>
+<pre class="r"><code>interval=c(0,4)
+optimize(function(vect_p) L_norm(X_N,vect_p,2),interval,lower=min(interval),upper=max(interval),maximum = TRUE)</code></pre>
 <pre><code>## $maximum
-## [1] 2.120096
+## [1] 2.315179
 ## 
 ## $objective
-## [1] 4.915194e-24</code></pre>
+## [1] 1.448676e-23</code></pre>
 <p>On trouve alors une valeur pour</p>
 </div>
 <div id="d" class="section level2">
 <h2>2.d</h2>
-<pre><code>## [1] 3.520234</code></pre>
+<pre class="r"><code>library(knitr)
+knitr::opts_chunk$set(echo=TRUE,message=FALSE,warning=FALSE)
+mu   &lt;- 2 
+N0   &lt;- 10
+Nn   &lt;- 2000
+n    &lt;- 200
+N    &lt;- 0 * 1:n # vecteur des &#39;N&#39;
+dmu  &lt;- 0 * 1:n # vecteur des &#39;| mu - mux |&#39;, où mu = 2, et px la valeur d&#39;optimize
+step &lt;- (Nn - N0) / (n - 1)
+for (i in 1:n) {
+  N[i]  &lt;- as.integer(N0 + (i - 1) * step)
+  X_Ni  &lt;- rnorm(n=N[i], 2, 1)
+  mux   &lt;- optimize(function(mux) { L_norm(X_Ni, mux,1) }, interval=c(0, 4), maximum=TRUE)
+  dmu[i] &lt;- mux$maximum
+}
+plot(N, dmu,ylab=&quot;&quot;)
+title(main=&quot;Approximation de mu en fonction de la taille de l&#39;échantillon&quot;,ylab = &quot;Valeur de mu&quot;)
+mean(dmu)</code></pre>
+<pre><code>## [1] 3.520385</code></pre>
 <p><img src="tp3_files/figure-html/unnamed-chunk-11-1.png" width="50%" /></p>
 <p>On remarque que comme dans le cas de l’exercice 1, il faut passer à la log-vraisemblance.</p>
-<pre><code>## [1] 2.005839</code></pre>
+<pre class="r"><code>library(knitr)
+knitr::opts_chunk$set(echo=TRUE,message=FALSE,warning=FALSE)
+mu   &lt;- 2 # le paramètre réel de notre loi
+N0   &lt;- 10
+Nn   &lt;- 2000
+n    &lt;- 200
+N    &lt;- 0 * 1:n # vecteur des &#39;N&#39;
+dmu  &lt;- 0 * 1:n # vecteur des &#39;| mu - mux |&#39;, où mu = 2, et px la valeur d&#39;optimize
+step &lt;- (Nn - N0) / (n - 1)
+for (i in 1:n) {
+  N[i]  &lt;- as.integer(N0 + (i - 1) * step)
+  X_Ni  &lt;- rnorm(n=N[i], 2, 1)
+  mux   &lt;- optimize(function(mux) { log_L_norm(X_Ni, mux,1) }, interval=c(0, 4), maximum=TRUE)
+  dmu[i] &lt;- mux$maximum
+}
+plot(N, dmu,xlab=&quot;&quot;)
+title(main=&quot;Approximation de mu en fonction de la taille de l&#39;échantillon&quot;,ylab = &quot;Valeur de mu&quot;)
+mean(dmu)</code></pre>
+<pre><code>## [1] 2.000819</code></pre>
 <p><img src="tp3_files/figure-html/unnamed-chunk-12-1.png" width="33%" /></p>
 <p>On remarque encore une fois l’apparition d’un cône pour n de plus en plus grand et une convergence du paramètre <span class="math inline">\(\mu\)</span> vers <span class="math inline">\(2\)</span> la valeur théorique.</p>
 </div>
@@ -443,15 +492,72 @@ mean(res) </code></pre>
 <div id="ajuster-une-loi-a-plusieurs-parametres" class="section level1">
 <h1>3 Ajuster une loi à plusieurs paramètres</h1>
 <p>Un calcul donne rapidement : <span class="math inline">\(f(x)=\lambda\exp^{-\lambda(x-L)}=\lambda\exp^{-\lambda x}\times\exp^{-\lambda L}\)</span> Ce qui permet de créer facilement un échantillon.</p>
-<p><img src="tp3_files/figure-html/unnamed-chunk-15-1.png" width="384" /></p>
+<pre class="r"><code>#taille de l&#39;échantillon
+N&lt;-1000
+lambda&lt;-2
+L&lt;-4
+echan_gaussien &lt;- rexp(N,lambda)*exp(-lambda*L)</code></pre>
+<pre class="r"><code>x0&lt;--2
+alpha&lt;-0.4
+echan_cauchy&lt;-rcauchy(N,x0,alpha)</code></pre>
+<pre class="r"><code>source(&quot;log_vrais_3.R&quot;)
+library(ggplot2)
+#discretisation de l&#39;espace
+n &lt;- 100
+#création d&#39;un dataframe
+lambdas &lt;- rep(seq(1.0, 4.0, (3.0) / (n - 1)), times=n)
+Ls &lt;- rep(seq(2.0, 6.0, (6.0 - 2.0) / (n - 1)), each=n)
+vraisemblance &lt;- c()
+gradient       &lt;- c()
+# calcul de l&#39;argmax du max
+m &lt;- 1
+for (i in 1:(n*n)) {
+  vraisemblance[i] &lt;- L_exp(echan_cauchy, lambdas[i], Ls[i])
+  #transformation évitent les valeurs de -infiny du gradient
+  gradient[i]       &lt;- exp(vraisemblance[i]*0.0001)
+  #gradient[i]=1/gradient[i]
+  m &lt;- if (vraisemblance[i] &gt; vraisemblance[m]) i else m
+}
+df &lt;- data.frame(lambdas, Ls, vraisemblance, gradient)
+ggplot(df, aes(lambdas, Ls)) +
+     geom_raster(aes(fill = gradient)) + 
+    scale_fill_gradientn(colours = topo.colors(4))</code></pre>
+<p><img src="tp3_files/figure-html/unnamed-chunk-15-1.png" width="768" /></p>
+<pre class="r"><code># valeurs des paramètres pour lesquels la vraisemblance est maximal:
+c(&quot;lambda_max&quot; = lambdas[m], &quot;l_max&quot; = Ls[m])</code></pre>
 <pre><code>## lambda_max      l_max 
 ##          4          6</code></pre>
 <p>Il a fallu dans ce cas gérer des valeurs du gradient valant <span class="math inline">\(-\infty\)</span> mais le résultat obtenu au tracé ne semble pas juste car pas centré sur les valeurs de <span class="math inline">\(\lambda\)</span> et <span class="math inline">\(L\)</span> attendues.</p>
-<p><img src="tp3_files/figure-html/unnamed-chunk-16-1.png" width="384" /></p>
+<pre class="r"><code>source(&quot;log_vrais_3.R&quot;)
+library(ggplot2)
+#discretisation de l&#39;espace
+n &lt;- 100
+#création d&#39;un dataframe
+x0s            &lt;- rep(seq(-4.0, 0.0, (0.0 - -4.0) / (n - 1)), times=n)
+alphas         &lt;- rep(seq(0.0, 1.0, (1.0 - 0.0) / (n - 1)), each=n)
+vraisemblance &lt;- c()
+gradient       &lt;- c()
+# calcul de l&#39;argmax du max
+m &lt;- 1
+for (i in 1:(n*n)) {
+  vraisemblance[i] &lt;- L_cauchy(echan_cauchy, x0s[i], alphas[i])
+  #transformée  par une transformation croissante qui améliore le résultat visuel 
+  gradient[i]       &lt;- exp(vraisemblance[i] * 0.1)
+  m &lt;- if (vraisemblance[i] &gt; vraisemblance[m]) i else m
+}
+df &lt;- data.frame(x0s, alphas, vraisemblance, gradient)
+ggplot(df, aes(x0s, alphas)) +
+    geom_raster(aes(fill = gradient)) +
+    scale_fill_gradientn(colours = topo.colors(4))</code></pre>
+<p><img src="tp3_files/figure-html/unnamed-chunk-16-1.png" width="768" /></p>
+<pre class="r"><code># vrais paramètres
+c(&quot;x0&quot; = x0, &quot;alpha_max&quot; = alpha)</code></pre>
 <pre><code>##        x0 alpha_max 
 ##      -2.0       0.4</code></pre>
+<pre class="r"><code># valeurs des paramètres pour lesquels la vraisemblance est maximal:
+c(&quot;x0_max&quot; = x0s[m], &quot;alpha_max&quot; = alphas[m])</code></pre>
 <pre><code>##     x0_max  alpha_max 
-## -2.0202020  0.3838384</code></pre>
+## -1.9797980  0.3939394</code></pre>
 </div>
 
 

@@ -65,7 +65,7 @@ $$\log(L_n(x))=\sum\limits_i \log(f(x_i;p))$$
 ```{r,out.width='50%',fig.show='hold'}
 source("L_bern.R")
 library(knitr)
-knitr::opts_chunk$set(echo=FALSE,message=FALSE,warning=FALSE)
+knitr::opts_chunk$set(echo=TRUE,message=FALSE,warning=FALSE)
 #vect_p=seq(0,1,length.out=100)
 #log_vect_vraisemblance <- sapply(vect_p,function(vect_p) log_L_bern(X_N,vect_p))
 #plot(log_vect_vraisemblance)
@@ -128,7 +128,7 @@ On trouve alors une valeur pour
 
 ```{r,out.width='50%',fig.show='hold'}
 library(knitr)
-knitr::opts_chunk$set(echo=FALSE,message=FALSE,warning=FALSE)
+knitr::opts_chunk$set(echo=TRUE,message=FALSE,warning=FALSE)
 mu   <- 2 
 N0   <- 10
 Nn   <- 2000
@@ -151,7 +151,7 @@ On remarque que comme dans le cas de l'exercice 1, il faut passer à la log-vrai
 
 ```{r,out.width='33%',fig.show='hold'}
 library(knitr)
-knitr::opts_chunk$set(echo=FALSE,message=FALSE,warning=FALSE)
+knitr::opts_chunk$set(echo=TRUE,message=FALSE,warning=FALSE)
 mu   <- 2 # le paramètre réel de notre loi
 N0   <- 10
 Nn   <- 2000
@@ -189,7 +189,7 @@ alpha<-0.4
 echan_cauchy<-rcauchy(N,x0,alpha)
 ```
 
-```{r,fig.height=2,fig.width=4}
+```{r,fig.height=4,fig.width=8}
 source("log_vrais_3.R")
 library(ggplot2)
 #discretisation de l'espace
@@ -219,7 +219,7 @@ c("lambda_max" = lambdas[m], "l_max" = Ls[m])
 Il a fallu dans ce cas gérer des valeurs du gradient valant $-\infty$ mais le résultat obtenu au tracé ne semble pas juste car pas centré sur les valeurs de $\lambda$ et $L$ attendues.
 
 
-```{r,fig.height=2,fig.width=4}
+```{r,fig.height=4,fig.width=8}
 source("log_vrais_3.R")
 library(ggplot2)
 #discretisation de l'espace
