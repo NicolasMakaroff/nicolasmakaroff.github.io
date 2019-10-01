@@ -11,11 +11,10 @@ In the __School Project__, we can find some math project and the description of 
 1. [Finance Project](https://nicolasmakaroff.github.io/financeproject.html)
 2. Statistics TP & Project
 
-    1. [TP1]()
-    2. [TP2]()
-    3. [TP3]()
-    4. [TP4]()
-    5. [Statistics Project]()
+    1. [TP2](https://nicolasmakaroff.github.io/tp2.html)
+    2. [TP3](https://nicolasmakaroff.github.io/tp3.html)
+    3. [TP4](https://nicolasmakaroff.github.io/tp4.html)
+    4. [Statistics Project](https://nicolasmakaroff.github.io/projectstat.html)
 
 #### Computer Science Project
 

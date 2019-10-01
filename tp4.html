@@ -387,7 +387,7 @@ for (i in 1:100){
   }
 }
 print(paste(&quot;nombre de rejet du test = &quot;,acc,sep = &quot;&quot;))</code></pre>
-<pre><code>## [1] &quot;nombre de rejet du test = 4&quot;</code></pre>
+<pre><code>## [1] &quot;nombre de rejet du test = 8&quot;</code></pre>
 <p>On remarque que le nombre de rejet varie accès peu et qu’il vaut généralement 4.</p>
 </div>
 <div id="b-1" class="section level3">
@@ -413,10 +413,10 @@ for (i in alpha_list){
     }
     print(paste(&quot;alpha = &quot;,i,&quot; nombre de rejet du test = &quot;,acc,sep = &quot;&quot;))
 }</code></pre>
-<pre><code>## [1] &quot;alpha = 0.2 nombre de rejet du test = 18&quot;
-## [1] &quot;alpha = 0.1 nombre de rejet du test = 9&quot;
-## [1] &quot;alpha = 0.05 nombre de rejet du test = 3&quot;
-## [1] &quot;alpha = 0.01 nombre de rejet du test = 3&quot;</code></pre>
+<pre><code>## [1] &quot;alpha = 0.2 nombre de rejet du test = 17&quot;
+## [1] &quot;alpha = 0.1 nombre de rejet du test = 8&quot;
+## [1] &quot;alpha = 0.05 nombre de rejet du test = 5&quot;
+## [1] &quot;alpha = 0.01 nombre de rejet du test = 1&quot;</code></pre>
 </div>
 </div>
 <div id="question-3" class="section level2">
@@ -432,9 +432,9 @@ for (i in alpha_list){
     print(paste(&quot;alpha = &quot;,i,&quot; nombre de rejet du test = &quot;,acc,sep = &quot;&quot;))
 }</code></pre>
 <pre><code>## [1] &quot;alpha = 0.2 nombre de rejet du test = 74&quot;
-## [1] &quot;alpha = 0.1 nombre de rejet du test = 58&quot;
-## [1] &quot;alpha = 0.05 nombre de rejet du test = 53&quot;
-## [1] &quot;alpha = 0.01 nombre de rejet du test = 19&quot;</code></pre>
+## [1] &quot;alpha = 0.1 nombre de rejet du test = 61&quot;
+## [1] &quot;alpha = 0.05 nombre de rejet du test = 43&quot;
+## [1] &quot;alpha = 0.01 nombre de rejet du test = 21&quot;</code></pre>
 <p>On remarque dans un premier que logiquement que rejeté beaucoup plus que précédemment. D’autre part, <span class="math inline">\(\alpha\)</span> influe encore car plus <span class="math inline">\(\alpha\)</span> est grand plus on se trompe sur le testde décision.</p>
 </div>
 <div id="b-2" class="section level3">
@@ -455,15 +455,15 @@ for(i in mu_liste){
     test &lt;- c(test,acc)
     print(paste(&quot;alpha = &quot;,i,&quot; nombre de rejet du test = &quot;,acc,sep = &quot;&quot;))
 }</code></pre>
-<pre><code>## [1] &quot;alpha = 1.2 nombre de rejet du test = 48&quot;
-## [1] &quot;alpha = 1.3 nombre de rejet du test = 52&quot;
-## [1] &quot;alpha = 1.4 nombre de rejet du test = 49&quot;
-## [1] &quot;alpha = 1.5 nombre de rejet du test = 40&quot;
-## [1] &quot;alpha = 1.6 nombre de rejet du test = 44&quot;
+<pre><code>## [1] &quot;alpha = 1.2 nombre de rejet du test = 49&quot;
+## [1] &quot;alpha = 1.3 nombre de rejet du test = 41&quot;
+## [1] &quot;alpha = 1.4 nombre de rejet du test = 44&quot;
+## [1] &quot;alpha = 1.5 nombre de rejet du test = 50&quot;
+## [1] &quot;alpha = 1.6 nombre de rejet du test = 42&quot;
 ## [1] &quot;alpha = 1.7 nombre de rejet du test = 48&quot;
-## [1] &quot;alpha = 1.8 nombre de rejet du test = 34&quot;
-## [1] &quot;alpha = 1.9 nombre de rejet du test = 49&quot;
-## [1] &quot;alpha = 2 nombre de rejet du test = 48&quot;</code></pre>
+## [1] &quot;alpha = 1.8 nombre de rejet du test = 47&quot;
+## [1] &quot;alpha = 1.9 nombre de rejet du test = 50&quot;
+## [1] &quot;alpha = 2 nombre de rejet du test = 51&quot;</code></pre>
 <pre class="r"><code>plot(mu_liste,100 - test,xlab = &quot;Valeurs prises par mu1&quot;,ylab = &quot;nombre de rejet obtenu&quot;,main = &quot;Pourcentage de bonne décision&quot;,type = &quot;l&quot;)</code></pre>
 <p><img src="tp4_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 </div>
@@ -477,13 +477,13 @@ for(i in mu_liste){
 ##  One Sample t-test
 ## 
 ## data:  rnorm(20, 1, sqrt(2))
-## t = -0.29773, df = 19, p-value = 0.7691
+## t = -0.83363, df = 19, p-value = 0.4148
 ## alternative hypothesis: true mean is not equal to 1
 ## 95 percent confidence interval:
-##  0.2802024 1.5405191
+##  0.2760568 1.3115266
 ## sample estimates:
 ## mean of x 
-## 0.9103607</code></pre>
+## 0.7937917</code></pre>
 <p><span class="math inline">\(t\)</span> est la valeur correspondant à la statistique donnée par Neyman-Pearson. <span class="math inline">\(df\)</span> est le degré de liberté de la loi de Student.</p>
 </div>
 <div id="b-3" class="section level3">
@@ -500,49 +500,49 @@ for(i in mu_liste){
 ##  One Sample t-test
 ## 
 ## data:  rnorm(20, 1, sqrt(2))
-## t = -0.37738, df = 19, p-value = 0.7101
+## t = 0.61731, df = 19, p-value = 0.5444
 ## alternative hypothesis: true mean is not equal to 1
 ## 80 percent confidence interval:
-##  0.3919971 1.3388701
+##  0.7437878 1.7014829
 ## sample estimates:
 ## mean of x 
-## 0.8654336 
+##  1.222635 
 ## 
 ## 
 ##  One Sample t-test
 ## 
 ## data:  rnorm(20, 1, sqrt(2))
-## t = 0.61578, df = 19, p-value = 0.5453
+## t = 0.11926, df = 19, p-value = 0.9063
 ## alternative hypothesis: true mean is not equal to 1
 ## 90 percent confidence interval:
-##  0.7111661 1.6083301
+##  0.4776727 1.5997170
 ## sample estimates:
 ## mean of x 
-##  1.159748 
+##  1.038695 
 ## 
 ## 
 ##  One Sample t-test
 ## 
 ## data:  rnorm(20, 1, sqrt(2))
-## t = -0.96263, df = 19, p-value = 0.3478
+## t = 1.2475, df = 19, p-value = 0.2274
 ## alternative hypothesis: true mean is not equal to 1
 ## 95 percent confidence interval:
-##  -0.3980512  1.5171862
+##  0.7549629 1.9681024
 ## sample estimates:
 ## mean of x 
-## 0.5595675 
+##  1.361533 
 ## 
 ## 
 ##  One Sample t-test
 ## 
 ## data:  rnorm(20, 1, sqrt(2))
-## t = 1.4141, df = 19, p-value = 0.1735
+## t = -1.4439, df = 19, p-value = 0.1651
 ## alternative hypothesis: true mean is not equal to 1
 ## 99 percent confidence interval:
-##  0.7161279 1.8387998
+##  -0.3167089  1.4334179
 ## sample estimates:
 ## mean of x 
-##  1.277464</code></pre>
+## 0.5583545</code></pre>
 </div>
 <div id="d" class="section level3">
 <h3>(d)</h3>
