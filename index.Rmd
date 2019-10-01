@@ -2,6 +2,13 @@
 title: "HOME"
 ---
 
+
+
+
+
+The __DataScIIEnce__ section is for the ENSIIE eponymous association. It will contain information and formation given for the association.
+
+
 In the __School Project__, we can find some math project and the description of computer science project for the $3$ school years.
 
 ### First Year
@@ -19,4 +26,16 @@ In the __School Project__, we can find some math project and the description of 
 #### Computer Science Project
 
 ### Second Year
+
+#### Regulized Regression Methods
+
+1. [TP1]()
+2. [TP2]()
+3. [TP3]()
+
+#### Data Analysis
+
+1. [TD1]()
+2. [TD2]()
+3. [TD3]()
 

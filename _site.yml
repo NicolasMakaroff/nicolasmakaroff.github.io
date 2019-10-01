@@ -4,8 +4,6 @@ navbar:
   right:
     - text: "Home"
       href: index.html
-    - text: "DataScIIEnce"
-      href: datascIIEnce.html
     - text: "School Project"
       href: schoolproject.html
       menu:
@@ -25,6 +23,8 @@ navbar:
           - text: "Project"
             href: projectstat.html
       - text: "---------"
+    - text: "DataScIIEnce"
+      href: datascIIEnce.html
     - text: "About"
       href: about.html
 output_dir: "."
