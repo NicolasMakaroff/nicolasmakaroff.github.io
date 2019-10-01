@@ -372,7 +372,7 @@ $(document).ready(function () {
 <h2>1.a Estimation de p</h2>
 <pre class="r"><code>X_N &lt;- rbinom(n=10,size=1,prob=0.7)
 X_N</code></pre>
-<pre><code>##  [1] 1 1 1 1 1 1 1 0 1 0</code></pre>
+<pre><code>##  [1] 1 1 1 1 0 1 1 1 1 1</code></pre>
 <p>Une estimation rapide de <span class="math inline">\(p\)</span> est de trouver le paramêtre qui maximise la vraisemblance.</p>
 </div>
 <div id="b" class="section level2">
@@ -389,10 +389,10 @@ plot(vect_vraisemblance)</code></pre>
 <pre class="r"><code>interval=c(0,1)
 optimize(function(vect_p) L_bern(X_N,vect_p),interval,lower=min(interval),upper=max(interval),maximum = TRUE)</code></pre>
 <pre><code>## $maximum
-## [1] 0.799982
+## [1] 0.8999978
 ## 
 ## $objective
-## [1] 0.006710886</code></pre>
+## [1] 0.03874205</code></pre>
 <p>On trouve finalement une valeur pour <span class="math inline">\(p=0.7\)</span>.</p>
 </div>
 <div id="e" class="section level2">
@@ -412,10 +412,10 @@ for (i in 1:n) {
 plot(N, res,ylab=&quot;&quot;)
 title(main=&quot;Approximation de p en fonction de la taille de l&#39;échantillon&quot;,ylab = &quot;Valeur de p&quot;)
 mean(res) </code></pre>
-<pre><code>## [1] 0.8224666</code></pre>
+<pre><code>## [1] 0.8224971</code></pre>
 <p><img src="tp3_files/figure-html/unnamed-chunk-5-1.png" width="50%" /></p>
 <p>On remarque que plus N est grand plus on se rapproche de la valeur attendue avec un meilleur écart. Pour combattre l’instabilité on passe à la log-vraisemblance : <span class="math display">\[\log(L_n(x))=\sum\limits_i \log(f(x_i;p))\]</span></p>
-<pre><code>## [1] 0.6987892</code></pre>
+<pre><code>## [1] 0.6988843</code></pre>
 <p><img src="tp3_files/figure-html/unnamed-chunk-6-1.png" width="50%" /></p>
 <p>On remarque que les points sont de moins en moins dispercé (la figure prend la forme d’un cône) plus on se rapproche d’un n grand.</p>
 </div>
@@ -441,11 +441,11 @@ optimize(function(vect_p) L_bern(data$x,vect_p),interval,lower=min(interval),upp
 <h2>2.a</h2>
 <pre class="r"><code>X_N &lt;- rnorm(n=30,mean=2,sd=1)
 X_N</code></pre>
-<pre><code>##  [1] 1.0982972 4.8696192 1.6049658 2.1178723 2.3807248 0.9832517 2.9188514
-##  [8] 0.9302164 3.5252657 1.9550724 2.7046791 2.3456803 3.5922528 1.2684625
-## [15] 2.5153061 4.0365898 1.7154526 1.2039273 1.9901951 2.5173703 2.6707316
-## [22] 2.2086996 2.8394573 3.8977861 0.8758317 2.3333847 3.4723110 1.4796926
-## [29] 1.7984192 2.5425710</code></pre>
+<pre><code>##  [1] 0.6524852 2.1952840 4.3898732 2.2257217 2.6831174 2.1162134 2.6020672
+##  [8] 1.4358431 2.1233476 2.3030871 2.0798092 2.2638207 3.1228621 1.1246795
+## [15] 2.0297522 3.7456483 1.7937068 0.6920884 2.3030544 3.7544260 2.1148822
+## [22] 2.3120054 1.6751674 1.2859396 3.6092680 3.1588369 1.2797219 3.7510654
+## [29] 1.0313155 2.7470865</code></pre>
 </div>
 <div id="b-1" class="section level2">
 <h2>2.b</h2>
@@ -460,10 +460,10 @@ plot(vect_vraisemblance)</code></pre>
 <pre class="r"><code>interval=c(0,4)
 optimize(function(vect_p) L_norm(X_N,vect_p,2),interval,lower=min(interval),upper=max(interval),maximum = TRUE)</code></pre>
 <pre><code>## $maximum
-## [1] 2.34643
+## [1] 2.286754
 ## 
 ## $objective
-## [1] 2.595958e-23</code></pre>
+## [1] 3.735476e-23</code></pre>
 <p>On trouve alors une valeur pour</p>
 </div>
 <div id="d" class="section level2">
@@ -486,7 +486,7 @@ for (i in 1:n) {
 plot(N, dmu,ylab=&quot;&quot;)
 title(main=&quot;Approximation de mu en fonction de la taille de l&#39;échantillon&quot;,ylab = &quot;Valeur de mu&quot;)
 mean(dmu)</code></pre>
-<pre><code>## [1] 3.510504</code></pre>
+<pre><code>## [1] 3.521101</code></pre>
 <p><img src="tp3_files/figure-html/unnamed-chunk-11-1.png" width="50%" /></p>
 <p>On remarque que comme dans le cas de l’exercice 1, il faut passer à la log-vraisemblance.</p>
 <pre class="r"><code>library(knitr)
@@ -507,7 +507,7 @@ for (i in 1:n) {
 plot(N, dmu,xlab=&quot;&quot;)
 title(main=&quot;Approximation de mu en fonction de la taille de l&#39;échantillon&quot;,ylab = &quot;Valeur de mu&quot;)
 mean(dmu)</code></pre>
-<pre><code>## [1] 1.996599</code></pre>
+<pre><code>## [1] 1.997673</code></pre>
 <p><img src="tp3_files/figure-html/unnamed-chunk-12-1.png" width="33%" /></p>
 <p>On remarque encore une fois l’apparition d’un cône pour n de plus en plus grand et une convergence du paramètre <span class="math inline">\(\mu\)</span> vers <span class="math inline">\(2\)</span> la valeur théorique.</p>
 </div>
@@ -580,7 +580,7 @@ c(&quot;x0&quot; = x0, &quot;alpha_max&quot; = alpha)</code></pre>
 <pre class="r"><code># valeurs des paramètres pour lesquels la vraisemblance est maximal:
 c(&quot;x0_max&quot; = x0s[m], &quot;alpha_max&quot; = alphas[m])</code></pre>
 <pre><code>##     x0_max  alpha_max 
-## -2.0202020  0.3939394</code></pre>
+## -1.9797980  0.3838384</code></pre>
 </div>
 
 

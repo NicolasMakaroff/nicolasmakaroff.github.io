@@ -1,0 +1,15 @@
+---
+title: "Présentation d'introduction"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This presentation aims to give a general view on the subject of datascience and more specifically machine learning.
+
+The slide are available [here](IntroductionDataScience.pdf).
+
+The videos displayed during the presentation can be find :
+* []()
+* []()
