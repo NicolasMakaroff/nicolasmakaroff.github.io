@@ -1,6 +1,6 @@
 name: "Nicolas Makaroff"
 navbar:
-  title: "HOME"
+  title: '<div><img src="DataScienceLogo.png"></img>HOME</div>'
   right:
     - text: "Home"
       href: index.html
