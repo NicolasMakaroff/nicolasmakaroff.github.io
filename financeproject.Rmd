@@ -34,7 +34,7 @@ Soit $\mathbb{Q}$ tq $\mathbb{E}[\frac{S_{t_{i+1}}}{S_{t_{i}}}/F_{t_{i}}]=\mathb
 Let $\frac{1}{(1+r_{n})^{N}}\mathbb{E}[f(S_{t_{N}})]$ donc $S_{tN}=s(1+h_{N})^{X}(1+b_{N})^{N-X}$ donc $S_{t_{0}}=s$ Ainsi $X~\mathcal{B}(N,q_{N})$
 
 
-#### Question 2
+#### __Question 2__
 
 
 Let $p_{(N)}=\frac{1}{(1+r_N)^N}\mathbb{E}[f(S_{t_N}^{(N)})]$
@@ -50,7 +50,7 @@ Finally: $$p_{(N)}=\frac{1}{(1+r_N)^N}\times\sum\limits_{i=0}^N \dbinom{N}{i} ((
 
 ### First pricer
 
-#### Question 
+#### __Question__ 
 
 
 [language=Python,caption={Implémentation de Price1}]
@@ -77,7 +77,7 @@ The output for the following value $s=100$, $h_N=0.05$, $b_N=-0.05$, $r_N=0.01$,
 
 ### Second Pricer
 
-#### Question 
+#### __Question__
 
 
 [language=Python,caption=Implémentation de Price2]
@@ -95,7 +95,7 @@ def price2(N,rN,hN,bN,s,f):
     return M[1,1] 
 ```
 
-#### Question
+#### __Question__
 
 \begin{center}
 \includegraphics[width=10cm]{../price2.png}
@@ -110,7 +110,7 @@ def price2(N,rN,hN,bN,s,f):
 
 ### Comparison
 
-#### Question
+#### __Question__
 
 [language=Python,caption=Comparaison de Price1 et Price2]
 ```{python}
@@ -163,7 +163,7 @@ $$\beta_{N-1}(S_{t_{N-1}}^{(N)}) = \frac{f((1+b_N)S_{t_{N-1}}^{(N)})(1+h_N) - f(
 
 
 
-#### Question
+#### __Question__
 $$\alpha_{k-1}(S_{t_{k-1}}^{(N)})(1 + h_N)S_{t_{k-1}}^{(N)} +\beta_{k-1}(S_{t_{k-1}}^{(N)})S_{t_k}^{0}=v_k((1+h_N)S_{t_{k-1}}^{(N)})$$
 
 $$\alpha_{k-1}(S_{t_{k-1}}^{(N)})(1+b_N)S_{t_{k-1}}^{(N)} +\beta_{k-1}(S_{t_{k-1}}^{(N)})S_{t_k}^{0}=f((1+b_N)S_{t_{k-1}}^{(N)})$$
@@ -177,7 +177,7 @@ And,
 $$\beta_{k-1}(S_{t_{k-1}}^{(N)}) = \frac{v((1+b_N)S_{t_{k-1}}^{(N)})(1+h_N) - v((1+h_N)S_{t_{k-1}}^{(N)})(1+b_N)}{(1+r_N)^N(b_N - h_N)}$$
 
 
-#### Question
+#### __Question__
 
 [language=Python,caption=Comparison of Price1 and Price2]
 ```{python}
@@ -204,7 +204,8 @@ Let g be a function in $C^2$. Then the differential of the processus $g(S_t)$ sa
 $$dg(S_t)=g^{'}(S_t)dS_t + \frac{|\sigma S_t|^2}{2}g^{''}(S_t)dt$$
 ```
 
-#### Question
+#### __Question__
+
 We apply the previous lemma with  $S_t \longrightarrow ln(S_t)$. Then, we have :
 $$dln(S_t) = \frac{1}{S_t}dS_t + \frac{|\sigma S_t|^2}{2}(-\frac{1}{S_t^2})dt$$
 But: $ dS_t = S_t(rdt+\sigma dB_t)$
@@ -223,14 +224,15 @@ The price formula of an asset is given by : $p:=\mathbb{E}[e^{-rT}f(S_t)]$
 Let $(\xi_i)_{1\leqslant i \leqslant n}$ be a sequence of random variables on some probability space $(\Omega,\mathcal{F},\mathbb{P})$. They are supposed $i.i.d$ and they follow a $normal$ $distribution$ with parameter $m=0$, $\sigma=1$. We define :
 $$\hat{p}_{(N)}:=\frac{1}{n}\sum_{i=1}^{n}e^{-rT}f(s\times\exp((r-\frac{\sigma^2}{2})T+\sigma\sqrt{T}\xi_i))$$
 
-#### Question 
+#### __Question__ 
+
 [language=Python,caption=Price3]
 ```{python}
 def price3(n, s, r, o, T, f):
     return 1.0 / n * exp(-r * T) * sum([f(s * exp((r - o*o/2.0)*T + o * sqrt(T) * ksi)) for ksi in rnorm(0.0, 1.0, n)])
 ```
 
-#### Question
+#### __Question__
 
 {Plot of Price3}
 
@@ -245,7 +247,7 @@ $$ \mathbb{P}[\lim_{n}n^{-1}S_n=\mathbb{E}[X_1]]=1$$
 If the $X_n$ are independent and let $f$ be a measurable function then the $f(X_n)$ are independent.
 
 
-#### Question
+#### __Question__
 
 Let $X_1,X_2,...$ be a sequence of random variables define by $(e^{-rT}f(s\times\exp((r+\frac{\sigma^2}{2})T + \sigma\sqrt{T}\xi_i)))_{i\in\{1,...,n\}}$. 
 We have with the hypotheses that $(\xi_i)_{i\in\{1,...,\}}$ are $i.i.d$. 
@@ -266,7 +268,8 @@ $$\hat{p}_{(N)} \underset{p.s}{\longrightarrow} p$$
 
 
 ### Pricer by a close formula
-#### Question
+
+#### __Question__
 
 [language=Python,caption=Put function]
 ```{python}
@@ -278,7 +281,7 @@ def put(s,r,sigma,T,K):
     return -s*F2+K*exp(-r*T)*F1
 ```
 
-#### Question
+#### __Question__
 
 
 \begin{center}
@@ -286,21 +289,22 @@ def put(s,r,sigma,T,K):
 \captionof{figure}{Output of put}
 \end{center}
 
-#### Question
+#### __Question__
 
 \begin{center}
 \includegraphics[width=10cm]{../price3xput.png}
 \caption{figure}{Comparison between Price3 and Put}
 \end{center}
 
-#### Question
+#### __Question__
 
 \begin{center}
 \includegraphics[width=10cm]{../3D.png}
 \captionof{figure}{3D Output of put}
 \end{center}
 \section{Price convergence}
-#### Question
+
+#### __Question__
 
 \begin{center}
 \includegraphics[width=10cm]{../price22.png}
