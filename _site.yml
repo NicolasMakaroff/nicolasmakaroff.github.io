@@ -6,6 +6,8 @@ navbar:
       href: index.html
     - text: "DataScIIEnce"
       href: datascIIEnce.html
+    - text: "School Project"
+      href: schoolproject.html
     - text: "About"
       href: about.html
 output_dir: "."
