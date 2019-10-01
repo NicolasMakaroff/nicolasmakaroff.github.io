@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # 1. Maximum de vraisemblance
 
 ## 1.a  Estimation de p
-```{r,echo=FALSE}
+```{r,echo=TRUE}
 X_N <- rbinom(n=10,size=1,prob=0.7)
 X_N
 ```
