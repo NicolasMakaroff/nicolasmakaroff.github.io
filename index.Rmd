@@ -6,7 +6,7 @@ title: "HOME"
 
 
 
-The __DataScIIEnce__ section is for the ENSIIE eponymous association. It will contain information and formation given for the association.
+The __DataScIIEnce__ section is for the ENSIIE eponymous association. It will contain informations and formations given for the association.
 
 
 In the __School Project__, we can find some math project and the description of computer science project for the $3$ school years.
@@ -15,8 +15,8 @@ In the __School Project__, we can find some math project and the description of 
 
 #### Mathematics Project
 
-1. [Finance Project](https://nicolasmakaroff.github.io/financeproject.html)
-2. Statistics TP & Project
+* [Finance Project](https://nicolasmakaroff.github.io/financeproject.html)
+* Statistics TP & Project
 
     1. [TP2](https://nicolasmakaroff.github.io/tp2.html)
     2. [TP3](https://nicolasmakaroff.github.io/tp3.html)
@@ -24,6 +24,10 @@ In the __School Project__, we can find some math project and the description of 
     4. [Statistics Project](https://nicolasmakaroff.github.io/projectstat.html)
 
 #### Computer Science Project
+
+* [OCaml Project for the functional programming module](https://nicolasmakaroff.github.io/ipf.html)
+* [Java Project : Small Figure Editor](https://nicolasmakaroff.github.io/ilo.html)
+* [C++ implementation of SmartPointers](https://nicolasmakaroff.github.io/smartpointers.html)
 
 ### Second Year
 

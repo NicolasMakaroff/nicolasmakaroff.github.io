@@ -1,7 +1,8 @@
 ---
 title: "datascIIEnce"
-author: "Nicolas Makaroff"
 output: html_document
 ---
 
 # DataScIIEnce
+
+This section is dedicated to host informations and formations given in the ENSIIE engineering school.

@@ -9,7 +9,7 @@ navbar:
       menu:
       - text: "First year"
         menu:
-        - text: "Maths Project"
+        - text: "Maths Projects"
         - text: "Finance Project"
           href: financeproject.html
         - text: "Statistics"
@@ -23,7 +23,15 @@ navbar:
           - text: "Project"
             href: projectstat.html
       - text: "---------"
-    - text: "Personal Project"
+      - text: "Computer Science Projects"
+      - text: "Functional programming"
+        href: ipf.html
+      - text: "Small Figure Editor"
+        href: ilo.html
+      - text: "SmartPointers"
+        href: smartpointers.html
+      - text: "---------"
+    - text: "Personal Projects"
       menu:
       - text: "Prey-Predator Simulation"
         href: preypredator.html 

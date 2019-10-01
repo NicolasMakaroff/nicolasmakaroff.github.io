@@ -1,9 +1,54 @@
 ---
 title: "Prey-Predator Simulation"
-author: "Nicolas Makaroff"
-date: "01/10/2019"
+author: "Nicolas Makaroff & Luca Pinguet"
 output: html_document
 ---
 
 Link to the Github Repository : [here](https://github.com/NicolasMakaroff/wolf_sheep_simulation)
 
+__Titre :__ Étude des systèmes de prédations et leurs applications à l’équilibre des écosystèmes
+
+
+Être capable de prévoir les évolutions d’une population animale avec seulement des équations, l’idée semble curieuse. Pourtant cela a été l’enjeu de nombreuses recherches. De nos jours, la conservation des écosystèmes est devenue un véritable enjeu écologique car dès qu’une espèce se retrouve introduite dans une nouvelle aire, elle a des conséquences sur le milieu.
+
+ Ce projet de recherche fait l’objet d’un travail de groupe.
+ 
+__Membres du groupe :__
+
+- _Nicolas MAKAROFF_
+- _Luca PINGUET_
+
+__Positionnement thématique __
+-Analyse
+-Informatique pratique
+
+__Mots-clés :__
+automate cellulaires 			cellular automaton
+
+écosystème	                    	ecosystem
+
+mathématiques et prédictions	 math and prediction
+ 
+systèmes proies-prédateurs		 prey-predator system
+
+
+#### Bibliographie commentée :
+
+ 	Les systèmes proies-prédateurs permettent de rendre compte des interactions entre plusieurs espèces et de pouvoir à long termes prévoir les variations de populations. Les modèles mathématiques appliqués à la dynamique des populations ont beaucoup évolué avec le temps cherchant toujours à décrire la réalité avec une plus grande précision. En 1798, Malthus propose le premier modèle de simulation moderne d’évolution d’une unique population avec une simple équation différentielle. Bien que premièrement conçus pour être appliqués à la population mondiale, les résultats obtenus sont éloignés de la réalité[1]. Cinquante ans plus tard, le mathématicien Verhulst reprend l’idée et corrige le modèle en introduisant de nouvelles composantes comme la prise en compte de la capacité d’accueil maximale d’un lieu. Verhulst propose ainsi une fonction à laquelle il donnera le nom de fonction logistique. Il finira par appliquer son modèle pour déterminer la loi de population en Belgique et, ainsi, confronter son schéma à la réalité[2]. C’est finalement au vingtième siècle, en 1925 que l’avancée la plus significative sera faite. Deux chercheurs, Vito Volterra [3] et Alfred James Lotka, en travaillant en parallèle vont arriver au même résultat et donner naissance aux équations de prédations de Lotka-Volterra. C’est le premier modèle prenant en compte plus d’une population et couplant l’action de l’une sur l’autre [4] ...
+	Une telle interdépendance entre deux systèmes peut aussi être étudiée informatiquement par le biais des automates cellulaires. On attribue généralement la création des automates cellulaires à Stanislas Ulam et Jon Von Neumann dans les années quarante. Ces mathématiciens s’intéressaient à l'évolution de certaines constructions graphiques engendrées à partir de règles simples qu’ils élaboraient [5] . Leurs recherches s’effectuaient sur une feuille quadrillée de cellules, chacune de celles-ci pouvait avoir deux états : allumé ou éteint, vivant ou mort,etc. Partant d'une certaine configuration, la génération de cellules suivante se détermine en fonction de « règles de voisinage ». Les deux mathématiciens ont très vite constaté que ce mécanisme permettait de générer des figures complexes et que, dans certains cas, ces figures pouvaient se répliquer. Ainsi des règles extrêmement simples permettaient de construire des structures très complexes. Vint alors la question de savoir si ces mécanismes récursifs pouvait servir dans la modélisation de phénomènes réels. Les applications pratiques des automates cellulaires sont extrêmement variées,  allant de la simulation de la propagation d’un feu de forêt jusqu’à une étude simplifiée du mécanisme de division de cellules biologiques : c’est ce sur quoi Stephen Wolfram a travaillé dans son livre « A New Kind of Science », étendant la portée de l’utilité des automates cellulaires à « toutes les branches de la science ». L’important est que dans un automate cellulaire, les lois sont simples et complètement connues, on peut ainsi tester et analyser le comportement global d'un univers simplifié que l’on maîtrise totalement.
+
+__Problématique retenue :__ Les résultats d’une étude mathématique de comportement « sociologique » sont-ils plus efficaces qu’une modélisation informatique ?
+
+__Objectifs du travail :__ Les automates cellulaires permettant de simuler toutes sortes de phénomènes réels, je me propose d’en coder un sous python en tentant de rendre compte au mieux des interactions possibles entre deux espèces d’un système proie-prédateur ; à savoir des loups et des moutons ici. A partir de certaines conditions initiales, je tenterai de trouver le bon nombre de loups à introduire dans une aire contenant des moutons pour arriver à un équilibre dans le nombre d’individus des deux populations.
+
+__Références bibliographiques:__
+
+[1] Thomas Robert Malthus, An essay on the principle of population, J.Johnson, Londres, 1798
+
+[2]  Pierre-François Verhulst, Nouveaux mémoires de l’académie royale des sciences et belles-lettres de Bruxelles , Recherches mathématiques sur la loi d’accroissement des populations, imprimeur de l’académie royale, 1845, [](https://gdz.sub.uni-goethigen.de/), octobre 2017
+
+[3] V. Volterra. Variations and fluctuations of the number of individuals in animal species living together. In Animal Ecology. McGraw-Hill, 1931.
+
+[4] Nabil Beroual (soutenue publiquement le 30 Mai 2015), Modèles Mathématiques Appliqués à la Dynamique des Populations , Doctorat en sciences à l'Université Ferhat Abbas – Setif 1
+
+ [5] [](http://natureofcode.com/book/chapter-7-cellular-automata/) pour se familiariser avec le concept d’automate cellulaire, page consultée le 10 Octobre 2017
