@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Nicolas Makaroff" />
+
+<meta name="date" content="2019-01-05" />
+
+<title>Statistical Project</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 45px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h2 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h3 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h4 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h5 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h6 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"><div><img src="DataScienceLogo.png"height=30 width=30></img>   HOME</div></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="datascIIEnce.html">DataScIIEnce</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    School Project
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-submenu">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">First year</a>
+      <ul class="dropdown-menu" role="menu">
+        <li class="dropdown-header">Maths Project</li>
+        <li>
+          <a href="financeproject.html">Finance Project</a>
+        </li>
+        <li class="dropdown-submenu">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Statistics</a>
+          <ul class="dropdown-menu" role="menu">
+            <li class="dropdown-header">TP1</li>
+            <li class="dropdown-header">TP2</li>
+            <li class="dropdown-header">TP3</li>
+            <li class="dropdown-header">TP4</li>
+            <li>
+              <a href="projectstat.html">Project</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li class="divider"></li>
+  </ul>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Statistical Project</h1>
+<h4 class="author"><em>Nicolas Makaroff</em></h4>
+<h4 class="date"><em>01/05/2019</em></h4>
+
+</div>
+
+
+<div id="statistiques-descriptives" class="section level1">
+<h1>Statistiques Descriptives</h1>
+<div id="a" class="section level2">
+<h2>(a)</h2>
+<p>Avant de commencer toute chose, on analyse d’abord la base de donnée fournit afin de comprendre les valeurs dans celle-ci et éventuellement détecter des irrégularités.</p>
+<pre class="r"><code>knitr::opts_chunk$set(echo=TRUE,message=FALSE,warning=FALSE)
+library(ggplot2)
+library(magrittr)
+library(dplyr)
+library(tidyr)
+data &lt;- read.csv(&quot;Data_Binomial_16.csv&quot;)
+summary(data)</code></pre>
+<pre><code>##       cost             victory            sex             age      
+##  Min.   :  0.0781   Min.   : 29.26   Min.   :0.000   Min.   :0.00  
+##  1st Qu.: 26.2713   1st Qu.: 42.88   1st Qu.:0.000   1st Qu.:1.00  
+##  Median : 64.6320   Median : 47.22   Median :0.000   Median :1.00  
+##  Mean   : 94.9607   Mean   : 49.53   Mean   :0.315   Mean   :1.19  
+##  3rd Qu.:135.2717   3rd Qu.: 53.92   3rd Qu.:1.000   3rd Qu.:2.00  
+##  Max.   :789.8508   Max.   :116.80   Max.   :1.000   Max.   :2.00</code></pre>
+<pre class="r"><code>data %&gt;%
+   dplyr::select_if(is.numeric) %&gt;%
+   tidyr::gather(variable, value) %&gt;%
+   ggplot(aes(value))+
+   geom_dotplot()+
+   facet_wrap(~variable, scales=&quot;free&quot;)</code></pre>
+<p><img src="projectstat_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<pre class="r"><code>data %&gt;%
+        select_if(is.numeric) %&gt;%
+        gather(variable, value) %&gt;%
+        ggplot(aes(y=value,x=variable, fill=variable, colour=variable))+
+        geom_boxplot(alpha=0.5)+
+        facet_wrap(~variable, scales=&quot;free&quot;)</code></pre>
+<p><img src="projectstat_files/figure-html/unnamed-chunk-1-2.png" width="672" /></p>
+<pre class="r"><code>outlier_cost &lt;- boxplot.stats(data$cost)$out</code></pre>
+<p>On remarque ainsi les valeurs absurdes dans le pourcentage de victoire (ainsi que le prix éxubérant de certains jeux de cartes).</p>
+<p>Nous pouvons donc à nettoyer la base de données des valeurs incohérentes. Ici nous pouvons les supprimer parce que le sujet le présente comme cela mais dans une étude plus poussée de data une réelle question se poserait surtout pour les valeurs <span class="math inline">\(NaN\)</span></p>
+<pre class="r"><code>data_clean &lt;- subset(data,victory &gt; 0 &amp; victory &lt; 100 ,victory &amp; sex)
+summary(data_clean)</code></pre>
+<pre><code>##       cost             victory           sex              age      
+##  Min.   :  0.0781   Min.   :29.26   Min.   :0.0000   Min.   :0.00  
+##  1st Qu.: 26.2381   1st Qu.:42.87   1st Qu.:0.0000   1st Qu.:1.00  
+##  Median : 64.5414   Median :47.21   Median :0.0000   Median :1.00  
+##  Mean   : 93.6747   Mean   :49.41   Mean   :0.3151   Mean   :1.19  
+##  3rd Qu.:134.6252   3rd Qu.:53.90   3rd Qu.:1.0000   3rd Qu.:2.00  
+##  Max.   :548.1184   Max.   :95.88   Max.   :1.0000   Max.   :2.00</code></pre>
+<pre class="r"><code>data_homme &lt;- subset(data_clean, sex == 1, victory &amp; sex)
+data_femme &lt;- subset(data_clean, sex == 0 ,victory &amp; sex)
+boxplot(data_clean$victory~data_clean$sex,varwidth = TRUE,notch = TRUE,outline = TRUE ,col = c(&quot;blue&quot;,&quot;pink&quot;),main=&quot;Répartition des victoire en fonction du sexe&quot;)</code></pre>
+<p><img src="projectstat_files/figure-html/unnamed-chunk-2-1.png" width="33%" /></p>
+</div>
+<div id="b" class="section level2">
+<h2>(b)</h2>
+<p>les âges étant déja rangés en trois catégories, on peut faire le même raisonnement que dans la question <span class="math inline">\(1(a)\)</span>.</p>
+<pre class="r"><code>boxplot(data_clean$victory~data_clean$age,varwidth = TRUE,notch = TRUE,outline = TRUE ,col = c(&quot;black&quot;,&quot;red&quot;,&quot;green&quot;),main=&quot;Répartition des victoire en fonction de l&#39;âge&quot;)
+
+boxplot(data_clean$victory~cut(data_clean$cost, breaks = seq(0,500,30),xlabel=c(&quot;&quot;), include.lowest = TRUE, ),varwidth = TRUE,notch = FALSE,outline = TRUE ,col = c(&quot;blue&quot;,&quot;pink&quot;),main=&quot;Répartition des victoire en fonction du prix&quot;)
+plot(data_clean$victory~data_clean$cost)</code></pre>
+<p><img src="projectstat_files/figure-html/unnamed-chunk-3-1.png" width="33%" /><img src="projectstat_files/figure-html/unnamed-chunk-3-2.png" width="33%" /><img src="projectstat_files/figure-html/unnamed-chunk-3-3.png" width="33%" /> On remarque que les victoires lorsque le prix du jeu dépasse 150 sont négligeables.</p>
+</div>
+<div id="c" class="section level2">
+<h2>(c)</h2>
+<pre class="r"><code>data_clean$cost.cat &lt;- cut(data_clean$cost,breaks = seq(0,50,2))
+table(data_clean$cost.cat)</code></pre>
+<pre><code>## 
+##   (0,2]   (2,4]   (4,6]   (6,8]  (8,10] (10,12] (12,14] (14,16] (16,18] 
+##      42      52      47      42      48      31      42      37      29 
+## (18,20] (20,22] (22,24] (24,26] (26,28] (28,30] (30,32] (32,34] (34,36] 
+##      38      38      22      26      29      40      32      33      22 
+## (36,38] (38,40] (40,42] (42,44] (44,46] (46,48] (48,50] 
+##      25      21      29      21      23      26      15</code></pre>
+<pre class="r"><code>hist(data_clean$cost,breaks = 30)</code></pre>
+<p><img src="projectstat_files/figure-html/unnamed-chunk-4-1.png" width="33%" /></p>
+</div>
+<div id="d" class="section level2">
+<h2>(d)</h2>
+<pre class="r"><code>data_clean$victory.cat &lt;- cut(data_clean$victory,breaks = seq(0,100,10))
+table(data_clean$victory.cat)</code></pre>
+<pre><code>## 
+##   (0,10]  (10,20]  (20,30]  (30,40]  (40,50]  (50,60]  (60,70]  (70,80] 
+##        0        0        1      236     1022      478      176       61 
+##  (80,90] (90,100] 
+##       19        3</code></pre>
+<pre class="r"><code>hist(data_clean$victory,breaks = 30)
+par(new=TRUE)
+# plot(dchisq(0.5*x,25))
+
+hist(data_clean$victory,breaks=30,freq=FALSE)
+#par(new=TRUE)
+y&lt;-seq(0,100,by=0.1)
+lines(y,dchisq(0.5*y,25))</code></pre>
+<p><img src="projectstat_files/figure-html/unnamed-chunk-5-1.png" width="33%" /></p>
+</div>
+</div>
+<div id="estimations" class="section level1">
+<h1>Estimations</h1>
+<div id="a-1" class="section level2">
+<h2>(a)</h2>
+<p>tracer loi exponentielle</p>
+<pre class="r"><code>hist(data_clean$cost,breaks = 30,xlab=&quot;&quot;,ylab=&quot;&quot;)
+
+x&lt;-seq(from = min(data_clean$cost),to = max(data_clean$cost), length.out = length (data_clean$cost) )
+par(new=TRUE)
+plot(dexp(x,rate = 0.01),type=&quot;l&quot;,xlab = &quot;prix du paquet&quot;,ylab=&quot;fréquence&quot;,col=&quot;red&quot;)</code></pre>
+<p><img src="projectstat_files/figure-html/unnamed-chunk-6-1.png" width="33%" /></p>
+</div>
+<div id="b-1" class="section level2">
+<h2>(b)</h2>
+<p>Calculons la vraisemblance du modèle : <span class="math inline">\(L(x_1,...,x_n;\lambda)=\prod\limits_i^nf(x_i;\lambda)=\prod\limits_i^n\lambda\exp(-\lambda(x_i-x_0)1_{[x_0,+\infty]}(x_i))=\lambda^n\exp(-\lambda\sum\limits_i^nx_i+\lambda nx_0)1_{[x_0,+\infty]}(\min x_i)\)</span></p>
+</div>
+<div id="c-1" class="section level2">
+<h2>(c)</h2>
+<p>A l’aide de la question (a), on obtien la log-vraisemblance : <span class="math display">\[\mathcal{L}(x_i;\lambda)=n\log(\lambda) - \lambda\sum\limits_i^nx_i + n\lambda x_0\]</span> On dérive et on cherche le point d’annulation : <span class="math inline">\(0=\frac{n}{\lambda} - \sum\limits_i^n +nx_0\)</span> Et ainsi l’EMV est <span class="math display">\[\hat{\lambda}=\frac{n}{c}\text{ ou } c= -nx_0+\sum\limits_i^nx_i\]</span> EMV de <span class="math display">\[x_0=\min(x_i)\]</span></p>
+<pre class="r"><code>exp_1 &lt;- function(lambda,echan) {
+  n &lt;- length(echan)
+  xn &lt;- 0
+  x0 &lt;- min(echan)
+  for (i in echan){
+    xn &lt;- xn + i
+  }
+   return( n*log(lambda)-lambda*xn+n*lambda*x0)
+}
+vect_p=seq(0.01,1,length.out=100)
+vect_vraisemblance &lt;- sapply(vect_p,function(vect_p) exp_1(vect_p,data$cost))
+plot(vect_vraisemblance)</code></pre>
+<p><img src="projectstat_files/figure-html/unnamed-chunk-7-1.png" width="33%" /></p>
+</div>
+<div id="d-1" class="section level2">
+<h2>(d)</h2>
+<pre class="r"><code>EMV &lt;- 1/(mean(data_clean$cost)-min(data_clean$cost))
+plot(vect_vraisemblance)
+abline(h=EMV)</code></pre>
+<p><img src="projectstat_files/figure-html/unnamed-chunk-8-1.png" width="33%" /></p>
+</div>
+<div id="e" class="section level2">
+<h2>(e)</h2>
+<p>La loi suivi par le modèle est une loi normale <span class="math inline">\(\mathcal{N}(40+\frac{P}{10},\sigma^2)\)</span> Le calcul de la vraisemblance donne : <span class="math display">\[L(x_i,\hat{\sigma})=\frac{1}{(2\pi)^{\frac{n}{2}}\sigma^n}\prod_i^n\exp(-\frac{1}{2}\frac{(x_i-\mu)^2}{\sigma^2})=\frac{1}{(2\pi)^{\frac{n}{2}}\sigma^n}\exp(\sum_i^n(x_i-40-\frac{P_i}{10}))\]</span> Et donc, la log-vraisemblance est : <span class="math display">\[\mathcal{L}(x_i,\hat{\sigma})=-\frac{n}{2}\log(2\pi) -n\log(\hat{\sigma})-\frac{1}{2\hat{\sigma^2}}\sum_i^n(x_i-40-\frac{P_i}{10})^2\]</span> ## (f) Une dérivation par rapport à <span class="math inline">\(\sigma\)</span> donne l’EMV : <span class="math display">\[\hat{\sigma^2}=\frac{1}{n}\sum_i^n(x_i-40-\frac{P_i}{10})^2\]</span></p>
+<pre class="r"><code>norm_1 &lt;- function(sigma,echan) {
+  n &lt;- length(echan)
+  xn &lt;- 0
+  for (i in echan){
+    xn &lt;- xn +(data_clean$victory[i] - 40 - data$cost[i]/10)**2 
+  }
+   return(-n/2 *log(2*pi)-n*log(sigma)-1/(2*sigma**2)*xn)
+}
+vect_p=seq(0.01,1,length.out=100)
+vect_vraisemblance &lt;- sapply(vect_p,function(vect_p) norm_1(vect_p,data_clean$victory))
+plot(vect_vraisemblance)
+abline(h=EMV)</code></pre>
+<p><img src="projectstat_files/figure-html/unnamed-chunk-9-1.png" width="33%" /></p>
+<p>On vérifie que l’estimateur obtenue est bien maximum à l’aide d’une dérivée seconde.</p>
+</div>
+</div>
+<div id="intervalles-de-confiance" class="section level1">
+<h1>Intervalles de confiance</h1>
+<div id="a-2" class="section level2">
+<h2>(a)</h2>
+<p>La formule théorique de l’Intervalle de confiance de la variance <span class="math inline">\(IC_{1-\alpha}(\sigma^2)\)</span>, <span class="math inline">\(\mu\)</span> étant inconnue dû manque d’information sur la translation <span class="math inline">\(x_0\)</span>, est :  <span class="math display">\[IC_{1-\alpha}(\sigma^2) = [\frac{nS^2(\omega)}{b},\frac{nS^2(\omega)}{a}]\]</span> où <span class="math inline">\(S^2(\omega)=\frac{\sum^{n}_{i=1}(X_i(\omega) - \bar{X}(\omega))^2}{n}\)</span> et où les réels <span class="math inline">\(a\)</span> et <span class="math inline">\(b\)</span> sont déterminés dans une table de la loi <span class="math inline">\(\chi^2(n-1)\)</span> de la v.a. U par : <span class="math inline">\(\mathbb{P}(U\le a)=\alpha/2\)</span> et <span class="math inline">\(\mathbb{P}(U\le b)=1-\alpha/2\)</span> ceci est valable pour encadrer la parmètre <span class="math inline">\(\lambda\)</span> car nous avons <span class="math inline">\(\frac{1}{\lambda^2}=\sigma^2\)</span> pour la loi exponentielle.</p>
+<p>On applique le théorème central limite : <span class="math display">\[\sqrt{n}\frac{\bar{X}_n - \frac{1}{\lambda}-x_0}{\frac{1}{\lambda}} \sim \mathcal{N}(0,1)\]</span></p>
+<p>Or : <span class="math display">\[\frac{1}{\hat{\lambda}}=-x_0 + \bar{X}_n\]</span> On obtient alors l’intervalle de confiance : <span class="math display">\[[\hat{\lambda} - \frac{\hat{\lambda}}{\sqrt{n}}q_{1-\frac{\alpha}{2}};\hat{\lambda} + \frac{\hat{\lambda}}{\sqrt{n}}q_{1-\frac{\alpha}{2}}]\]</span></p>
+</div>
+<div id="b-2" class="section level2">
+<h2>(b)</h2>
+<pre class="r"><code>EMV &lt;- 1/(mean(data_clean$cost)-min(data_clean$cost))
+EMV</code></pre>
+<pre><code>## [1] 0.01068415</code></pre>
+<pre class="r"><code>I_C2 &lt;- function(alpha){
+  n=length(data_clean$cost)
+  icg=EMV-EMV*qnorm(1-alpha/2,0,1)/sqrt(n)
+  icd=EMV+EMV*qnorm(1-alpha/2,0,1)/sqrt(n)
+  return(c(icg,icd))
+}
+
+val_alpha &lt;- seq(0.5,0.99,length.out=45)
+intervalle_confiance &lt;- sapply(val_alpha,function(alpha) I_C2(alpha))
+plot(seq(0.5,0.99,length.out = 90),intervalle_confiance)</code></pre>
+<p><img src="projectstat_files/figure-html/unnamed-chunk-10-1.png" width="33%" /></p>
+<pre class="r"><code>to_plot&lt;-c()
+for (i in 1:length(intervalle_confiance)){
+  append(to_plot,intervalle_confiance[i])
+}
+val_alpha2 &lt;- rep(val_alpha,2)
+# sort(val_alpha2)
+plot(val_alpha2,to_plot)</code></pre>
+<p><img src="projectstat_files/figure-html/unnamed-chunk-11-1.png" width="33%" /></p>
+</div>
+</div>
+<div id="tests" class="section level1">
+<h1>Tests</h1>
+<div id="a-3" class="section level2">
+<h2>(a)</h2>
+<pre class="r"><code>mean(data_homme$victory)</code></pre>
+<pre><code>## [1] 49.15906</code></pre>
+<pre class="r"><code>mean(data_femme$victory)</code></pre>
+<pre><code>## [1] 49.5248</code></pre>
+<p>Les pourcentages de victoire des hommes et des femmes sont tous deux inférieurs à 50%.</p>
+</div>
+<div id="b-3" class="section level2">
+<h2>(b)</h2>
+<p>Nous allons tester le fait qu’une femme a un pourcentage de victoire plus élever que celui d’un homme avec un risque de première espèce <span class="math inline">\(\alpha=0.05\)</span>. On pose le problème suivant : <span class="math display">\[H_0: \mu_{femme}=\mu_{hommme}\]</span> <span class="math display">\[H_1: \mu_{femme} \neq \mu_{homme}\]</span> On suppose que les <span class="math inline">\(X_{femme}\)</span> et <span class="math inline">\(X_{homme}\)</span> sont i.i.d. Sous l’hypothèse <span class="math inline">\(H_0\)</span>, on a alors <span class="math display">\[X_{femme}-X_{homme} \sim \mathcal{N}(0,\sqrt{\sigma_{femme}^2-\sigma_{homme}^2})\]</span></p>
+<p>Pour pouvoir utiliser le test de Student nous vérifier sa compatibilté avec une loi normale avec un test de kolmogorov.</p>
+<pre class="r"><code>ks.test(data_homme$victory, &quot;pnorm&quot;, mean = mean(data_homme$victory), sd = sd(data_homme$victory))</code></pre>
+<pre><code>## 
+##  One-sample Kolmogorov-Smirnov test
+## 
+## data:  data_homme$victory
+## D = 0.11092, p-value = 3.791e-07
+## alternative hypothesis: two-sided</code></pre>
+<pre class="r"><code>t.test(data_homme$victory, mu = mean(data_femme$victory), alternative = &quot;two.sided&quot;)</code></pre>
+<pre><code>## 
+##  One Sample t-test
+## 
+## data:  data_homme$victory
+## t = -0.95683, df = 628, p-value = 0.339
+## alternative hypothesis: true mean is not equal to 49.5248
+## 95 percent confidence interval:
+##  48.40844 49.90968
+## sample estimates:
+## mean of x 
+##  49.15906</code></pre>
+</div>
+<div id="c-2" class="section level2">
+<h2>(c)</h2>
+<p>On ne connait pas la loi assouvie par l’echantillon des paquets de cartes qui valent chers nous allons donc utiliser un test de Kolmogorov pour vérifier la loi normale d’écart-type=<span class="math inline">\(5\)</span> dont on sait que la fonction de répartition est continue:</p>
+<pre class="r"><code>q &lt;- quantile(data_clean$cost,0.7)
+data_jeu_cher &lt;- subset(data_clean, cost&gt;=unname(q))
+res &lt;- ks.test((data_jeu_cher$victory)-mean(data_jeu_cher$victory),&quot;pnorm&quot;,mean=0,sd=5)
+res</code></pre>
+<pre><code>## 
+##  One-sample Kolmogorov-Smirnov test
+## 
+## data:  (data_jeu_cher$victory) - mean(data_jeu_cher$victory)
+## D = 0.1728, p-value = 5.551e-16
+## alternative hypothesis: two-sided</code></pre>
+<pre class="r"><code>data_jeu_cher$victory.cat &lt;- cut(data_jeu_cher$victory,breaks = seq(0,50,2))
+table(data_jeu_cher$victory.cat)</code></pre>
+<pre><code>## 
+##   (0,2]   (2,4]   (4,6]   (6,8]  (8,10] (10,12] (12,14] (14,16] (16,18] 
+##       0       0       0       0       0       0       0       0       0 
+## (18,20] (20,22] (22,24] (24,26] (26,28] (28,30] (30,32] (32,34] (34,36] 
+##       0       0       0       0       0       0       0       0       0 
+## (36,38] (38,40] (40,42] (42,44] (44,46] (46,48] (48,50] 
+##       0       0       0       5       0       9      31</code></pre>
+<pre class="r"><code>hist(data_jeu_cher$victory-mean(data_jeu_cher$victory),breaks = 30)</code></pre>
+<p><img src="projectstat_files/figure-html/unnamed-chunk-16-1.png" width="33%" /> La valeur de la <span class="math inline">\(p-value\)</span> confirme que la loi suivi est bien normale.</p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

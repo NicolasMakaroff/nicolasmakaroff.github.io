@@ -14,6 +14,18 @@ navbar:
         - text: "Maths Project"
         - text: "Finance Project"
           href: financeproject.html
+        - text: "Statistics"
+          menu: 
+          - text: "TP1"
+          
+          - text: "TP2"
+         
+          - text: "TP3"
+         
+          - text: "TP4"
+          
+          - text: "Project"
+            href: projectstat.html
       - text: "---------"
     - text: "About"
       href: about.html
