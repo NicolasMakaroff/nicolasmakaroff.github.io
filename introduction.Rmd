@@ -11,5 +11,5 @@ This presentation aims to give a general view on the subject of datascience and 
 The slide are available [here](IntroductionDataScience.pdf).
 
 The videos displayed during the presentation can be find :
-* []()
-* []()
+* [CartPole Simulation]()
+* [Pac-Man Game]()

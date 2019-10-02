@@ -372,7 +372,68 @@ $(document).ready(function () {
 </div>
 
 
-
+<p>Link to the Github repository : <a href="https://github.com/NicolasMakaroff/Martien_Communication/">here</a></p>
+<div id="i.introduction" class="section level2">
+<h2>I.Introduction</h2>
+</div>
+<div id="ii.-partie-1" class="section level2">
+<h2>II. Partie 1</h2>
+</div>
+<div id="iii.-partie-2" class="section level2">
+<h2>III. Partie 2</h2>
+<p>## 3.1 Compréhension des difficultés. ## 3.2 Choix de la représentation. ## 3.3 Construction des fonctions liées aux antennes. ## 3.4 Réutilisation de la partie 1.</p>
+</div>
+<div id="iv.-pour-aller-plus-loin" class="section level2">
+<h2>IV. Pour aller plus loin</h2>
+</div>
+<div id="i.-introduction" class="section level2">
+<h2>I. Introduction</h2>
+<p>Le projet se décompose en deux parties étant une version simplifiée de la seconde. Le but est de transmettre un message à travers la manipulation d’antenne à une forme de vie située sur une autre planète qui tente de rentrer en contact avec nous. La solution proposée ici n’est pas optimale car elle ne prend pas en compte le temps d’envoie le plus court sur un mot mais seulement lettre par lettre. Une esquisse d’une autre implémentation est proposée en section 3. L’exécutable présent dans l’archive ne fonctionne qu’avec la partie 2 puisque qu’il suffit de donner une seule antenne pour se retrouver dans la situation de la partie 1.</p>
+</div>
+<div id="ii.-partie-1-1" class="section level2">
+<h2>II. Partie 1</h2>
+<p>J’ai pris la décision en abordant cette partie 1 de ne pas prendre en compte l’existence de la deuxième afin d’obtenir un code le plus clair possible. Les premiers temps ont été consacré à chercher une modélisation du problème à l’aide des outils informatiques que nous connaissons. J’ai d’abord entreprit de représenter les antennes par des <em>Zippers</em> mais cet outils m’est apparu par la suite inutilement complexe ce qui m’a conduit à me concentrer sur la structure de <em>List</em> fournit par la fonction de lecture d’entrée.</p>
+<p>Les lettres étant transposable en entier le calcul des distances entre deux lettres semblait être une solution simple et efficace. Une nouvelle difficulté est alors apparu qui est le caractère <em>espace</em> car celui-ci est <em>loin</em> des lettres de l’alphabet. Il a donc fallu considéré à part ce cas particulier. La fonction faisant la majorité du travail sur cette partie <em>creation</em> se contente de calculer des distances et de faire le bon choix de sens de rotation.</p>
+</div>
+<div id="iii.-partie-2-1" class="section level2">
+<h2>III. Partie 2</h2>
+<p>La plupart de cette partie s’est faîte sur papier. Le travail a été divisé en trois étapes:</p>
+<ol style="list-style-type: decimal">
+<li>Compréhension de la difficulté</li>
+<li>Choix de représentation des antennes 3.Construction des fonctions d’antennes</li>
+<li>Réutilisation de la <strong>Partie 1.</strong></li>
+</ol>
+<div id="comprehension-de-la-difficulte" class="section level4">
+<h4>Compréhension de la difficulté</h4>
+<p>L’apport de cette seconde partie de projet est la prise en compte d’un nombre inconnue d’antenne disponible pour transmettre le message et l’envie d’optimiser le temps d’envoie.</p>
+<p>Il faut donc pouvoir considérer chaque antenne comme des entités distinctes. Une fois cette difficulté résolue, il faut être capable de faire switcher l’algorithme entre les antennes et d’indiquer quelle antenne est utilisée.</p>
+</div>
+<div id="choix-de-la-representation" class="section level4">
+<h4>Choix de la représentation</h4>
+<p>J’ai fait le choix de représenter une antenne par un enregistrement contenant plusieurs informations sur celle-ci.</p>
+<ul>
+<li>un identifiant d’antenne : son nom avec <span class="math inline">\(nom\in \{S0,..,SN\}\)</span>.</li>
+<li>sa position courante initialisée sur l’espace.</li>
+<li>un entier représentant la distance au prochain caractère du message initialisé en 0.</li>
+</ul>
+<pre><code>type antenne={num:char list; pos: char ; dis: int};;</code></pre>
+</div>
+<div id="construction-des-fonctions-dantennes" class="section level4">
+<h4>Construction des fonctions d’antennes</h4>
+<p>J’ai par la suite écrit quelques fonctions pour manipuler ce nouveau type ainsi qu’une liste d’antenne. Ces fonctions permettent essentiellement de simplifier la compréhension du code et d’empêcher les mauvaises manipulation. Une description de leur fonctionnement se trouve dans le document d’explication des fonctions.</p>
+</div>
+<div id="reutilisation-de-la-partie-1." class="section level4">
+<h4>Réutilisation de la <strong>Partie 1.</strong></h4>
+<p>L’envie ici a été de réutiliser les résultats fournis par la partie 1 mais sur les différentes antennes indépendamment. Cela se fait par tout d’abord être capable de choisir la bonne antenne puis appliquer la partie 1. Ceci n’a pas été très compliqué puisque le choix a été simplifier par la troisième entrée dis du type antenne en écrivant une fonction trouvant la distance minimum sur une liste d’antenne.</p>
+</div>
+</div>
+<div id="pour-aller-plus-loin" class="section level2">
+<h2>Pour aller plus loin</h2>
+<p>Comme expliqué en introduction, cette solution ne donnera pas le meilleur résultat sur certains mots particuliers comme par exemple [′E′;′B′;′Z′] avec 2 antenne (ou encore [′A′;′B′;′A′;′B′;′A′;′B′;′A′;′B′;′A′;′B′]). On obtiendra ici 31sec alors qu’on aurait au mieux 25sec. On obtient ainsi quand même une différence de 6 sec ce qui pourrait ne pas être négligeable d’autant plus que le contre-exemple donné est relativement simple.</p>
+<p>J’ai voulu alors trouver d’autre modélisation afin de résoudre cette difficulté mais le réalisation n’ont pas été mené jusqu’au bout.</p>
+<p>Deux choix se proposaient à moi : * les arbres * les graphes Les arbres ont été mis de côté parce que la complexité en temps était très élevé est que mon niveau dans ce domaine me permettait pas de représenter optimalement le problème.</p>
+<p>Par contre, les graphes me semblaient plus simple d’utilisation. Une modélisation du contre exemple donnerait en utilisant les graphes Potentiel-Tâches un graphe assez simple mais rapidement inutilisable. En effet, l’utilisation de Dijkstra amène à un mauvais résultat à cause du chemin entre ′E′ et ′Z′ . Il a donc fallu rajouter des sommets fictifs afin de résoudre la mauvaise représentation. Le problème étant alors de faire comprendre à un ordinateur comment créer un tel graphe à partir d’une seule liste de caractères. On trouvera dans le fichier autre.ml une implémentation du graphe pour l’exemple E; B; Z et l’application de l’algorithme de Dijkstra qui renvoie le parcours entre les lettres et les antennes afin de savoir quand bien utiliser un changement d’antenne.</p>
+</div>
 
 
 
