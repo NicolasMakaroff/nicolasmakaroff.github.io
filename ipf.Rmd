@@ -9,18 +9,17 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Link to the Github repository : [here](https://github.com/NicolasMakaroff/Martien_Communication/)
 
-## I.Introduction
+#### I.Introduction
 
-## II. Partie 1 
+#### II. Partie 1 
 
-## III. Partie 2
+#### III. Partie 2
+    3.1 __Compréhension des difficultés.__
+    3.2 __Choix de la représentation.__
+    3.3 __Construction des fonctions liées aux antennes.__
+    3.4 __Réutilisation de la partie 1.__
   
-  ## 3.1 Compréhension des difficultés.
-  ## 3.2 Choix de la représentation.
-  ## 3.3 Construction des fonctions liées aux antennes.
-  ## 3.4 Réutilisation de la partie 1.
-  
-## IV. Pour aller plus loin 
+#### IV. Pour aller plus loin 
 
 
 
