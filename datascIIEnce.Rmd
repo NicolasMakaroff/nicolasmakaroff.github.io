@@ -5,4 +5,4 @@ output: html_document
 
 # DataScIIEnce
 
-This section is dedicated to host informations and formations given in the ENSIIE engineering school.
+This section is dedicated to host information and formations given in the ENSIIE engineering school.

@@ -39,7 +39,7 @@ navbar:
       href: datascIIEnce.html
       menu:
       - text: "Introductory Presentation"
-        href: introduction.html
+        href: introduction.html   
     - text: "About"
       href: about.html
 output_dir: "."

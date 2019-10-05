@@ -398,6 +398,14 @@ $(document).ready(function () {
 <div id="question" class="section level4">
 <h4><strong>Question</strong></h4>
 <p>[language=Python,caption={Implémentation de Price1}]</p>
+<pre class="python"><code>from scipy import special
+
+def price1(N,rN,hN,bN,s,f):
+    qN = (rN-bN)/(hN-bN)
+    return 1.0/((1.0+rN)**N) * sum([special.comb(N,i)*f(s*((1+hN)**i)*((1+bN)**(N-i)))*(qN**i)*((1-qN)**(N-i)) for i in range(N)])
+    
+def f(x):
+    return max(x-90,0)</code></pre>
 <pre><code>The output for the following value $s=100$, $h_N=0.05$, $b_N=-0.05$, $r_N=0.01$, $N=30$ et $f(x)=max(x-90,0)$</code></pre>
 
 </div>
@@ -407,6 +415,17 @@ $(document).ready(function () {
 <div id="question-3" class="section level4">
 <h4><strong>Question</strong></h4>
 <p>[language=Python,caption=Implémentation de Price2]</p>
+<pre class="python"><code>def price2(N,rN,hN,bN,s,f):
+    cst=1/(1+rN)
+    qN=(rN-bN)/(hN-bN)
+    M =np.zeros((N+2,N+2),float)
+    for i in range(1,N+1):
+        M[i,N+1]=f(s*(1+hN)**(N-i+1)*(1+bN)**(i-1)) 
+    for j in range(N,0,-1):
+        for k in range(1,j+1):
+            M[k,j]=cst*(M[k,j+1]*qN+M[k+1,j+1]*(1-qN)) 
+    
+    return M[1,1] </code></pre>
 </div>
 <div id="question-4" class="section level4">
 <h4><strong>Question</strong></h4>
@@ -419,6 +438,13 @@ $(document).ready(function () {
 <div id="question-5" class="section level4">
 <h4><strong>Question</strong></h4>
 <p>[language=Python,caption=Comparaison de Price1 et Price2]</p>
+<pre class="python"><code>import random
+
+def compare(rN,hN,bN,s,f):
+    N=random.randint(5,15)
+    print(N)
+    print(price1(N,rN,hN,bN,s,f))
+    print(price2(N,rN,hN,bN,s,f))</code></pre>
 
 </div>
 </div>
@@ -448,6 +474,13 @@ $(document).ready(function () {
 <div id="question-7" class="section level4">
 <h4><strong>Question</strong></h4>
 <p>[language=Python,caption=Comparison of Price1 and Price2]</p>
+<pre class="python"><code>def couverture(N,s,rN,hN,bN,f):
+    Sh = price2(N,rN,hN,bN,(1+hN)*s,f);
+    Sb = price2(N,rN,hN,bN,(1+bN)*s,f);
+    alpha =  (Sh-Sb)/(s*(hN-bN));
+    beta = (Sh(1+bN)-Sb(1+hN))/((1+rN)**N *(bN-hN));
+    print(alpha)
+    print(beta)</code></pre>
 
 </div>
 </div>
@@ -471,6 +504,8 @@ $$dg(S_t)=g^{&#39;}(S_t)dS_t + \frac{|\sigma S_t|^2}{2}g^{&#39;&#39;}(S_t)dt$$</
 <div id="question-9" class="section level4">
 <h4><strong>Question</strong></h4>
 <p>[language=Python,caption=Price3]</p>
+<pre class="python"><code>def price3(n, s, r, o, T, f):
+    return 1.0 / n * exp(-r * T) * sum([f(s * exp((r - o*o/2.0)*T + o * sqrt(T) * ksi)) for ksi in rnorm(0.0, 1.0, n)])</code></pre>
 </div>
 <div id="question-10" class="section level4">
 <h4><strong>Question</strong></h4>
@@ -491,6 +526,12 @@ Moreover we should check if <span class="math inline">\(\mathbb{E}[X_1]\)</span>
 <div id="question-12" class="section level4">
 <h4><strong>Question</strong></h4>
 <p>[language=Python,caption=Put function]</p>
+<pre class="python"><code>def put(s,r,sigma,T,K):
+    d = 1/(sigma*sqrt(T))*(log(s/K)+(r+sigma**2/2)*T);
+    va = norm()
+    F1 = va.cdf(-d+sigma*sqrt(T))
+    F2 = va.cdf(-d)
+    return -s*F2+K*exp(-r*T)*F1</code></pre>
 </div>
 <div id="question-13" class="section level4">
 <h4><strong>Question</strong></h4>
