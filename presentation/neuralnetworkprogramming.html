@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NeuralNetwork</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="core/fonts/mono.css"> 
+    <link rel="stylesheet" type="text/css" href="core/css/animate.css"> 
+    <link rel="stylesheet" type="text/css" href="core/css/cinescript.css"> 
+    <link rel="stylesheet" type="text/css" href="core/css/style_core.css"> 
+    <link rel="stylesheet" type="text/css" href="core/css/mermaid.css"> 
+    <link rel="stylesheet" type="text/css" href="core/css/gitgraph.css"> 
+    <link rel="stylesheet" type="text/css" href="core/css/style_ensiie.css"> 
+    <link rel="stylesheet" type="text/css" href="core/css/katex.css"> 
+  </head>
+  <body>
+    <textarea id="source" readonly>
+
+class: titlepage
+
+
+.footnote[
+N. Makaroff - ENSIIE - 2019
+]
+
+.title[How to programm Neural Networks.]
+
+
+#### University of Paris-Saclay and ENSIIE,<br/>Applied Mathematics
+
+
+
+---
+layout: true
+class: animated fadeIn middle numbers
+
+.footnote[
+Programming Neural Networks - N. Makaroff - ENSIIE - 2019 
+]
+
+---
+class : toc top 
+# Agenda 
+
+1. Introduction
+--
+
+2. Build our own Network from A to Z
+--
+  
+  1. The Neuron Layer
+-- 
+
+  2. The Back-Propagation Algorithm
+-- 
+
+  3. Learning Phase
+--
+
+3. Using Framework
+--
+
+  1. Tensorflow 1.X and 2.0
+--
+
+  2. PyTorch
+--
+
+4. Example 
+-- 
+
+  1. MNIST Database
+-- 
+
+  2. Function approximation
+--
+
+
+---
+
+
+</textarea>
+
+        
+
+<script src="core/javascript/remark.js"></script>
+<script src="core/javascript/katex.min.js"></script>
+<script src="core/javascript/auto-render.min.js"></script>
+<script src="core/javascript/emojify.js"></script>
+<script src="core/javascript/mermaid.js"></script>
+<script src="core/javascript/term.js"></script>
+<script src="core/javascript/jquery-2.1.1.min.js"></script>
+<script src="core/javascript/extend-jquery.js"></script>
+<script src="core/javascript/cinescript.js"></script>
+<script src="core/javascript/gitgraph.js"></script>
+<script src="core/javascript/plotly.js"></script>
+<script src="vega.js"></script>
+<script src="vega-lite.js"></script>
+<script src="vega-embed.js"></script>
+<script>
+// === Remark.js initialization ===
+var slideshow = remark.create(
+{
+highlightStyle: 'monokai',
+countIncrementalSlides: false,
+highlightLines: false,
+ratio: "16:9"
+});
+// === Mermaid.js initialization ===
+mermaid.initialize({
+startOnLoad: false,
+cloneCssStyles: false,
+flowchart:{
+height: 50
+},
+sequenceDiagram:{
+width: 110,
+height: 30
+}
+});
+function initMermaid(s) {
+var diagrams = document.querySelectorAll('.mermaid');
+var i;
+for(i=0;i<diagrams.length;i++){
+if(diagrams[i].offsetWidth>0){
+mermaid.init(undefined, diagrams[i]);
+}
+}
+}
+slideshow.on('afterShowSlide', initMermaid);
+initMermaid(slideshow.getSlides()[slideshow.getCurrentSlideIndex()]);
+
+// === Emojify.js initialization ===
+emojify.run();
+// === Cinescript initialization ===
+$(document).ready(init_cinescripts);
+// KaTeX
+renderMathInElement(document.body,{delimiters: [{left: "$$", right: "$$", display: true}, {left: "\\(", right: "\\)", display: false}], ignoredTags: [] });
+</script>
+</body>
+</html>

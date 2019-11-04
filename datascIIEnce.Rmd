@@ -6,3 +6,15 @@ output: html_document
 # DataScIIEnce
 
 This section is dedicated to host information and formations given in the ENSIIE engineering school.
+
+This presentation aims to give a general view on the subject of datascience and more specifically machine learning.
+
+The slide are available [here](IntroductionDataScience.pdf).
+
+The videos displayed during the presentation can be find :
+* [CartPole Simulation]()
+* [Pac-Man Game]()
+
+Second presentation on the mathematics of neural network.
+
+[Getting on with the mathematics of neural network](presentation/neuralnetwork.html)

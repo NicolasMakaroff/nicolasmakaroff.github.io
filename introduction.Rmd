@@ -13,3 +13,5 @@ The slide are available [here](IntroductionDataScience.pdf).
 The videos displayed during the presentation can be find :
 * [CartPole Simulation]()
 * [Pac-Man Game]()
+
+Second presentation on the mathematics of neural network.

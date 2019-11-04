@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NeuralNetwork</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="core/fonts/mono.css"> 
+    <link rel="stylesheet" type="text/css" href="core/css/animate.css"> 
+    <link rel="stylesheet" type="text/css" href="core/css/cinescript.css"> 
+    <link rel="stylesheet" type="text/css" href="core/css/style_core.css"> 
+    <link rel="stylesheet" type="text/css" href="core/css/mermaid.css"> 
+    <link rel="stylesheet" type="text/css" href="core/css/gitgraph.css"> 
+    <link rel="stylesheet" type="text/css" href="core/css/style_ensiie.css"> 
+    <link rel="stylesheet" type="text/css" href="core/css/katex.css"> 
+  </head>
+  <body>
+    <textarea id="source" readonly>
+
+class: titlepage
+
+
+.footnote[
+N. Makaroff - ENSIIE - 2019
+]
+
+.title[Getting on with the mathematics of neural network]
+
+
+#### University of Paris-Saclay and ENSIIE,<br/>Applied Mathematics
+
+
+
+---
+layout: true
+class: animated fadeIn middle numbers
+
+.footnote[
+Introduction to Neural Network - N. Makaroff - ENSIIE - 2019 
+]
+
+---
+class: toc top
+# Agenda
+
+1. Introduction
+--
+
+2. Mathematics of a Classification or Regression Problem
+--
+
+3. Single Layer Network
+--
+
+  1. Linear to Logistic Discriminant
+--
+
+  2. Least-Square Learning Technique
+--
+
+  3. Gradient Descent
+--
+
+  4. The Perceptron
+--
+
+4. Multi Layer Network - The Case Of Feed-Foward Networks
+--
+
+  1. Network Architecture
+--
+
+  2. Activation Functions
+--
+
+  3. Error Approximation (Sum-of-squares Error Function & Cross-entropy Error Function) 
+--
+
+  4. Optimizer or Gradient Method Variants
+--
+
+  5. Vocabulary Break 
+--
+
+  6. Error Backpropagation
+-- 
+
+  7. Avoid Overfitting/Underfitting and Lost Function Topology.
+---
+
+# 1. Introduction
+
+.subtitle[History]
+
+.block[
+* 1957  (Rosenblatt) Perceptron
+* 1960  (Widrow, Hoff) ADALINE
+* 1969  (Minsky, Papert) XOR Problem
+* 1986  (Rumelhartet.al) Backpropagation
+* 1992  (Vapniket.al) SVM
+* 1998  (LeCunet.al) LeNet
+* 2010  (Hintonet.al) Deep Neural Networks
+* 2012  (Krizhevsky, Hintonet.al) AlexNet, ILSVRC’2012, GPU – 8 layers
+* 2014  GoogleNet – 22 layers
+* 2015  Inception (Google) – Deep Dream
+* 2016  ResidualNet (Microsoft/Facebook) – 152 layers
+]
+
+---
+
+.subtitle[Biological neurones vs Informatical Approach]
+
+<br>
+
+- Inspiration from the brain and the complex relations between the synapses.
+- Two neurones and one axon.
+- Transmission of a small electrical impulse. 
+- Transmission of the electrical information when the minimum threshold is reached.
+
+<br>
+.row[
+.leftf.w100[![](images/neurone.png)]
+.column.middle.w40[
+.rightf.right.w100[![](images/schema_neurone.png)]]]
+
+---
+
+# 2. Mathematics of a Classification or Regression Problem
+
+.subtitle[Symbol used in the following slides]
+
+.hcenter[
+_d_ - number of inputs
+
+_c_ - number of classes and _`\(c_k\)` the k-th class
+
+_i_ - input label
+
+_j_ - hidden unit label
+
+_k_ - output unit label
+
+_M_ - number of hidden units 
+
+_x_ - network input variable
+
+_y_ - network output variable 
+
+_z_ - network hidden output variable 
+
+_W_ - number of weights and biais in a Network
+
+_t_ - expected output and `\(t_k\)` k-th expected output 
+]
+
+---
+
+# 2. Mathematics of a Classification or Regression Problem
+
+`\(y_k\)` is used in multiclass problem. 
+
+We write `\(y_k = y_k(x;w)\)` where _w_ is the vector of parameters named weights in the neural network theory.
+
+__Reminder:__
+`$$y(x) = w_0 + w_1x_1 + \ldots + w_Mx_M = \sum\limits_{j=0}^M w_jx_j$$`
+
+_Goal_: find __w__ the matrix of weights
+
+_How ?_ solve the problem : `\(w^{*} = \arg  \min \frac{1}{N}\sum\limits_{n=1}^N(y(x_n;w) - t_n)^2\)`
+
+__Generalization:__
+
+_order 2:_
+`$$y=w_0 + \sum\limits_{i_{1}=1}^d w_{i_1}x_{i_1} + \sum\limits_{i_{1}=1}^d\sum\limits_{i_{2}=1}^d w_{i_1i_2}x_{i_1}x_{i_2}$$`
+
+_order M_:
+`$$y=w_0 + \sum\limits_{i_{1}=1}^d w_{i_1}x_{i_1} + \ldots + \sum\limits_{i_{1}=1}^d \ldots \sum\limits_{i_{M}=1}^d w_{i_1  \ldots i_M}x_{i_1} \ldots x_{i_M}$$`
+
+* `\(d^M\)` degrees of freedom **`\(\rightarrow\)`** that's quite a lot
+
+
+---
+
+# 3. Single Layer Network
+
+.row[.column.hcenter.middle[__two classes problem :__
+
+`$$y(x) = w^Tx + w_0$$`
+
+![](images/one_output_perceptron.png)]
+.column.hcenter.middle[__C classes problem :__
+
+`$$y_k(x) = w_k^Tx + w_{k0}$$`
+
+![](images/multi_output_perceptron.png)]]
+
+__Adding logistic discriminant :__
+
+we note `\(s(.)\)` the activation function.
+`$$y = s(w^Tx +w_0)$$`
+`$$y= s(\sum\limits_{i=0}^dw_ix_i + w_0)$$`
+
+---
+
+# 3.1. Linear to Logistic Discriminant
+
+:arrow_right: key role 
+* introduce non-linearity **`\(\rightarrow\)`** use of non-linear functions.
+* influence backpropagation process. (see section _4.2_)
+
+* Sum-of-square Error Function minimization is only possible in a linear network.
+* __Solution :__ Gradient Descent
+---
+
+# 3.2. Least-Square Learning Technique
+
+`$$E(w) = \frac{1}{2}\sum\limits_{n=1}^N\sum\limits_{k=1}^c (y_k(x_n;w) - t_k^n)^2$$`
+
+* `\(y_k(x_n;w)\)` : ouptup of the k-th neuron
+* `\(c\)` : number of classes
+* `\(N\)` : number of training example 
+* `\(t_k^n\)` : expected output 
+
+
+* Quadratic function of the weights.
+
+.hcenter[:arrow_right: We can find an exact solution.]
+
+---
+
+# 3.2. Least-Square Learning Technique
+
+`$$\min ||X_{ij}w - y||^2 = \min ||w^TX^TXw - 2w^TX^Ty + y^Ty||$$`
+
+differentiating :
+
+`$$\frac{\partial(w^TX^Tw)}{\partial w} - 2\frac{\partial w^TX^Ty}{\partial w} + \frac{\partial y^Ty}{\partial w} = 2X^TXw^T - 2X^Ty$$`
+
+The minimun is reached in 0 i.e. 
+`$$(X^TX)w^T = X^Ty$$`
+
+If `\((X^TX)\)` is non-singular we can invert it : 
+
+.block.hcenter[`$$w^T = (X^TX)^{-1}X^Ty$$`]
+<br>
+__Theorem :__
+
+The w weights vector realises `\(||Xw - y||^2\)` if and only if `\(X^TXw = X^Ty\)`.
+Those equations are called _normal equations_ and this system has at least one solution. 
+Finally if `\(X^TX\)` is nondegenerate i.e. `\(rg(X) = rg(w)\)`, the solution is unique.
+
+---
+
+# 3.3. Gradient Descent
+
+Let _f_ be defined a neighbourhood _V_ of a point _a_ and let _u_ be a vector with Euclidean Norm of 1. 
+
+We define : `$$f'(a;u) \coloneqq \lim_{\lambda\to 0} \frac{f(a + \lambda u) -f(a)}{\lambda}$$`
+
+If _f_ is differentiable in _a_ then `\(f'(a;u)=\nabla f(a) \bullet u\)`
+
+Let suppose that `\(\nabla f(a) \neq 0\)`. Therefore the problem : minimize `\(f'(a;u)\)` with ||u|| = 1 has the solution `\(u^{*}= -\frac{\nabla f(a)}{||\nabla f(a)||}\)`
+
+This result shows that `\(u^*\)` is the direction of the strongest decrease of _f_ from point _a_.
+
+__Methods :__
+
+Let now suppose that `\(f \in \mathcal{C}^1\)`
+
+1. Start from a point `\(x^{(0)}\)`
+2. Find `\(t^{(k)}\)` that minimize `\(\Phi_k(t) \coloneqq f(x^{(k)} - t\nabla f(x^{(k)}))\)` where `\(t>0\)`. 
+3. Build `\(x^{(k+1)} = x^{(k)} - t^{(k)}\nabla f(x^{(k)})\)` where `\(k≥0\)`. 
+4. Stop when `\(\nabla f(x^{(k)})=0\)`.
+
+---
+
+# 3.3. Gradient Descent
+
+.subtitle[Convergence Property]
+
+* `\(\forall k, \forall (x^{(k)},x^{(k+1)},x^{(k+2)}), (x^{(k+1)} - x^{(k)}) \bullet (x^{(k+2)} - x^{(k+1)})\)`
+
+:arrow_right: `\((f(x^{(k)}))\)` sequence is strictly decreasing.
+.row[.column.middle.w50[
+__Global Convergence :__
+
+If _f_ is a coercive function i.e `\(\lim\limits_{||x||\to\infty}f(x)=\infty\)`, it exists a converging subsequence of `\((x^{(k)})\)`. 
+Every converging subsequence of `\(x^{(k)}\)` converge to a critical point of _f_.
+
+If _f_ is a coercive function and strictly convex then `\((x^{(k)})\)` converge to the one and only one minimum of _f_.
+
+
+__Exemple :__ `$$y = \theta_0 + \theta_1\times x \text{ with } \theta_0 = 2 \text{ and } \theta_1 = 0.5$$`]
+
+.column.middle.w65[![](images/gradient_2d.png)]]
+
+---
+
+# 3.3. Gradient Descent 
+
+.subtitle[Exemple]
+
+Let `\(f(x_1,x_2) = x_1^2 + x_1x_2 + \frac{x_2^2}{2} - 3x_1 - 2x_2\)`. Let `\(x^{(0)} = (0,3)^T\)`.
+
+__k=0 :__
+
+`$$d^{(0)} = -\nabla f(x^{(0)}) = (0,-1)^T$$`
+
+`$$\Phi'(t) = \nabla f(x^{(0)} + td^{(0)})\bullet d^{(0)} = \left(\begin{matrix}
+3 - t -3 \\
+3 - t - 2
+\end{matrix}\right)\bullet d^{(0)} = \left(\begin{matrix}
+-t \\
+1 - t
+\end{matrix}\right)\bullet \left(\begin{matrix}
+0 \\
+-1
+\end{matrix}\right) = t-1 = 0 \implies t = 1$$`
+
+`$$x^{(1)} = x^{(0)} + t^{(0)}d^{(0)} = \left(\begin{matrix}
+0 \\
+3
+\end{matrix}\right) + 1\left(\begin{matrix}
+0 \\
+-1
+\end{matrix}\right) = \left(\begin{matrix}
+0 \\
+2
+\end{matrix}\right) \text{ and } f(x^{(1)}) = -2$$`
+
+__k=1 :__
+
+`$$d^{(1)} = -\nabla f(x^{(1)}) = -(-1,0)^T$$`
+
+`$$\Phi'(t) = \nabla f(x^{(1)} + t^{(1)}d^{(1)})\bullet d^{(1)} = \left(\begin{matrix}
+2t + 2 -3 \\
+\times 
+\end{matrix}\right)\bullet d^{(1)} = \left(\begin{matrix}
+2t -1 \\
+0
+\end{matrix}\right) = 2t-1 = 0 \implies t = \frac{1}{2}$$`
+
+`$$x^{(2)} = x^{(1)} + t^{(1)}d^{(1)} = \left(\begin{matrix}
+0 \\
+2
+\end{matrix}\right) + \frac{1}{2}\left(\begin{matrix}
+1 \\
+0
+\end{matrix}\right) = \left(\begin{matrix}
+\frac{1}{2} \\
+2
+\end{matrix}\right) \text{ and } f(x^{(1)}) = -\frac{9}{4}$$`
+
+---
+
+# 3.4 The Perceptron
+
+`$$y = s(\sum\limits_{j=0}^M w_j x_j) = s(w^T X)$$`
+
+`$$s(a) = \begin{matrix}
+-1 & \text{ when } a < 0 \\
++1 & \text{ when } a ≥ 0 
+\end{matrix}$$`
+
+---
+
+# 4.1. Network Architecture
+
+.hcenter.w30[![](images/neuron_network.png)]
+
+`$$a_j = \sum\limits_{i=1}^d w_{ji}^{(1)}x_i + w_{j0}^{(1)} = \sum\limits_{i=0}^d w_{ji}^{(1)}x_i$$`
+
+We add an activation function: `\(s(.) \rightarrow z_j = s(a_j)\)`
+
+`$$a_k = \sum\limits_{j=1}^M w_{kj}^{(2)}z_j + w_{k0}^{(2)} = \sum\limits_{j=0}^M w_{kj}^{(2)}z_j$$`
+<br>
+Finally we add a non-linear activation for the last layer : `\(\bar{s}(.) \rightarrow y_k = \bar{s}(a_k)\)`
+
+`$$ y_k = \bar{s}(\sum\limits_{j=0}^M w_{kj}^{(2)}s(\sum\limits_{i=0}^d w_{ji}^{(1)}x_i)) $$`
+
+
+
+---
+
+# 4.2. Activation Functions
+
+:arrow_right: key role 
+* introduce non-linearity **`\(\rightarrow\)`** use of non-linear functions.
+* influence backpropagation process.
+
+In the early years, the activation functions were following the form of the _Heaviside step function_. 
+
+.block[
+The activation functions used can vary in the different layers, especially between the hidden layers and the ouput layer.
+(These layers don't have the same roles.)]  
+
+<br>
+.subtitle[What are the main activation functions ?]
+
+<br>
+.row[.column.middle.w30[
+__Saturating Activation Functions:__
+* Logistic Sigmoïd Function
+* `tanh` Function]
+.column.hcenter.middle.w40[
+__Nonsaturating Activation Functions:__
+* ReLU Function
+* ELU Function
+]]
+
+---
+
+# 4.2. Activation Functions - Saturating Activation Functions
+
+.title[Logistic Sigmoïd Activation Function]
+
+<br><br>
+`$$\sigma (z) = \frac{1}{1 + \exp(-z)}$$`
+.block[]
+* differentiable with output in `\([0,1]\)`
+* prone to __Vanishing/Exploding Gradient Problems__
+
+.hcenter.w50[![](images/sigmoid.png)]
+
+---
+
+# 4.2. Activation Functions - Saturating Activation Functions
+
+.title[`tanh` Activation Function]
+
+<br><br>
+`$$\tanh(z) = \frac{\exp(z) - \exp(-z)}{\exp(z) + exp(-z)} = 2\sigma(2z) - 1$$`
+.block[]
+* differentiable with output in `\([-1,1]\)`
+* introduce some normalization around `\(0\)`
+* give rise to faster convergence
+
+.hcenter.w40[![](images/tanh.png)]
+
+---
+
+# 4.2. Activation Functions - Nonsaturating Activation Functions
+
+.title[ ReLU Activation Function]
+
+<br><br>
+`$$Relu(z) = \max(0,z)$$`
+.block[]
+.row[.column.middle.w50[
+* not differentiable in 0 **`\(\rightarrow\)`** can produce some bad values
+* very fast to compute
+* no maximum]
+.column.hcenter.middle.w40[
+* solve the vanishing/exploding gradient Problem
+* _counterpart_ : __dying ReLUs__
+* `\(LeakyRelu = \max(\alpha z,z)\)`
+]]
+
+.hcenter.w50[![](images/relu.png)]
+
+---
+
+# 4.2. Activation Functions - Nonsaturating Activation Functions
+
+.title[ ELU Activation Function]
+
+<br><br>
+`$$ Elu_{\alpha}(z)  = \alpha(\exp(z)-1) \text{ if } z < 0$$`
+`$$Elu_{\alpha}(z) = z \text{ if } z ≥ 0$$`
+
+.block[]
+.row[.column.middle.w40[
+* negativ values possible
+* no more __dying ReLUs__ phenomenon
+* `\(Elu\in\mathcal{C}^{\infty}([a,b],\mathbb{R})\)`]
+.column.hcenter.middle.w40[
+* faster convergence rate
+* slower than the ReLU to compute (compensated during training time)
+]]
+
+.hcenter.w40[![`\(\alpha = 0.5\)`](images/elu.png)]
+
+---
+
+# 4.3. Error Approximation
+
+* Mesure the performances of a neural network
+* These functions must be metrics between the predicted values and expected ones.
+* Not the same metrics for a regression problem or classification problem.
+
+.hcenter[__For regression problem :__]
+
+__Root Mean Square  Error :__
+`$$RMSE(x,y) = \sqrt{\frac{1}{N}\sum\limits_{i=1}^N (y(x_i;w) - t_i)^2}$$`
+
+* sensitive to huge error 
+
+__Mean Absolute Error :__ 
+`$$ MAE(x,y) = \frac{1}{N}\sum\limits_{i=1}^N |y(x_i;w) - t_i |$$`
+
+* less influenced by large error
+* useful when many values in the training set aren't perfect
+
+---
+
+# 4.3. Error Approximation
+
+.hcenter[__For classification problem :__]
+
+* binary classification :
+`$$-(t\log(y) + (1  - t)\log(1 - y))$$`
+
+* multiclass classification :
+`$$-\sum\limits_{i=1}^c t_{k,i}\log(y_{k,i})$$`
+
+---
+
+# 4.4. Optimizer or Gradient Method Variants
+
+These are the method that are used to do the backpropagation.
+
+We saw in part 2.2 the gradient descent but there exists many other methods that are often more precise and converge way faster.
+
+The introduction of these other methods are part of the reason for the democratization of neural network.
+
+.block[
+.row[
+.column.middle.w40[
+* Stochastic Gradient Descent
+* Momentum Optimizer
+* Nesterov Gradient]
+.column.hcenter.middle.w30[
+* AdaGrad
+* RMSProp
+* Adam Optimizer]]]
+
+---
+
+# 4.4. Optimizer or Gradient Method Variants
+
+.subtitle[Gradient Descent]
+
+__Definition :__
+
+Let _f_ be a cost function and _w_ a vector of parameters s.t. `\(w\in\mathbb{R}^n\)`. Then the gradient is :
+`$$Grad(f) = \nabla_w f(w) = \left(\begin{matrix}
+\vdots \\
+\vdots \\
+\frac{\partial}{\partial w_n}f(w)
+\end{matrix}\right)$$`
+
+Applied to the mean quadratic error we have :
+`$$\frac{\partial}{\partial w_i}MSE(w) = \frac{2}{n}\sum\limits_{j=1}^n (w^Tx^{(j)} - y^{(j)})x_i^{(j)}$$`
+then :
+`$$ \nabla_w MSE(w) = \frac{2}{n}X^T(Xw-y)$$`
+Finally :
+`$$ w^{next} = w - \eta \nabla_w f(w) \text{ where } \eta = \text{ learning rate }$$`
+
+__Remarks :__
+
+.row[.column.middle.w40[
+* First step is randomly initialize the weight matrix.]
+.column.middle.w60[* Select a learning rate
+  * if too high then the method might never converge.
+  * if too small the convergence will be too slow.
+]]
+---
+        
+# 4.4. Optimizer or Gradient Method Variants
+
+.title[Stochastic Gradient Descent]
+
+* Gradient Descent is too slow 
+* choose randomly the next direction 
+* doesn't stop when a minimum is found
+  * keeps from getting stuck in a local minima
+* doesn't assure that the minimum found is optimal
+
+__:arrow_right: in the recent years were introducted many other algorithm that solve those problem__
+
+---
+
+# 4.4. Optimizer or Gradient Method Variants
+
+.title[Momentum Optimizer]
+
+* Use the method of the Gradient Descent but add memory
+:arrow_right: consider the last iteration in its process
+* speed up during training
+
+We introduce a new parameter `\(\beta\)` called Momentum.
+
+This method stands on the substraction of a vector _m_ by the Momentum vector multiplied by the learning rate `\(\eta\)`. 
+Finally we add the local gradient to _w_ vector of weights.
+
+.block.hcenter[
+1. `\(m = m\beta - \eta\nabla_w f(w)\)` where _f_ is the cost function.
+2. `\(w = w + m\)`
+]
+
+__Remarks :__
+
+If `\(\nabla_w f(w) = c^{te}\)` then the learning speed is `\(\eta\frac{1}{1-\beta}\)` which helps not to stay too long in valley of the cost function.
+
+The main problem is that it introduce a new parameter even if `\(\beta=0.9\)` often works great.
+
+---
+
+# 4.4. Optimizer or Gradient Method Variants
+
+.title[Nesterov Accelerated Gradient]
+
+* almost always as fast as the Momentum Optimizer
+* strenght comes from the fact that it is computing the gradient slightly ahead in the direction of the momentum
+
+.block.hcenter[
+1. `\(m = m\beta - \eta\nabla_w f(w+m\beta)\)`
+2. `\(w= w + m\)`
+]
+
+* it often works because the Momentum vector point toward the optimum
+* Gradient is more precise 
+* better optimum
+
+---
+
+# 4.4. Optimizer or Gradient Method Variants
+
+.title[AdaGrad]
+
+* more recent one 
+* add the capability to point toward the global optimum from the beginning 
+* scaling down the gradient along the steepest dimension
+
+.block.hcenter[
+1. `\(s = s + \nabla_wf(w) \bullet \nabla_wf(w)\)`
+2. `\(w = w -\eta\nabla_wf(w)|\sqrt{s+\epsilon}\)`
+]
+
+where `\(\bullet\)` is the Hadamard product of matrix and | the term to term division (`\(\epsilon\)` is add to provent a division by zero)
+
+* This method is able to change the learning rate during training and therefore doesn't need to set one.
+
+.block[
+* The major draw back is that it often stop learning too early when the learning rate become too small which is a problem for very deep network.
+]
+
+---
+
+# 4.4. Optimizer or Gradient Method Variants
+
+.title[RMSProp]
+
+* solves the problem faced with AdaGrad
+* takes into account only the last gradient values
+
+.block.hcenter[
+1. `\(s = \beta s + (1 - \beta)\nabla_w f(w) \bullet \nabla_w f(w)\)`
+2. `\(w = w - \eta\nabla_w f(w)|\sqrt{s+\epsilon}\)`
+]
+
+As for the Momentum Optimizer it creates a new parameter `\(\beta\)` but again `\(\beta=0.9\)` often works.
+
+---
+
+# 4.4. Optimizer or Gradient Method Variants
+
+.title[Adam Optimizer]
+
+* beats every other optimizer in all performances
+* comes from the fusion between the Momentum Optimizer and RMSProp
+* saves the last gradient computed and there square
+
+.block.hcenter[
+1. `\(m = \beta_1 m -(1 - \beta_1)\nabla_w f(w)\)`
+2. `\(s = \beta_2 s + (1 - \beta_2)\nabla_w f(w) \bullet \nabla_w f(w)\)`
+3. `\(m = \frac{m}{1 - \beta_1^T}\)`
+4. `\(s = \frac{s}{1 - \beta_2^T}\)`
+5. `\(w = w - \eta m | \sqrt{s + \epsilon}\)`
+]
+
+* In general, we set `\(\beta_1 = 0.9, \beta_2 = 0.99\)` and `\(\eta = 0.001\)` because the rate adapts itself.
+
+---
+
+# 4.5. Vocabulary Break
+
+__Epoch :__ Time during training where all example are run throught the network.
+
+__Batch :__ Subdivision of the training data set.
+
+---
+
+# 4.6. Error Backpropagation
+
+Learning is based on the definintion of a suitable __error function__ which is minimized with respect to the weights and biases.
+
+In the case of the __Perceptron__, the procedure can't be applied even if we considere each neuron as a __Perceptron__.
+
+__What shall we use ?__
+
+* We introduce __differentiable__ activation function :arrow_right: the activation of the output unit is then also differentiable.
+* We introduce __differentiable__ error function.
+
+`$$\rightarrow \text{ Gradient Descent or other methods }$$`
+<br>
+.hcenter[__BACKPROPAGATION__]
+
+---
+
+# 4.6. Error Backpropagation
+
+.subtitle[Procedure]
+
+.block[
+1. __Compute forward propagation__ : pass an input vector `\(x\in\mathbb{R}^n\)` in the network to compute all activation in the network
+(hidden and output neurons).
+
+2. Find the error named `\(\delta_k\)` for the output neurons (`\(\delta_k\)` : classification problem & `\(\delta\)` : regression problem).
+
+3. Compute Backpropagation : Find the `\(\delta_j\)` error of the hidden neurons in the network.
+
+4. Evaluate the required derivatives.]
+
+---
+
+# 4.6. Error Backpropagation
+
+.title[Backpropagation Procedure]
+
+We considere here a general network with arbitrary topology and arbitrary activation function `\(s(.)\)`. 
+
+We can write the output `\(a_j\)` (j : hidden neuron label) of a neuron as a sum :
+`$$a_j = \sum\limits_i w_{ji}z_i \text{ } (1)$$`
+
+where `\(z_i\)` is the activation of the previous neurones.
+
+Therefore we have : 
+`$$z_j = s(a_j) \text{ } (2)$$`
+
+__Remark :__ `\(z_j\)` could be an input `\(x_j\)` and `\(a_j\)` an output of the network `\(y_k\)`. 
+
+We define an __error function__ E which is a sum of all error function for every class.
+`$$E = \sum\limits_{n=1}^c E^n \text{ and } E^n = E^n(y_1,\ldots,y_k)$$`
+
+The `\(E^n\)` are also supposed differentiable. 
+
+After a forward propagation, we can start searching the error of the network.
+`$$\frac{\partial E^n}{\partial w_{ji}} = \frac{\partial E^n}{\partial a_j}\frac{\partial a_j}{\partial w_{ji}} \text{ } (3)$$` 
+
+---
+
+# 4.6. Error Backpropagation
+
+As a habit, we define `\(\delta_j \coloneqq \frac{\partial E^n}{\partial a_j}\)`. 
+
+With the (1), we also have : 
+
+`$$\frac{\partial a_j}{\partial w_{ji}} = z_i \text{ } (4)$$`
+
+(3) becomes :
+
+`$$\frac{\partial E^n}{\partial w_{ji}} = \delta_j z_i \text{ } (5)$$`
+
+For the output neurons it is :
+
+`$$\delta_k = \frac{\partial E^n}{\partial a_k} = s'(a_k)\frac{\partial E^n}{\partial y_k}$$`
+
+---
+
+# 4.6. Error Backpropagation
+
+For the hidden neurons :
+`$$\delta_j = \frac{\partial E^n}{\partial a_j} = \sum\limits_k \frac{\partial E^n}{\partial a_k}\frac{\partial a_k}{\partial a_j}$$`
+
+_k_ stands for all neurons that receive from _j_. 
+
+.hcenter.w30[![](images/error_propagation.png)]
+
+Finally with (1), (2) :
+`$$\delta_j = s'(a_j)\sum\limits_k w_{kj} \delta_k$$`
+
+The generalization to all classes is : `\(\frac{\partial E}{\partial w_{ji}} = \sum\limits_n \frac{\partial E^n}{\partial w_{ji}}\)`
+
+---
+
+# 4.6. Error Backpropagation
+
+.subtitle[Exemple : two-layers classification network]
+
+We choose here for simplication purpose : `\(s(x) = \frac{1}{1 + \exp(- x)}\)` as the activation function and 
+`\(s'(x) = s(x)(1 - s(x))\)`. 
+
+The error function is the sum-of-square : `\(E^n = \frac{1}{2} \sum\limits_{k=1}^c (y_k - t_k)^2\)`. 
+
+We have : 
+
+`$$\delta_k = \frac{\partial E^n}{\partial a_k} = s'(a_k)\frac{\partial E^n}{\partial y_k} = (y_k - t_k)$$`
+We choosed a wise value for `\(s'(a_k)\)`.  
+
+For hidden neurons, we have : 
+
+`$$\frac{\partial E^n}{\partial a_j} = s(a_j)(1 - s(a_J))\sum\limits_{k=1}^c w_{kj}\delta_k
+= z_j(1 - z_j)\sum\limits_{k=1}^c w_{kj}(y_k - t_k)$$`
+
+Finally for the first and second layer we have respectively : 
+<br>
+.row[
+.column.right.middle.w40[
+`\(\frac{\partial E^n}{\partial w_{ji}} = \delta_j x_i\)`]
+.column.left.middle.w40[
+`\(\frac{\partial E^n}{\partial w_{kj}} = \delta_k z_j\)`]] 
+
+Apply Gradient Descent :
+
+.row[
+.column.right.middle.w40[
+__ on-line learning :__
+
+* first layer : `\(\Delta w_{ji} = - \eta\delta_jx_i\)`
+* second layer : `\(\Delta w_{kj} = -\eta\delta_kz_j\)`]
+.column.left.middle.w40[
+__batch-learning :__
+
+* first layer : `\(\Delta w_{ji} = - \eta\sum\limits_n\delta_j^nx_i^n\)`
+* second layer : `\(\Delta w_{ki} = - \eta\sum\limits_n\delta_k^nz_j^n\)`]]
+
+---
+
+# 4.7. Avoid Overfitting/Underfitting and Lost Function Topology.
+
+__Overfitting :__ Over learn the training data and not be able to generalize well.
+
+
+__Underfitting :__ The exact opposit and not know how to generalize.
+
+
+__Lost Function complexity :__ Get stuck in a local minima 
+
+---
+
+# 4.7. DropOut
+
+.hcenter.w30[![](images/dropout.png)]
+
+* Most popular regulaarization method.
+* Massive learning improvement possible.
+
+__Use :__
+
+For every training session, we shut down neurons on every layer with a propability `\(p\)`. The idea is that it helps the neurons to learn without
+focussing on what other neurons do and try at each epoch to get the most of it. They get more sensitiv to input and interpret better the data.
+
+
+---
+
+# 4.7. Batch-Normalization
+
+* zero-centering and normalization of the inputs on each layer 
+* scaling and shifting of the result
+
+__Algorithm:__
+`$$1. \text{ } \mu_b = \frac{1}{N_b}\sum\limits_{i=1}^{N_b} x_i$$`
+`$$2. \text{ } \sigma_b = \frac{1}{N_b}\sum\limits_{i=1}^{N_b} (x_i - \mu_b)^2$$`
+`$$3. \text{ } \hat{x}_i = \frac{x_i - \mu_b}{\sqrt{\sigma_b + \epsilon}}$$`
+`$$4. \text{ } z_i = \gamma \hat{x}_i + \beta $$`
+
+* `\(\gamma\)` : scaling parameter 
+* `\(\beta\)` : shifting parameter 
+
+---
+
+__Bibliography :__
+
+Geron Olivier, _Hands On Machine Learnind with Scikit-Learn and Tensorflow_, O'Reilly, 2017.
+
+Bishop Chris., _Neural Network For Pattern Recognition_, Oxford University Press, 1995.
+
+Makaroff Nicolas, _Planification et Méta-Modélisation d'expériences numériques pour le calcul des Surfaces d'Energie Potentielle_, 2019.
+<br><br>
+.hcenter[
+Thank You !
+
+See you in two weeks to apply all this to real world example.
+
+
+```python
+import tensorflow as tf
+
+def NeuralNetwork():
+      nextweek = super
+      return model
+
+```]
+        </textarea>
+
+        
+
+        <script src="core/javascript/remark.js"></script>
+        <script src="core/javascript/katex.min.js"></script>
+        <script src="core/javascript/auto-render.min.js"></script>
+        <script src="core/javascript/emojify.js"></script>
+        <script src="core/javascript/mermaid.js"></script>
+        <script src="core/javascript/term.js"></script>
+        <script src="core/javascript/jquery-2.1.1.min.js"></script>
+        <script src="core/javascript/extend-jquery.js"></script>
+        <script src="core/javascript/cinescript.js"></script>
+        <script src="core/javascript/gitgraph.js"></script>
+        <script src="core/javascript/plotly.js"></script>
+        <script src="vega.js"></script>
+        <script src="vega-lite.js"></script>
+        <script src="vega-embed.js"></script>
+        <script>
+        // === Remark.js initialization ===
+        var slideshow = remark.create(
+        {
+        highlightStyle: 'monokai',
+        countIncrementalSlides: false,
+        highlightLines: false,
+        ratio: "16:9"
+        });
+        // === Mermaid.js initialization ===
+        mermaid.initialize({
+        startOnLoad: false,
+        cloneCssStyles: false,
+        flowchart:{
+        height: 50
+        },
+        sequenceDiagram:{
+        width: 110,
+        height: 30
+        }
+        });
+        function initMermaid(s) {
+        var diagrams = document.querySelectorAll('.mermaid');
+        var i;
+        for(i=0;i<diagrams.length;i++){
+        if(diagrams[i].offsetWidth>0){
+        mermaid.init(undefined, diagrams[i]);
+        }
+        }
+        }
+        slideshow.on('afterShowSlide', initMermaid);
+        initMermaid(slideshow.getSlides()[slideshow.getCurrentSlideIndex()]);
+
+        // === Emojify.js initialization ===
+        emojify.run();
+        // === Cinescript initialization ===
+        $(document).ready(init_cinescripts);
+        // KaTeX
+        renderMathInElement(document.body,{delimiters: [{left: "$$", right: "$$", display: true}, {left: "\\(", right: "\\)", display: false}], ignoredTags: [] });
+        </script>
+        </body>
+        </html>
