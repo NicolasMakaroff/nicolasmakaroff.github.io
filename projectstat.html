@@ -375,22 +375,9 @@ $(document).ready(function () {
 <pre class="r"><code>knitr::opts_chunk$set(echo=TRUE,message=FALSE,warning=FALSE)
 library(ggplot2)
 library(magrittr)
-library(dplyr)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;dplyr&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code>library(tidyr)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;tidyr&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:magrittr&#39;:
-## 
-##     extract</code></pre>
-<pre class="r"><code>data &lt;- read.csv(&quot;Data_Binomial_16.csv&quot;)
+library(dplyr)
+library(tidyr)
+data &lt;- read.csv(&quot;Data_Binomial_16.csv&quot;)
 summary(data)</code></pre>
 <pre><code>##       cost             victory            sex             age      
 ##  Min.   :  0.0781   Min.   : 29.26   Min.   :0.000   Min.   :0.00  
