@@ -37,9 +37,6 @@ navbar:
         href: preypredator.html 
     - text: "DataScIIEnce"
       href: datascIIEnce.html
-      menu:
-      - text: "Introductory Presentation"
-        href: introduction.html   
     - text: "About"
       href: about.html
 output_dir: "."
