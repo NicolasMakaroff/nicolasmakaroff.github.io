@@ -9,12 +9,23 @@ This section is dedicated to host information and formations given in the ENSIIE
 
 This presentation aims to give a general view on the subject of datascience and more specifically machine learning.
 
+_Lecture 1 :_
+
 The slide are available [here](IntroductionDataScience.pdf).
 
 The videos displayed during the presentation can be find :
+
 * [CartPole Simulation]()
 * [Pac-Man Game]()
+
+_Lecture 2:_
 
 Second presentation on the mathematics of neural network.
 
 [Getting on with the mathematics of neural network](presentation/neuralnetwork.html)
+
+_Lecture 3:_
+
+How to program Neural Network - A quick overview
+
+[How to program Neural Networks](presentation/neuralnetworkprogramming.html)

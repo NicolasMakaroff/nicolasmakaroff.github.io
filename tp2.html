@@ -442,7 +442,7 @@ moy_norm_hist &lt;- function(law,title){
   }
 }
 mean(gen_echan_gauss(100,1000,1,2))</code></pre>
-<pre><code>## [1] 2.345591</code></pre>
+<pre><code>## [1] 2.388307</code></pre>
 <pre class="r"><code>#moy_empirique(gen_echan_gauss(10000,10000,1,2))
 moy_norm &lt;- function(n,N,mu,sigma){
   Xn &lt;- gen_echan_gauss(n,N,mu,sigma)[1,]
@@ -466,8 +466,19 @@ moy_norm &lt;- function(n,N,mu,sigma){
 <h3>1.2 Loi de Pareto</h3>
 <p>Soit <span class="math inline">\(X\)</span> une variable aléatoire suivant une loi de Pareto <span class="math inline">\(\mathcal{P}(a, \alpha)\)</span>,où <span class="math inline">\(\alpha &gt; 2\)</span>. Alors, <span class="math inline">\(\mathbb{E}[X]=\frac{\alpha \times a}{\alpha - 1}\)</span> et <span class="math inline">\(\mathbb{V}[X]=(\frac{\alpha \times a}{\alpha - 1})^2\frac{\alpha}{\alpha - 2}\)</span> On cherche encore une fois à appliquer le théorème centrale limite afin de mettre en avant que la loi de pareto peut-être approchée par un loi normale centrée réduite : On a déja une expression de l’espérance : <span class="math inline">\(\mathbb{E}[X_{i}]=\frac{\alpha\times a}{\alpha - 1}=a_{n}\)</span> Pour l’expression de <span class="math inline">\(b_n\)</span>, on a : <span class="math display">\[b_{n}=\frac{\sigma}{\sqrt{n}}=\frac{\sqrt{\mathbb{V}[X_{i}]}}{\sqrt{n}}=\frac{\frac{\alpha\times a}{\alpha - 1}\frac{(\alpha)^{1/2}}{(\alpha - 2)^{1/2}}}{\sqrt{n}} \]</span></p>
 <p>Plus n est grand, plus la loi moyenne empirique renormalisé semble suivre une loi N(0, 1).</p>
-<pre class="r"><code>library(&quot;rmutil&quot;)
-gen_echan_pareto &lt;- function(n,N,a,alpha){
+<pre class="r"><code>library(&quot;rmutil&quot;)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;rmutil&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:tidyr&#39;:
+## 
+##     nesting</code></pre>
+<pre><code>## The following object is masked from &#39;package:stats&#39;:
+## 
+##     nobs</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     as.data.frame, units</code></pre>
+<pre class="r"><code>gen_echan_pareto &lt;- function(n,N,a,alpha){
     x &lt;- rpareto(n,a,alpha)
     aleatoire &lt;- function(x1,n1){
       y &lt;- sample(x1,n1,replace=TRUE)

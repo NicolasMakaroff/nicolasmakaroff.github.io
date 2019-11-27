@@ -6,7 +6,7 @@ title: "HOME"
 
 
 
-The __DataScIIEnce__ section is for the ENSIIE eponymous association. It will contain informations and formations given for the association.
+The __DataScIIEnce__ section is for the ENSIIE eponymous association. It will contain information and formations given for the association.
 
 
 In the __School Project__, we can find some math project and the description of computer science project for the $3$ school years.

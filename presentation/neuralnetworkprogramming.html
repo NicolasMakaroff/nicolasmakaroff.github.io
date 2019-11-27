@@ -22,7 +22,7 @@ class: titlepage
 N. Makaroff - ENSIIE - 2019
 ]
 
-.title[How to programm Neural Networks.]
+.title[How to program Neural Networks.]
 
 
 #### University of Paris-Saclay and ENSIIE,<br/>Applied Mathematics
@@ -38,22 +38,11 @@ Programming Neural Networks - N. Makaroff - ENSIIE - 2019
 ]
 
 ---
-class : toc top 
+class: toc top 
+
 # Agenda 
 
 1. Introduction
---
-
-2. Build our own Network from A to Z
---
-  
-  1. The Neuron Layer
--- 
-
-  2. The Back-Propagation Algorithm
--- 
-
-  3. Learning Phase
 --
 
 3. Using Framework
@@ -63,19 +52,201 @@ class : toc top
 --
 
   2. PyTorch
---
-
-4. Example 
 -- 
 
-  1. MNIST Database
+1. mnist Database
 -- 
 
-  2. Function approximation
+2. Auto-MPG Database
 --
 
 
 ---
+
+# Tensorflow 
+
+* Open-source library developped by __Google Brain__. Used initially only in intern.
+* Implements automatic learning methods based on deep neural network i.e. Deep Learning.
+* API python, JS, swift ...
+* Different level of use.
+
+.hcenter.w30[![](images/tensorflow.jpg)]
+
+* Easily put in production.
+
+---
+
+# PyTorch 
+
+
+.hcenter.w30[![](images/pytorch.png)]
+
+PyTorch is a Python machine learning package based on Torch, which is an open-source machine learning package based on the programming language Lua. 
+
+PyTorch has two main features:
+
+* Tensor computation (like NumPy) with strong GPU acceleration
+* Automatic differentiation for building and training neural networks
+
+__Why Tensorflow then ?__ 
+
+* Easier for production.
+* More documentation.
+* Since Tensorflow 2.0, very easy to use.
+
+__Advantages of Pytorch :__
+
+* No need to create the whole graph before running the code.
+* Many scientific papers written using Pytorch nowadays. 
+
+---
+
+# Examples
+
+__Two examples :__
+
+1. MNIST Data Base : Classic classification problem.
+2. MPG prediction : Simple Regression problem
+
+__Your turn :__
+
+* Boston Housing Market
+
+---
+
+# MNIST Data Base 
+
+__The notebook is available here :__
+
+[MNIST](https://github.com/NicolasMakaroff/Tutorials)
+
+__Useful library :__
+
+```python
+import tensorflow as tf 
+import pandas as pd 
+from matplotlib import pyplot as plt
+```
+__Get the data :__
+
+```python
+mnist = tf.keras.datasets.mnist
+
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
+x_train, x_test = x_train / 255.0, x_test / 255.0
+```
+
+```python
+def open_data(file,
+              info = False):
+        """ Open the data and transform it in a DataFrame 
+                Arguments :
+                        file : CSV to read and convert into a pandas DataFrame
+                        info = False : Boolean to get summary information on the created object
+                Output :
+                        A pandas DataFrame with all the data from the CSV file
+        """
+        df = pd.read_csv(file)
+        if info is True :
+                print('Five first rows of the generated DataFrame : \n {}'.format(df.head()))
+                print('\nDataFrame shape : {}\n'.format(df.shape))
+        return df
+```
+
+---
+
+
+__Split the data between training and test :__
+
+```python
+def create_train_test_set(dataframe,
+                          train_frac,
+                          test_frac):
+        """ Create the train and test set for the training with a random method
+                Arguments :
+                        dataframe : pandas DataFrame containing the date to split
+                        train_frac : float, fraction number of training data to keep
+                        test_frac : float, fraction number of test data to keep
+                Outputs : 
+                        train_dataset : pandas DataFrame of the training points selected randomly
+                        test_dataset : pandas DataFrame of the test points selected randomly
+         """
+        train_dataset = dataframe.sample(frac = train_frac, random_state = 0)
+        tmp = dataframe.drop(train_dataset.index)
+        test_dataset = tmp.sample(frac = test_frac, random_state = 0)
+        tmp.drop(test_dataset.index)
+        return train_dataset, test_dataset
+```
+
+__Gain insight on the data :__
+
+```python
+def get_statistics(dataframe,
+                   *argv):
+        """ Compute some basic statistics over the data 
+                Arguments :
+                        dataframe : pandas DataFrame 
+                        *argv : allows to pass multiple DataFrame in one time
+                Output : None
+        """
+        print('Statistics Computed : \n {}'.format(dataframe.describe().transpose()))
+        for arg in argv :
+                print(arg.describe().transpose())
+```
+
+---
+
+```python
+model = tf.keras.models.Sequential([
+  tf.keras.layers.Flatten(input_shape=(28, 28)),
+  tf.keras.layers.Dense(128, activation='relu'),
+  tf.keras.layers.Dropout(0.2),
+  tf.keras.layers.Dense(10, activation='softmax')
+])
+
+model.compile(optimizer='adam',
+              loss='sparse_categorical_crossentropy',
+              metrics=['accuracy'])
+```
+
+__Fit the model :__
+
+```python
+model.fit(x_train, y_train, epochs=5)
+```
+
+__Evaluate it :__
+
+```python
+model.evaluate(x_test, y_test, verbose = 2)
+```
+
+---
+
+# MPG 
+
+__The notebook is available here :__
+
+[Auto-MPG](https://github.com/NicolasMakaroff/Tutorials)
+
+---
+
+# Boston Housing Market
+
+Fetch the data here : https://www.kaggle.com/vikrishnan/boston-house-prices
+
+```python
+column_name = ['CRIM','ZN','INDUS','CHAS','NOX','RM','AGE','DIS','RAD' ,'TAX','PTRATIO','B','LSTAT','MEDV']
+dataset = pd.read_csv('housing.csv', names=column_names,
+                       na_values = "?", comment='\t',
+                       sep=" ", skipinitialspace=True)
+```
+
+
+
+
+---
+
 
 
 </textarea>
