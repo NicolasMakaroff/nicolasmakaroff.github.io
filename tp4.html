@@ -16,7 +16,7 @@
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/readable.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -106,33 +106,33 @@ summary {
 <style type="text/css">
 /* padding for bootstrap navbar */
 body {
-  padding-top: 45px;
+  padding-top: 66px;
   padding-bottom: 40px;
 }
 /* offset scroll position for anchor links (for fixed navbar)  */
 .section h1 {
-  padding-top: 50px;
-  margin-top: -50px;
+  padding-top: 71px;
+  margin-top: -71px;
 }
 .section h2 {
-  padding-top: 50px;
-  margin-top: -50px;
+  padding-top: 71px;
+  margin-top: -71px;
 }
 .section h3 {
-  padding-top: 50px;
-  margin-top: -50px;
+  padding-top: 71px;
+  margin-top: -71px;
 }
 .section h4 {
-  padding-top: 50px;
-  margin-top: -50px;
+  padding-top: 71px;
+  margin-top: -71px;
 }
 .section h5 {
-  padding-top: 50px;
-  margin-top: -50px;
+  padding-top: 71px;
+  margin-top: -71px;
 }
 .section h6 {
-  padding-top: 50px;
-  margin-top: -50px;
+  padding-top: 71px;
+  margin-top: -71px;
 }
 .dropdown-submenu {
   position: relative;
@@ -396,7 +396,7 @@ if (Delta(rnorm(20,1,sqrt(2)),0.05,1,1.5)){
 }else{
   print(&quot;H0 n&#39;est pas rejeté : mu = mu0&quot;)
 }</code></pre>
-<pre><code>## [1] &quot;H0 est rejeté : mu = mu1&quot;</code></pre>
+<pre><code>## [1] &quot;H0 n&#39;est pas rejeté : mu = mu0&quot;</code></pre>
 </div>
 </div>
 <div id="question-2" class="section level2">
@@ -410,7 +410,7 @@ for (i in 1:100){
   }
 }
 print(paste(&quot;nombre de rejet du test = &quot;,acc,sep = &quot;&quot;))</code></pre>
-<pre><code>## [1] &quot;nombre de rejet du test = 9&quot;</code></pre>
+<pre><code>## [1] &quot;nombre de rejet du test = 3&quot;</code></pre>
 <p>On remarque que le nombre de rejet varie accès peu et qu’il vaut généralement 4.</p>
 </div>
 <div id="b-1" class="section level3">
@@ -437,9 +437,9 @@ for (i in alpha_list){
     print(paste(&quot;alpha = &quot;,i,&quot; nombre de rejet du test = &quot;,acc,sep = &quot;&quot;))
 }</code></pre>
 <pre><code>## [1] &quot;alpha = 0.2 nombre de rejet du test = 17&quot;
-## [1] &quot;alpha = 0.1 nombre de rejet du test = 12&quot;
-## [1] &quot;alpha = 0.05 nombre de rejet du test = 6&quot;
-## [1] &quot;alpha = 0.01 nombre de rejet du test = 0&quot;</code></pre>
+## [1] &quot;alpha = 0.1 nombre de rejet du test = 9&quot;
+## [1] &quot;alpha = 0.05 nombre de rejet du test = 4&quot;
+## [1] &quot;alpha = 0.01 nombre de rejet du test = 2&quot;</code></pre>
 </div>
 </div>
 <div id="question-3" class="section level2">
@@ -454,10 +454,10 @@ for (i in alpha_list){
     }
     print(paste(&quot;alpha = &quot;,i,&quot; nombre de rejet du test = &quot;,acc,sep = &quot;&quot;))
 }</code></pre>
-<pre><code>## [1] &quot;alpha = 0.2 nombre de rejet du test = 76&quot;
-## [1] &quot;alpha = 0.1 nombre de rejet du test = 66&quot;
-## [1] &quot;alpha = 0.05 nombre de rejet du test = 60&quot;
-## [1] &quot;alpha = 0.01 nombre de rejet du test = 23&quot;</code></pre>
+<pre><code>## [1] &quot;alpha = 0.2 nombre de rejet du test = 75&quot;
+## [1] &quot;alpha = 0.1 nombre de rejet du test = 58&quot;
+## [1] &quot;alpha = 0.05 nombre de rejet du test = 41&quot;
+## [1] &quot;alpha = 0.01 nombre de rejet du test = 11&quot;</code></pre>
 <p>On remarque dans un premier que logiquement que rejeté beaucoup plus que précédemment. D’autre part, <span class="math inline">\(\alpha\)</span> influe encore car plus <span class="math inline">\(\alpha\)</span> est grand plus on se trompe sur le testde décision.</p>
 </div>
 <div id="b-2" class="section level3">
@@ -478,15 +478,15 @@ for(i in mu_liste){
     test &lt;- c(test,acc)
     print(paste(&quot;alpha = &quot;,i,&quot; nombre de rejet du test = &quot;,acc,sep = &quot;&quot;))
 }</code></pre>
-<pre><code>## [1] &quot;alpha = 1.2 nombre de rejet du test = 47&quot;
-## [1] &quot;alpha = 1.3 nombre de rejet du test = 50&quot;
-## [1] &quot;alpha = 1.4 nombre de rejet du test = 43&quot;
-## [1] &quot;alpha = 1.5 nombre de rejet du test = 38&quot;
-## [1] &quot;alpha = 1.6 nombre de rejet du test = 44&quot;
-## [1] &quot;alpha = 1.7 nombre de rejet du test = 49&quot;
-## [1] &quot;alpha = 1.8 nombre de rejet du test = 37&quot;
-## [1] &quot;alpha = 1.9 nombre de rejet du test = 44&quot;
-## [1] &quot;alpha = 2 nombre de rejet du test = 42&quot;</code></pre>
+<pre><code>## [1] &quot;alpha = 1.2 nombre de rejet du test = 41&quot;
+## [1] &quot;alpha = 1.3 nombre de rejet du test = 44&quot;
+## [1] &quot;alpha = 1.4 nombre de rejet du test = 44&quot;
+## [1] &quot;alpha = 1.5 nombre de rejet du test = 48&quot;
+## [1] &quot;alpha = 1.6 nombre de rejet du test = 47&quot;
+## [1] &quot;alpha = 1.7 nombre de rejet du test = 44&quot;
+## [1] &quot;alpha = 1.8 nombre de rejet du test = 41&quot;
+## [1] &quot;alpha = 1.9 nombre de rejet du test = 49&quot;
+## [1] &quot;alpha = 2 nombre de rejet du test = 37&quot;</code></pre>
 <pre class="r"><code>plot(mu_liste,100 - test,xlab = &quot;Valeurs prises par mu1&quot;,ylab = &quot;nombre de rejet obtenu&quot;,main = &quot;Pourcentage de bonne décision&quot;,type = &quot;l&quot;)</code></pre>
 <p><img src="tp4_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 </div>
@@ -500,13 +500,13 @@ for(i in mu_liste){
 ##  One Sample t-test
 ## 
 ## data:  rnorm(20, 1, sqrt(2))
-## t = -0.29048, df = 19, p-value = 0.7746
+## t = -0.82953, df = 19, p-value = 0.4171
 ## alternative hypothesis: true mean is not equal to 1
 ## 95 percent confidence interval:
-##  0.2922053 1.5352774
+##  -0.02031589  1.44111054
 ## sample estimates:
 ## mean of x 
-## 0.9137414</code></pre>
+## 0.7103973</code></pre>
 <p><span class="math inline">\(t\)</span> est la valeur correspondant à la statistique donnée par Neyman-Pearson. <span class="math inline">\(df\)</span> est le degré de liberté de la loi de Student.</p>
 </div>
 <div id="b-3" class="section level3">
@@ -523,49 +523,49 @@ for(i in mu_liste){
 ##  One Sample t-test
 ## 
 ## data:  rnorm(20, 1, sqrt(2))
-## t = -0.85886, df = 19, p-value = 0.4011
+## t = -1.06, df = 19, p-value = 0.3024
 ## alternative hypothesis: true mean is not equal to 1
 ## 80 percent confidence interval:
-##  0.3143841 1.1470171
+##  0.1461769 1.0957400
 ## sample estimates:
 ## mean of x 
-## 0.7307006 
+## 0.6209584 
 ## 
 ## 
 ##  One Sample t-test
 ## 
 ## data:  rnorm(20, 1, sqrt(2))
-## t = -0.25245, df = 19, p-value = 0.8034
+## t = -0.032237, df = 19, p-value = 0.9746
 ## alternative hypothesis: true mean is not equal to 1
 ## 90 percent confidence interval:
-##  0.2944566 1.5257724
+##  0.4292244 1.5498829
 ## sample estimates:
 ## mean of x 
-## 0.9101145 
+## 0.9895536 
 ## 
 ## 
 ##  One Sample t-test
 ## 
 ## data:  rnorm(20, 1, sqrt(2))
-## t = -0.16869, df = 19, p-value = 0.8678
+## t = 0.5439, df = 19, p-value = 0.5928
 ## alternative hypothesis: true mean is not equal to 1
 ## 95 percent confidence interval:
-##  0.4353263 1.4804414
+##  0.4346629 1.9623168
 ## sample estimates:
 ## mean of x 
-## 0.9578838 
+##   1.19849 
 ## 
 ## 
 ##  One Sample t-test
 ## 
 ## data:  rnorm(20, 1, sqrt(2))
-## t = 0.69594, df = 19, p-value = 0.4949
+## t = 0.31918, df = 19, p-value = 0.7531
 ## alternative hypothesis: true mean is not equal to 1
 ## 99 percent confidence interval:
-##  0.3414598 2.0819149
+##  0.1488183 2.0649571
 ## sample estimates:
 ## mean of x 
-##  1.211687</code></pre>
+##  1.106888</code></pre>
 </div>
 <div id="d" class="section level3">
 <h3>(d)</h3>
