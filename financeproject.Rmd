@@ -1,9 +1,10 @@
 ---
 title: "Finance Project"
 ---
-```{r,include=FALSE}
-library(reticulate)
+```{r,include=FALSE,echo=FALSE}
+
 ```
+
 
 
 # Cox-Ross-Rubinstein Model
@@ -54,7 +55,7 @@ Finally: $$p_{(N)}=\frac{1}{(1+r_N)^N}\times\sum\limits_{i=0}^N \dbinom{N}{i} ((
 
 
 [language=Python,caption={Implémentation de Price1}]
-```{python}
+```
 from scipy import special
 
 def price1(N,rN,hN,bN,s,f):
@@ -63,11 +64,14 @@ def price1(N,rN,hN,bN,s,f):
     
 def f(x):
     return max(x-90,0)
+    
+print(price1(30,0.01,0.05,-0.05,100,f))
 
 ```
 ```
 The output for the following value $s=100$, $h_N=0.05$, $b_N=-0.05$, $r_N=0.01$, $N=30$ et $f(x)=max(x-90,0)$
 ```
+
 
 \begin{center}
 \includegraphics[width=10cm]{../price1.png}
@@ -81,7 +85,9 @@ The output for the following value $s=100$, $h_N=0.05$, $b_N=-0.05$, $r_N=0.01$,
 
 
 [language=Python,caption=Implémentation de Price2]
-```{python}
+```
+import numpy as np
+
 def price2(N,rN,hN,bN,s,f):
     cst=1/(1+rN)
     qN=(rN-bN)/(hN-bN)
@@ -92,7 +98,12 @@ def price2(N,rN,hN,bN,s,f):
         for k in range(1,j+1):
             M[k,j]=cst*(M[k,j+1]*qN+M[k+1,j+1]*(1-qN)) 
     
-    return M[1,1] 
+    return M[1,1]
+
+def f(x):
+    return max(x-90,0)
+    
+print(price2(30,0.01,0.05,-0.05,100,f))
 ```
 
 #### __Question__
@@ -113,7 +124,7 @@ def price2(N,rN,hN,bN,s,f):
 #### __Question__
 
 [language=Python,caption=Comparaison de Price1 et Price2]
-```{python}
+```
 import random
 
 def compare(rN,hN,bN,s,f):
@@ -121,6 +132,7 @@ def compare(rN,hN,bN,s,f):
     print(N)
     print(price1(N,rN,hN,bN,s,f))
     print(price2(N,rN,hN,bN,s,f))
+    
 ```
 
 
@@ -180,7 +192,7 @@ $$\beta_{k-1}(S_{t_{k-1}}^{(N)}) = \frac{v((1+b_N)S_{t_{k-1}}^{(N)})(1+h_N) - v(
 #### __Question__
 
 [language=Python,caption=Comparison of Price1 and Price2]
-```{python}
+```
 def couverture(N,s,rN,hN,bN,f):
     Sh = price2(N,rN,hN,bN,(1+hN)*s,f);
     Sb = price2(N,rN,hN,bN,(1+bN)*s,f);
@@ -227,7 +239,7 @@ $$\hat{p}_{(N)}:=\frac{1}{n}\sum_{i=1}^{n}e^{-rT}f(s\times\exp((r-\frac{\sigma^2
 #### __Question__ 
 
 [language=Python,caption=Price3]
-```{python}
+```
 def price3(n, s, r, o, T, f):
     return 1.0 / n * exp(-r * T) * sum([f(s * exp((r - o*o/2.0)*T + o * sqrt(T) * ksi)) for ksi in rnorm(0.0, 1.0, n)])
 ```
@@ -272,7 +284,7 @@ $$\hat{p}_{(N)} \underset{p.s}{\longrightarrow} p$$
 #### __Question__
 
 [language=Python,caption=Put function]
-```{python}
+```
 def put(s,r,sigma,T,K):
     d = 1/(sigma*sqrt(T))*(log(s/K)+(r+sigma**2/2)*T);
     va = norm()

@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="Nicolas Makaroff" />
 
-<meta name="date" content="2019-01-03" />
+<meta name="date" content="2019-04-03" />
 
-<title>TP2 de Statistique</title>
+<title>MAKAROFF_NICOLAS_TPSTAT2</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -24,6 +24,7 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -71,9 +72,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -87,7 +86,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -192,8 +190,6 @@ $(document).ready(function () {
 });
 </script>
 
-<div class="container-fluid main-container">
-
 <!-- tabsets -->
 
 <style type="text/css">
@@ -238,6 +234,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -250,20 +247,17 @@ $(document).ready(function () {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
 
 
 
@@ -360,261 +354,513 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">TP2 de Statistique</h1>
-<h4 class="author"><em>Nicolas Makaroff</em></h4>
-<h4 class="date"><em>01/03/2019</em></h4>
+<h1 class="title toc-ignore">MAKAROFF_NICOLAS_TPSTAT2</h1>
+<h4 class="author">Nicolas Makaroff</h4>
+<h4 class="date">04/03/2019</h4>
 
 </div>
 
 
-<div id="theoreme-central-limite-et-estimation-de-monte-carlo" class="section level1">
-<h1>1 - Théorème Central Limite et Estimation de Monte Carlo</h1>
-<div id="avant-propos" class="section level3">
-<h3>Avant-propos</h3>
-<p>Pour la suite de l’exercice, on définit trois fonctions permettant d’une part pour un vecteur donné de calculer la moyenne empirique et la variance empirique, et d’autre part pour une loi donné de créer un échantillon de taille <span class="math inline">\(N=1000\)</span>.</p>
-<pre class="r"><code>N&lt;-1000
-n&lt;-c(5,30,100)
-#Fonction calculant la moyenne empirique pour un vecteur donné
-moy_empirique &lt;- function(vecteur){
- sum&lt;-0
- for (i in vecteur){
-   sum&lt;-sum + i
- }
- return (sum/(length(vecteur)))
-}
-
-#Calcul de la variance emmpirique pour un vecteur donné
-var_empirique &lt;- function(vecteur){
-  moy&lt;-moy_empirique(vecteur)
-  sum&lt;-0
-  for (i in vecteur){
-    sum &lt;- sum  + (i-moy)*(i-moy)
-  }
-  return ( sum/(length(vecteur)-1))
-}</code></pre>
-<p>On introduit aussi une fonction permettant de calculer la moyenne empirique sur un échantillon en fonction de n’importe quelle loi et compare avec la loi normale.</p>
-</div>
-<div id="simulation-de-1000-echantillon-i.i.d-gaussien" class="section level3">
-<h3>1.1 Simulation de 1000 échantillon i.i.d Gaussien</h3>
-<pre class="r"><code>gen_echan_gauss &lt;- function(n,N,mu,sigma){
-    x &lt;- rnorm(n,mu,sigma)
-    aleatoire &lt;- function(x1,n1){
-      y &lt;- sample(x1,n1,replace=TRUE)
-      moy_sd &lt;- c(moy_empirique(y),var_empirique(y))
-     return(moy_sd)
-    }
-  result &lt;- sapply(1:N,function(w) aleatoire(x,n))
-  
-  return(result)
-}
-hist_mul &lt;- function(n){
-  for (i in n){
-    hist(gen_echan_gauss(i,N,1,2)[1,],breaks=i)
-    t &lt;- seq(-10,10,by=0.5)
-x &lt;- dnorm(t,1,2)
-par(new=TRUE)
-#plot(x)
-curve(dnorm(x,1,2),-5,5)
-  }
-}
-#hist_moy(function(n){return (rnorm(n,mean=1,sd=2))},&quot;Distribution Gausienne N(1,2)&quot;)
-hist_mul(n)</code></pre>
-<p><img src="tp2_files/figure-html/unnamed-chunk-2-1.png" width="384" /><img src="tp2_files/figure-html/unnamed-chunk-2-2.png" width="384" /><img src="tp2_files/figure-html/unnamed-chunk-2-3.png" width="384" /></p>
+<p>#1 - Théorème Central Limite et Estimation de Monte Carlo</p>
+<p>###1.1 Simulation de 1000 échantillon i.i.d Gaussien</p>
+<pre class="r"><code>gen_echan_law(function(n){return (rnorm(n,m=1,s=2))})</code></pre>
+<embed src="tp2_files/figure-html/unnamed-chunk-3-1.pdf" width="33%" type="application/pdf" />
+<embed src="tp2_files/figure-html/unnamed-chunk-3-2.pdf" width="33%" type="application/pdf" />
+<embed src="tp2_files/figure-html/unnamed-chunk-3-3.pdf" width="33%" type="application/pdf" />
 <p>Soit <span class="math inline">\(S_{n}=\sum\limits_{i=1}^{n}X_{i}\)</span> tq : <span class="math inline">\(X_{i}\)</span> i.i.d en loi de moyenne <span class="math inline">\(\mu\)</span> et variance <span class="math inline">\(\sigma^{2}\)</span>.</p>
 <p>D’après le théorème centrale limite, comme <span class="math inline">\(N\)</span> est assez grand, on en déduit que <span class="math inline">\(S_{n}\)</span> peut être approchée une loi normal <span class="math inline">\(\mathcal{N}(n\mu,n\sigma^{2})\)</span>.</p>
 <p>On pose : <span class="math inline">\({X_{n}} = \frac{S_{n}}{n}\)</span> Ainsi, pour la moyenne : <span class="math inline">\(\mathbb{E}[ X_{n}]=\mathbb{E}[\frac{S_{n}}{n}]=\frac{1}{n}\mathbb{E}[S_{n}]=\frac{1}{n}\sum\limits_{i=0}^{n}\mathbb{E}[X_{i}]=\mathbb{E}[X_{i}]\)</span> De même pour la variance : <span class="math inline">\(\mathbb{V}[{ X_{n}}]=\mathbb{V}[\frac{S_{n}}{n}]=\frac{1}{n^{2}}\mathbb{V}[S_{n}]=\frac{1}{n^{2}}\sum\limits_{i=0}^{n}\mathbb{V}[X_{i}]=\frac{1}{n}\mathbb{V}[X_{i}]\)</span></p>
 <p>Dans le cas de la question 1. on a : <span class="math inline">\(\mathcal{N}(1,2)\)</span> On note, avec les notations de l’énoncé, <span class="math inline">\((a_{n},b_{n})=(\mathbb{E}[X_i],\sqrt{\frac{1}{n}\mathbb{V}[Xi]})=(\mu,\sqrt\frac{\sigma^{2}}{n})\)</span> Ce qui donne pour le cas présent : <span class="math inline">\((1,\frac{2}{\sqrt{n}})\)</span></p>
 <p>Ainsi, on en déduit que <span class="math inline">\(U_{n}=\frac{{X_{n}} - a_{n}}{b_{n}}\)</span> suit une loi normale centrée réduite <span class="math inline">\(\mathcal{N}(0,1)\)</span>.</p>
-<pre class="r"><code>#Fonction que trace l&#39;histogramme pour la loi centrée réduite. Pour varier, j&#39;ai utilisé ici une autre manière de créer un échantillon.
-moy_norm_hist &lt;- function(law,title){
-  for (j in n){
-    sample &lt;-law(j*N)
-    Xn &lt;- moy_empirique(sample)
-    Un &lt;- c()
-    for (i in 1:N){
-      sample2 &lt;- sample[((i-1)*j + 1): (i*j)]
-      ani &lt;- moy_empirique(sample2)
-      bni &lt;- var_empirique(sample2) / sqrt(j)
-      Uni &lt;- (Xn - ani)/ bni
-      Un &lt;- c(Un,Uni)
-    }
-    hist(Un, xlab=paste(&quot;Moyenne empirique centrée réduite pour une taille=&quot;,j),main=title,breaks=j)
-  }
-}
-mean(gen_echan_gauss(100,1000,1,2))</code></pre>
-<pre><code>## [1] 2.469046</code></pre>
-<pre class="r"><code>#moy_empirique(gen_echan_gauss(10000,10000,1,2))
-moy_norm &lt;- function(n,N,mu,sigma){
-  Xn &lt;- gen_echan_gauss(n,N,mu,sigma)[1,]
-  Un &lt;- c()
-  for (i in Xn){
-    an &lt;- mu
-    bn &lt;- sqrt(sigma*sigma/n)
-    Un &lt;- c(Un,(i-an)/bn)
-  }
-  return(Un)
-}
-#hist(moy_norm(1000,10000,1,2),breaks=100)
-#moy_norm_hist(function(n) {return (rnorm(n , mean=1, sd=2))},&quot;Distribution gaussienne N(1,2)&quot;)
-#t &lt;- seq(-10,10,by=0.5)
-#x &lt;- dnorm(t)
-#par(new=TRUE)
-#curve(dnorm(x),-3,3)</code></pre>
-<p>On obtient bien une loi centrée reduite. On remarque que plus n est grand plus la loi suivi ce rapproche de la loi centré réduite.</p>
-</div>
-<div id="loi-de-pareto" class="section level3">
-<h3>1.2 Loi de Pareto</h3>
-<p>Soit <span class="math inline">\(X\)</span> une variable aléatoire suivant une loi de Pareto <span class="math inline">\(\mathcal{P}(a, \alpha)\)</span>,où <span class="math inline">\(\alpha &gt; 2\)</span>. Alors, <span class="math inline">\(\mathbb{E}[X]=\frac{\alpha \times a}{\alpha - 1}\)</span> et <span class="math inline">\(\mathbb{V}[X]=(\frac{\alpha \times a}{\alpha - 1})^2\frac{\alpha}{\alpha - 2}\)</span> On cherche encore une fois à appliquer le théorème centrale limite afin de mettre en avant que la loi de pareto peut-être approchée par un loi normale centrée réduite : On a déja une expression de l’espérance : <span class="math inline">\(\mathbb{E}[X_{i}]=\frac{\alpha\times a}{\alpha - 1}=a_{n}\)</span> Pour l’expression de <span class="math inline">\(b_n\)</span>, on a : <span class="math display">\[b_{n}=\frac{\sigma}{\sqrt{n}}=\frac{\sqrt{\mathbb{V}[X_{i}]}}{\sqrt{n}}=\frac{\frac{\alpha\times a}{\alpha - 1}\frac{(\alpha)^{1/2}}{(\alpha - 2)^{1/2}}}{\sqrt{n}} \]</span></p>
-<p>Plus n est grand, plus la loi moyenne empirique renormalisé semble suivre une loi N(0, 1).</p>
-<pre class="r"><code>library(&quot;rmutil&quot;)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;rmutil&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:tidyr&#39;:
-## 
-##     nesting</code></pre>
-<pre><code>## The following object is masked from &#39;package:stats&#39;:
-## 
-##     nobs</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     as.data.frame, units</code></pre>
-<pre class="r"><code>gen_echan_pareto &lt;- function(n,N,a,alpha){
-    x &lt;- rpareto(n,a,alpha)
-    aleatoire &lt;- function(x1,n1){
-      y &lt;- sample(x1,n1,replace=TRUE)
-      moy_sd &lt;- c(moy_empirique(y),var_empirique(y))
-     return(moy_sd)
-    }
-  result &lt;- sapply(1:N,function(w) aleatoire(x,n))
-  
-  return(result)
-}
-
-hist_mul &lt;- function(n){
-  for (i in n){
-    hist(gen_echan_pareto(i,N,1.0,2.5)[1,],breaks=i)
-    t &lt;- seq(-10,10,by=0.5)
-x &lt;- dnorm(t,1,2)
-par(new=TRUE)
-plot(x)
-  }
-}
-gen_echan_law_norm &lt;- function(law,a,alpha){
-  for (i in n){
-    SampleMeans &lt;- sapply(1:N,function(i) moy_empirique(sample(law(i),n,replace=TRUE)))
-    Un &lt;-c()
-    an &lt;- (a*alpha)/(alpha-1)
-    bn &lt;- an*sqrt(alpha/(alpha-2))
-    Un &lt;- (SampleMeans - an)/bn 
-    hist(Un,prob=TRUE,xlab=&quot;moyenne&quot;,breaks=i)
-    curve(dnorm(x,0,1),add=TRUE,col=&quot;blue&quot;,-5,5)
-  }
-}
-l&lt;-c(1000)
-gen_echan_law_norm(function(l) {return (rpareto(l,1,3))},1,3)</code></pre>
-<p><img src="tp2_files/figure-html/unnamed-chunk-4-1.png" width="384" /><img src="tp2_files/figure-html/unnamed-chunk-4-2.png" width="384" /><img src="tp2_files/figure-html/unnamed-chunk-4-3.png" width="384" /></p>
-<pre class="r"><code>#hist_moy(function(n){return (rnorm(n,mean=1,sd=2))},&quot;Distribution Gausienne N(1,2)&quot;)
-#moy_norm_hist(function(n) rpareto(n,1,2.5),&quot;AAA&quot;)
-#hist_mul(n)
-
-moy_norm_pareto &lt;- function(n,N,a,alpha){
-  Xn &lt;- gen_echan_pareto(n,N,a,alpha)[1,]
-  Un &lt;- c()
-  #an &lt;- mean(Xn) 
-  #bn &lt;-sqrt(sd(Xn))
-  an &lt;- alpha*a/(alpha-1)
-  bn &lt;- (alpha*a)/(alpha-1)*sqrt(alpha/(alpha-2))/sqrt(n)
-  for (i in Xn){
-    
-    Un &lt;- c(Un,(i-an)/bn)
-  }
-  return(Un)
-}
-
-hist(moy_norm_pareto(100,1000,1.0,3),breaks=100)</code></pre>
-<p><img src="tp2_files/figure-html/unnamed-chunk-4-4.png" width="384" /></p>
-</div>
-<div id="loi-de-poisson" class="section level3">
-<h3>1.3 Loi de Poisson</h3>
+<pre class="r"><code>mean_norm_hist(function(n) { return (rnorm(n, mean=1, sd=2)) }, &quot;Distribution centrée réduite Gaussienne N(1, 2)&quot;)</code></pre>
+<embed src="tp2_files/figure-html/unnamed-chunk-5-1.pdf" width="33%" type="application/pdf" />
+<embed src="tp2_files/figure-html/unnamed-chunk-5-2.pdf" width="33%" type="application/pdf" />
+<embed src="tp2_files/figure-html/unnamed-chunk-5-3.pdf" width="33%" type="application/pdf" />
+<p>###1.2 Loi de Pareto</p>
+<p>Soit <span class="math inline">\(X\)</span> une variable aléatoire suivant une loi de Pareto <span class="math inline">\(\mathcal{P}(a, \alpha)\)</span>,où <span class="math inline">\(\alpha &gt; 2\)</span>. Alors, <span class="math inline">\(\mathbb{E}[X]=\frac{\alpha \times a}{\alpha - 1}\)</span> et <span class="math inline">\(\mathbb{V}[X]=(\frac{\alpha \times a}{\alpha - 1})^2\frac{\alpha}{\alpha - 2}\)</span></p>
+<p>En effet, on sait que <span class="math inline">\(\mathbb{E}[X]=\int_0^\infty\mathbb{P}(X&gt;t)\)</span>, donc <span class="math inline">\(\mathbb{E}[X]=\int_0^\infty(\int_t^\infty f(x;a,\alpha)dx)dt=\int_0^\alpha(\int_a^\infty\lambda\frac{a^\alpha}{x^{\alpha+1}}dx)dt +\int_a^\infty(\int_t^\infty\alpha\frac{a^\alpha}{x^{\alpha+1}}dx)dt=a+[\frac{a^\alpha}{-\alpha+1}t^{-\alpha+1}]^\infty_a=\frac{a\times\alpha}{\alpha-1}\)</span> On cherche encore une fois à appliquer le théorème centrale limite afin de mettre en avant que la loi de pareto peut-être approchée par un loi normale centrée réduite : On a déja une expression de l’espérance : <span class="math inline">\(\mathbb{E}[X_{i}]=\frac{\alpha\times a}{\alpha - 1}=a_{n}\)</span> Pour l’expression de <span class="math inline">\(b_n\)</span>, on a : <span class="math display">\[b_{n}=\frac{\sigma}{\sqrt{n}}=\frac{\sqrt{\mathbb{V}[X_{i}]}}{\sqrt{n}}=\frac{\frac{\alpha\times a}{\alpha - 1}\frac{(\alpha)^{1/2}}{(\alpha - 2)^{1/2}}}{\sqrt{n}} \]</span></p>
+<pre class="r"><code>gen_echan_law_pareto(function(n) {return(rpareto(n,1,3))})</code></pre>
+<embed src="tp2_files/figure-html/unnamed-chunk-7-1.pdf" width="33%" type="application/pdf" />
+<embed src="tp2_files/figure-html/unnamed-chunk-7-2.pdf" width="33%" type="application/pdf" />
+<embed src="tp2_files/figure-html/unnamed-chunk-7-3.pdf" width="33%" type="application/pdf" />
+<pre class="r"><code>gen_echan_law_norm_pareto(function(n) {return(rpareto(n,1,3))},1,3)</code></pre>
+<embed src="tp2_files/figure-html/unnamed-chunk-9-1.pdf" width="33%" type="application/pdf" />
+<embed src="tp2_files/figure-html/unnamed-chunk-9-2.pdf" width="33%" type="application/pdf" />
+<embed src="tp2_files/figure-html/unnamed-chunk-9-3.pdf" width="33%" type="application/pdf" />
+<p>###1.3 Loi de Poisson</p>
 <p>Soit X une variable aléatoire suivant une loi de Poisson qu’on notera <span class="math inline">\(\mathcal{P}(\lambda)\)</span>. Alors, <span class="math inline">\(\mathbb{E}[X]=\lambda\)</span> et <span class="math inline">\(\mathbb{V}[X]=\lambda\)</span> On cherche de nouveau à impliquer le théorème centrale limite : On a alors rapidement : <span class="math inline">\(a_n=\lambda\)</span> et <span class="math inline">\(b_n=\sqrt{\frac{\lambda}{n}}\)</span></p>
 <p>Comme pour les questions précédentes, on remarque que plus n est grand, plus la loi moyenne empirique normalisé semble suivre une loi N(0, 1).</p>
-<pre class="r"><code>gen_echan_poisson &lt;- function(n,N,lambda){
-    x &lt;- rpois(n,lambda)
-    aleatoire &lt;- function(x1,n1){
-      y &lt;- sample(x1,n1,replace=TRUE)
-      moy_sd &lt;- c(mean(y),sd(y))
-     return(moy_sd)
-    }
-  result &lt;- sapply(1:N,function(w) aleatoire(x,n))
-  
-  return(result)
-}
-
-hist_mul &lt;- function(n){
-  for (i in n){
-    hist(gen_echan_poisson(i,N,1)[1,],breaks=i)
-    t &lt;- seq(-10,10,by=0.5)
-x &lt;- dnorm(t,1,2)
-par(new=TRUE)
-plot(x)
-  }
-}
-#hist_moy(function(n){return (rnorm(n,mean=1,sd=2))},&quot;Distribution Gausienne N(1,2)&quot;)
-#hist_mul(n)
-gen_echan_law_norm &lt;- function(law,lambda){
-  for (i in n){
-    SampleMeans &lt;- sapply(1:N,function(w) moy_empirique(sample(law(i),n,replace=TRUE)))
-    Un &lt;-c()
-    an &lt;- lambda
-    bn &lt;- lambda/sqrt(i)
-    Un &lt;- (SampleMeans - an)/bn 
-    hist(Un,prob=TRUE,xlab=&quot;moyenne&quot;,breaks=i)
-    curve(dnorm(x,0,1),add=TRUE,col=&quot;blue&quot;,-5,5)
-  }
-}
-
-gen_echan_law_norm(function(n) {return (rpois(n,3))},3)</code></pre>
-<p><img src="tp2_files/figure-html/unnamed-chunk-5-1.png" width="192" /><img src="tp2_files/figure-html/unnamed-chunk-5-2.png" width="192" /><img src="tp2_files/figure-html/unnamed-chunk-5-3.png" width="192" /></p>
-<pre class="r"><code>moy_norm_poisson &lt;- function(n,N,lambda){
-  Xn &lt;- gen_echan_poisson(n,N,lambda)[1,]
-  Un &lt;- c()
-  an &lt;- mean(Xn)
-  bn &lt;- sqrt(sd(gen_echan_poisson(n,N,lambda)[,1]))
-  for (i in Xn){
-    
-    Un &lt;- c(Un,(i-an)/bn)
-  }
-  return(Un)
-}
-
-#hist(moy_norm_poisson(100,1000,1),breaks=100)</code></pre>
-</div>
-<div id="methodologie-destimation" class="section level3">
-<h3>1.4 Méthodologie d’estimation</h3>
+<pre class="r"><code>mean_hist(function(n) { return (rpois(n, lambda=3)) }, &quot;Distribution suivant une loi de Poisson P(3)&quot;)</code></pre>
+<embed src="tp2_files/figure-html/unnamed-chunk-12-1.pdf" width="33%" type="application/pdf" />
+<embed src="tp2_files/figure-html/unnamed-chunk-12-2.pdf" width="33%" type="application/pdf" />
+<embed src="tp2_files/figure-html/unnamed-chunk-12-3.pdf" width="33%" type="application/pdf" />
+<pre class="r"><code>mean_norm_hist_poisson(function(n) { return (rpois(n, lambda=3)) }, &quot;Distribution centrée réduite d&#39;une loi de Poisson P(3)&quot;)</code></pre>
+<embed src="tp2_files/figure-html/unnamed-chunk-14-1.pdf" width="33%" type="application/pdf" />
+<embed src="tp2_files/figure-html/unnamed-chunk-14-2.pdf" width="33%" type="application/pdf" />
+<embed src="tp2_files/figure-html/unnamed-chunk-14-3.pdf" width="33%" type="application/pdf" />
+<p>###1.4 Méthodologie d’estimation</p>
 <p>Soit <span class="math inline">\(X=(X_1, ..., X_n)\)</span>, où <span class="math inline">\(n \in \mathbb{R}\)</span>, un échantillon. De plus, on suppose que tous les <span class="math inline">\(X_{i}\)</span> son i.i.d de même loi.</p>
 <p>Soit <span class="math inline">\(T : \Omega^n \rightarrow \mathbb{R}\)</span> statistique sur un echantillon de taille n.</p>
-<p>Pour trouver une approximation, on fait : 1. Soit <span class="math inline">\(N \in \mathbb{N}\)</span> tq <span class="math inline">\(N \gg 1\)</span> et soit <span class="math inline">\(N\)</span> échantillons de taille n, notés <span class="math inline">\(X^i = (X^i_1, ..., X^i_n)\)</span> tel que <span class="math inline">\(1 \leq i \leq N\)</span> On introduit :$ T_{N} = _{i=1}<sup>{N}{T(X</sup>{i})} $ D’après le théorème centrale limite, on en déduit que lorsque N devient grand alors: D’une part, on a : <span class="math inline">\(\mathbb{E}[ T_N] \xrightarrow[N \gg 1]{} \mathbb{E}[T(X)]\)</span> et, d’autre part, on a aussi : <span class="math inline">\(\mathbb{V}[ T_N] \xrightarrow[N \gg 1]{} \frac{1}{N}\mathbb{V}[T(X)] \xrightarrow[N \rightarrow +\infty]{} 0\)</span> Avec ce qui précéde, on a finalement $ T_n{ [T(X)] = c^{te}}$.</p>
+<p>Pour trouver une approximation, on fait : 1. Soit <span class="math inline">\(N\in\mathbb{N}\)</span> tq <span class="math inline">\(N\gg1\)</span> et soit N échantillons de taille n, notés <span class="math inline">\(X^i = (X^i_1, ..., X^i_n)\)</span> tel que <span class="math inline">\(1\leq i\leq N\)</span> On introduit :<span class="math inline">\(T_{N} = \frac{1}{N}\sum\limits_{i=1}^{N}{T(X^{i})}\)</span></p>
+<p>D’après le théorème centrale limite, on en déduit que lorsque N devient grand alors: D’une part, on a : <span class="math inline">\(\mathbb{E}[ T_N] \xrightarrow[N \gg 1]{}\mathbb{E}[T(X)]\)</span> et, d’autre part, on a aussi : <span class="math inline">\(\mathbb{V}[T_N] \xrightarrow[N\gg 1]{} \frac{1}{N}\mathbb{V}[T(X)] \xrightarrow[N\rightarrow +\infty]{}0\)</span> Avec ce qui précéde, on a finalement <span class="math inline">\(T_n{\xrightarrow[N \rightarrow +\infty]{\mathbb {L}^{2}} \mathbb{E}[T(X)] = c^{te}}\)</span>.</p>
 <p>N influence a qualité de l’approximation dans le sens où, comme observé dans les précédentes question, plus il est grand plus celle-ci est de bonne qualité.</p>
-</div>
-</div>
-<div id="moyenne-et-dispersion" class="section level1">
-<h1>2. Moyenne et dispersion</h1>
-<div id="inegalite-de-tchebytchev" class="section level3">
-<h3>2.1 Inégalité de Tchebytchev</h3>
+<p>#2. Moyenne et dispersion</p>
+<p>###2.1 Inégalité de Tchebytchev</p>
 <p>On considère une variable aléatoire X qui admet un moment d’ordre 2. On a alors l’inégalité bien connu : <span class="math display">\[\forall \delta &gt; 0, \mathbb{P}(|X-\mathbb{E}[X]|\geq\delta)&lt;\frac{\mathbb{V}[X]}{\delta^{2}}\]</span></p>
-<p>Dans le cas d’une loi Gaussienne, on a alors : <span class="math display">\[\forall \delta &gt; 0, \mathbb{P}(|X-\mu|\geq \delta)&lt;\frac{\sigma^{2}}{\delta^{2}}\]</span> Dans le cas d’une loi de Poisson, c’est : <span class="math display">\[\forall \delta &gt;0, \mathbb{P}(|X-\lambda|\geq \delta)&lt;\frac{\lambda}{\delta^{2}}\]</span></p>
-</div>
-<div id="monte-carlo" class="section level3">
-<h3>2.2 Monte-Carlo</h3>
-<div id="section" class="section level4">
-<h4>2.2.1</h4>
-<p>On a immédiatement que <span class="math display">\[\mathbb{P}(|X-\mu|\geq\delta)=\mathbb{E}[\mathbb{1}_{|X-\mu|\geq\delta}]\]</span> On pose alors <span class="math display">\[Z=1_{|X-\mu|\geq\delta}\]</span></p>
-</div>
-<div id="section-1" class="section level4">
-<h4>2.2.2</h4>
-<p>Par hypothèse N est supposé grand, on peut alors en réutilisant les conclusion de la partie 1, estimer <span class="math inline">\(\mathbb{E}[Z]\)</span> par la moyenne empirique : <span class="math display">\[Z_{n}= \frac{1}{n}\sum\limits_{i=1}^{n}T(Z^{i})\]</span></p>
-</div>
-</div>
+<p>Dans le cas d’une loi Gaussienne, on a alors : <span class="math inline">\(\forall \delta &gt; 0, \mathbb{P}(|X-\mu|\geq \delta)&lt;\frac{\sigma^{2}}{\delta^{2}}\)</span> Dans le cas d’une loi de Poisson, c’est : <span class="math inline">\(\forall \delta &gt;0, \mathbb{P}(|X-\lambda|\geq \delta)&lt;\frac{\lambda}{\delta^{2}}\)</span></p>
+<p>###2.2 Monte-Carlo ####2.2.1 On a immédiatement que <span class="math inline">\(\mathbb{P}(|X-\mu|\geq\delta)=\mathbb{E}[1_{|X-\mu|\geq\delta}]\)</span> On pose alors <span class="math inline">\(Z=1_{|X-\mu|\geq\delta}\)</span></p>
+<p>####2.2.2</p>
+<p>Par hypothèse N est supposé grand, on peut alors en réutilisant les conclusion de la partie 1, estimer <span class="math inline">\(\mathbb{E}[Z]\)</span> par la moyenne empirique : <span class="math inline">\(Z_{n}= \frac{1}{n}\sum\limits_{i=1}^{n}T(Z^{i})\)</span></p>
+<p>On obtient alors en appliquant aux différentes lois :</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right;">
+Gauss
+</th>
+<th style="text-align:right;">
+Pareto
+</th>
+<th style="text-align:right;">
+Poisson
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0.3220322
+</td>
+<td style="text-align:right;">
+0.5788579
+</td>
+<td style="text-align:right;">
+0.7717772
+</td>
+</tr>
+</tbody>
+</table>
+<p>On considère la moyenne empirique comme une variable aléatoire. Or : <span class="math inline">\(\mathbb{E}[Z_N]=\mathbb{E}[Z]\)</span> et <span class="math inline">\(\mathbb{V}[Z_N]=\frac{1}{N}\mathbb{V}[Z]\)</span> On injecte dans l’inégalité de Tchebytchev pour finalement obtenir avec la précision : <span class="math inline">\(\mathbb{P}(|X-\mu|\geq\delta)=\mathbb{E}[Z]\simeq \mathbb{E}[Z_N]\)</span>, <span class="math display">\[\forall\delta&gt;0, \mathbb{P}(|Z_N-\mathbb{E}[Z]|\geq\delta)\leq\frac{1}{\delta\times N}\mathbb{V}[Z]\]</span></p>
+<div id="comparaison-avec-tchebytchev" class="section level4">
+<h4>2.2.3 Comparaison avec Tchebytchev</h4>
+<p>Soit <span class="math inline">\(\delta=1\times 10^{-4}\)</span></p>
+En fonction des loi de X précèdentes, notre estimation de <span class="math inline">\(Z_N \simeq \mathbb{E}[Z]\)</span> vérifie: <span class="math inline">\(\mathbb{P}[|Z_N -\mathbb{E}[Z]|\geq\delta] = \mathbb{P}(Z_N\notin [\mathbb{E}[Z] - \delta , \mathbb{E}[Z] + \delta])\)</span>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+Loi
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Gauss : 0.218337833783378
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pareto : 0.243814941494149
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Poisson : 0.176196729672967
+</td>
+</tr>
+</tbody>
+</table>
+<p>Pour plusieurs valeurs de <span class="math inline">\(\delta\)</span> et <span class="math inline">\(\sigma\)</span>:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;-webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg);">
+</th>
+<th style="text-align:right;-webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg);">
+d.0.0001_s.1
+</th>
+<th style="text-align:right;-webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg);">
+d.0.01_s.1
+</th>
+<th style="text-align:right;-webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg);">
+d.1_s.1
+</th>
+<th style="text-align:right;-webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg);">
+d.0.0001_s.10
+</th>
+<th style="text-align:right;-webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg);">
+d.0.01_s.10
+</th>
+<th style="text-align:right;-webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg);">
+d.1_s.10
+</th>
+<th style="text-align:right;-webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg);">
+d.0.0001_s.100
+</th>
+<th style="text-align:right;-webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg);">
+d.0.01_s.100
+</th>
+<th style="text-align:right;-webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg);">
+d.1_s.100
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Gauss
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+<td style="text-align:right;">
+0.0000587
+</td>
+<td style="text-align:right;">
+2.16e-05
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+<td style="text-align:right;">
+0.0000100
+</td>
+<td style="text-align:right;">
+7.40e-06
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+<td style="text-align:right;">
+0.000001
+</td>
+<td style="text-align:right;">
+8.00e-07
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pareto
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+<td style="text-align:right;">
+0.0000259
+</td>
+<td style="text-align:right;">
+2.19e-05
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+<td style="text-align:right;">
+0.0000180
+</td>
+<td style="text-align:right;">
+2.19e-05
+</td>
+<td style="text-align:right;">
+0.0000000
+</td>
+<td style="text-align:right;">
+0.000022
+</td>
+<td style="text-align:right;">
+2.18e-05
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Poisson
+</td>
+<td style="text-align:right;">
+0.2306186
+</td>
+<td style="text-align:right;">
+0.0023323
+</td>
+<td style="text-align:right;">
+2.31e-05
+</td>
+<td style="text-align:right;">
+0.2327573
+</td>
+<td style="text-align:right;">
+0.0023323
+</td>
+<td style="text-align:right;">
+2.30e-05
+</td>
+<td style="text-align:right;">
+0.2328098
+</td>
+<td style="text-align:right;">
+0.002332
+</td>
+<td style="text-align:right;">
+2.34e-05
+</td>
+</tr>
+</tbody>
+</table>
+<p>On remarque que, plus <span class="math inline">\(\delta\)</span> est négligeable devant 1, plus la précision diminue et plus <span class="math inline">\(\sigma\)</span> est grand devant <span class="math inline">\(\delta\)</span>, plus la précision sera incertaine.</p>
+<p>####2.2.4 Inégalité de Chernoff</p>
+<p>Soit X une variable aléatoire admettant une fonction génératrice. L’inégalité de Chernoff donne: <span class="math inline">\(\forall \delta \in \mathbb{R}, \forall t\in \mathbb{R}^*_+\)</span> tq <span class="math inline">\(\phi(t)=\mathbb E[e^{tX}]&lt;+\infty,\)</span> <span class="math inline">\(\mathbb{P}(X\geq \delta) \leq e^{t\delta} \mathbb{E}[e^{tX]}]\)</span> et, <span class="math inline">\(\mathbb{P}(X \leq -\delta) \leq e^{-t\delta} \mathbb{E}[e^{tX}]\)</span> Donc, Pour une variable Gaussienne : <span class="math inline">\(\mathbb{P}(X \geq \delta) \leq e^{\frac{-\delta^2}{2\sigma^2}}\)</span> Pour une variable de Poisson : <span class="math inline">\(\mathbb{P}(X \geq \delta) \leq e^{\frac{-\delta^2}{2\lambda}}\)</span></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;-webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg);">
+</th>
+<th style="text-align:right;-webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg);">
+d.0.0001_s.1
+</th>
+<th style="text-align:right;-webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg);">
+d.0.01_s.1
+</th>
+<th style="text-align:right;-webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg);">
+d.1_s.1
+</th>
+<th style="text-align:right;-webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg);">
+d.0.0001_s.10
+</th>
+<th style="text-align:right;-webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg);">
+d.0.01_s.10
+</th>
+<th style="text-align:right;-webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg);">
+d.1_s.10
+</th>
+<th style="text-align:right;-webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg);">
+d.0.0001_s.100
+</th>
+<th style="text-align:right;-webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg);">
+d.0.01_s.100
+</th>
+<th style="text-align:right;-webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -ms-transform: rotate(90deg); -o-transform: rotate(90deg); transform: rotate(90deg);">
+d.1_s.100
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Gauss
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.99995
+</td>
+<td style="text-align:right;">
+0.6065307
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.9999995
+</td>
+<td style="text-align:right;">
+0.9950125
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1.0000000
+</td>
+<td style="text-align:right;">
+0.9999500
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Poisson
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.99995
+</td>
+<td style="text-align:right;">
+0.6065307
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.9999950
+</td>
+<td style="text-align:right;">
+0.9512294
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.9999995
+</td>
+<td style="text-align:right;">
+0.9950125
+</td>
+</tr>
+</tbody>
+</table>
+<p>####2.3.1 On a l’inégalité de Chernoff : <span class="math inline">\(\mathbb{P}(Xn&gt;t)\leq\exp(-\frac{n\delta^2}{2\sigma^2})\)</span> On obtient plusieurs valeurs pour <span class="math inline">\(\delta=(0.0001,0.01,1)\)</span>:</p>
+<pre><code>## [1] &quot;Pour n=20: 4.53999297624849e-05&quot;</code></pre>
+<pre><code>## [1] &quot;Pour n=20: 1.92874984796392e-22&quot;</code></pre>
+<pre><code>## [1] &quot;Pour n=20: 7.12457640674129e-218&quot;</code></pre>
+<p>####2.3.2</p>
+<p>On déduit que la moyenne empirique est un estimateur pour <span class="math inline">\(\mu\)</span> et <span class="math inline">\(\lambda\)</span>.</p>
+<p>####2.4.1</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+X20
+</th>
+<th style="text-align:right;">
+X100
+</th>
+<th style="text-align:right;">
+X1000
+</th>
+<th style="text-align:right;">
+X10000
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+moyenne empirique
+</td>
+<td style="text-align:right;">
+-0.5967884
+</td>
+<td style="text-align:right;">
+-0.1545888
+</td>
+<td style="text-align:right;">
+-0.7319641
+</td>
+<td style="text-align:right;">
+-0.131172
+</td>
+</tr>
+</tbody>
+</table>
+<p>La moyenne empirique donne des valeurs très différentes selon ‘n’, et ne semble pas converger.</p>
+<p>####2.4.2 Une variable aléatoire <span class="math inline">\(X\)</span> suivant une loi de Cauchy <span class="math inline">\(C(\theta)\)</span> n’admet pas d’espérance: <span class="math inline">\(f_X(x, \theta) = \frac{1}{\pi}\frac{1}{1 + (x - \theta)^2}\)</span>, et quand <span class="math inline">\(x \rightarrow +\infty\)</span>, <span class="math inline">\(xf_X(x, \theta) \sim \frac{1}{x}\)</span>, donc: <span class="math inline">\(\mathbb{E}[X] = \int_{-\infty}^{+\infty}|xf_X(x, \theta)|dx\)</span> diverge. Donc le théorème central limite ne s’applique pas: il n’y a pas d’espérance, donc la moyenne empirique ne converge pas. Ceci s’explique par le fait que la probabilité d’obtenir une valeur éloigné de <span class="math inline">\(\theta\)</span> (la médiane) est trop elévé pour que la moyenne converge.</p>
+####2.4.3 La médiane d’une loi de Cauchy <span class="math inline">\(C(\theta)\)</span> est <span class="math inline">\(\theta\)</span>. Si l’on sait qu’un phénomène suit une loi de Cauchy, il est possible de déterminer son paramètre <span class="math inline">\(\theta\)</span> en suivant ce protocole: 1. Fixer <span class="math inline">\(n \in \mathbb{N}, n \gg 1\)</span>. 2. Générer un échantillon de taille <span class="math inline">\(n\)</span>. 3. Trier les valeurs de cette échantillon par ordre croissant. (ou décroissant) 4. La valeur au centre de l’échantillon trié (en <span class="math inline">\(\frac{n}{2}\)</span> ) est un estimateur de <span class="math inline">\(\theta\)</span>. Application: On fait varier <span class="math inline">\(\theta\)</span> dans {-1,0,1}.
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+X20
+</th>
+<th style="text-align:right;">
+X100
+</th>
+<th style="text-align:right;">
+X1000
+</th>
+<th style="text-align:right;">
+X10000
+</th>
+<th style="text-align:right;">
+X20.1
+</th>
+<th style="text-align:right;">
+X100.1
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+médiane
+</td>
+<td style="text-align:right;">
+-0.7173642
+</td>
+<td style="text-align:right;">
+-0.7351218
+</td>
+<td style="text-align:right;">
+-1.026091
+</td>
+<td style="text-align:right;">
+-1.029137
+</td>
+<td style="text-align:right;">
+0.1303069
+</td>
+<td style="text-align:right;">
+0.0849859
+</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+X1000
+</th>
+<th style="text-align:right;">
+X10000
+</th>
+<th style="text-align:right;">
+X20
+</th>
+<th style="text-align:right;">
+X100
+</th>
+<th style="text-align:right;">
+X1000.1
+</th>
+<th style="text-align:right;">
+X10000.1
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+médiane
+</td>
+<td style="text-align:right;">
+-0.0759155
+</td>
+<td style="text-align:right;">
+0.0038092
+</td>
+<td style="text-align:right;">
+1.489666
+</td>
+<td style="text-align:right;">
+1.065962
+</td>
+<td style="text-align:right;">
+1.050527
+</td>
+<td style="text-align:right;">
+0.9847867
+</td>
+</tr>
+</tbody>
+</table>
+<p>Les valeurs obtenus par la simulation sont en accord avec celle attendu par notre protocole.</p>
 </div>
 
 
@@ -634,6 +880,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

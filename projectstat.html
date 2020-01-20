@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="Nicolas Makaroff" />
@@ -71,9 +71,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -87,7 +85,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -192,8 +189,6 @@ $(document).ready(function () {
 });
 </script>
 
-<div class="container-fluid main-container">
-
 <!-- tabsets -->
 
 <style type="text/css">
@@ -238,6 +233,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -250,20 +246,17 @@ $(document).ready(function () {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
 
 
 
@@ -361,8 +354,8 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">Statistical Project</h1>
-<h4 class="author"><em>Nicolas Makaroff</em></h4>
-<h4 class="date"><em>01/05/2019</em></h4>
+<h4 class="author">Nicolas Makaroff</h4>
+<h4 class="date">01/05/2019</h4>
 
 </div>
 
@@ -375,22 +368,9 @@ $(document).ready(function () {
 <pre class="r"><code>knitr::opts_chunk$set(echo=TRUE,message=FALSE,warning=FALSE)
 library(ggplot2)
 library(magrittr)
-library(dplyr)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;dplyr&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     filter, lag</code></pre>
-<pre><code>## The following objects are masked from &#39;package:base&#39;:
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<pre class="r"><code>library(tidyr)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;tidyr&#39;</code></pre>
-<pre><code>## The following object is masked from &#39;package:magrittr&#39;:
-## 
-##     extract</code></pre>
-<pre class="r"><code>data &lt;- read.csv(&quot;Data_Binomial_16.csv&quot;)
+library(dplyr)
+library(tidyr)
+data &lt;- read.csv(&quot;Data_Binomial_16.csv&quot;)
 summary(data)</code></pre>
 <pre><code>##       cost             victory            sex             age      
 ##  Min.   :  0.0781   Min.   : 29.26   Min.   :0.000   Min.   :0.00  
@@ -445,12 +425,10 @@ plot(data_clean$victory~data_clean$cost)</code></pre>
 <pre class="r"><code>data_clean$cost.cat &lt;- cut(data_clean$cost,breaks = seq(0,50,2))
 table(data_clean$cost.cat)</code></pre>
 <pre><code>## 
-##   (0,2]   (2,4]   (4,6]   (6,8]  (8,10] (10,12] (12,14] (14,16] (16,18] 
-##      42      52      47      42      48      31      42      37      29 
-## (18,20] (20,22] (22,24] (24,26] (26,28] (28,30] (30,32] (32,34] (34,36] 
-##      38      38      22      26      29      40      32      33      22 
-## (36,38] (38,40] (40,42] (42,44] (44,46] (46,48] (48,50] 
-##      25      21      29      21      23      26      15</code></pre>
+##   (0,2]   (2,4]   (4,6]   (6,8]  (8,10] (10,12] (12,14] (14,16] (16,18] (18,20] (20,22] (22,24] (24,26] (26,28] (28,30] (30,32] 
+##      42      52      47      42      48      31      42      37      29      38      38      22      26      29      40      32 
+## (32,34] (34,36] (36,38] (38,40] (40,42] (42,44] (44,46] (46,48] (48,50] 
+##      33      22      25      21      29      21      23      26      15</code></pre>
 <pre class="r"><code>hist(data_clean$cost,breaks = 30)</code></pre>
 <p><img src="projectstat_files/figure-html/unnamed-chunk-4-1.png" width="33%" /></p>
 </div>
@@ -459,10 +437,8 @@ table(data_clean$cost.cat)</code></pre>
 <pre class="r"><code>data_clean$victory.cat &lt;- cut(data_clean$victory,breaks = seq(0,100,10))
 table(data_clean$victory.cat)</code></pre>
 <pre><code>## 
-##   (0,10]  (10,20]  (20,30]  (30,40]  (40,50]  (50,60]  (60,70]  (70,80] 
-##        0        0        1      236     1022      478      176       61 
-##  (80,90] (90,100] 
-##       19        3</code></pre>
+##   (0,10]  (10,20]  (20,30]  (30,40]  (40,50]  (50,60]  (60,70]  (70,80]  (80,90] (90,100] 
+##        0        0        1      236     1022      478      176       61       19        3</code></pre>
 <pre class="r"><code>hist(data_clean$victory,breaks = 30)
 par(new=TRUE)
 # plot(dchisq(0.5*x,25))
@@ -617,12 +593,10 @@ res</code></pre>
 <pre class="r"><code>data_jeu_cher$victory.cat &lt;- cut(data_jeu_cher$victory,breaks = seq(0,50,2))
 table(data_jeu_cher$victory.cat)</code></pre>
 <pre><code>## 
-##   (0,2]   (2,4]   (4,6]   (6,8]  (8,10] (10,12] (12,14] (14,16] (16,18] 
-##       0       0       0       0       0       0       0       0       0 
-## (18,20] (20,22] (22,24] (24,26] (26,28] (28,30] (30,32] (32,34] (34,36] 
-##       0       0       0       0       0       0       0       0       0 
-## (36,38] (38,40] (40,42] (42,44] (44,46] (46,48] (48,50] 
-##       0       0       0       5       0       9      31</code></pre>
+##   (0,2]   (2,4]   (4,6]   (6,8]  (8,10] (10,12] (12,14] (14,16] (16,18] (18,20] (20,22] (22,24] (24,26] (26,28] (28,30] (30,32] 
+##       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0       0 
+## (32,34] (34,36] (36,38] (38,40] (40,42] (42,44] (44,46] (46,48] (48,50] 
+##       0       0       0       0       0       5       0       9      31</code></pre>
 <pre class="r"><code>hist(data_jeu_cher$victory-mean(data_jeu_cher$victory),breaks = 30)</code></pre>
 <p><img src="projectstat_files/figure-html/unnamed-chunk-16-1.png" width="33%" /> La valeur de la <span class="math inline">\(p-value\)</span> confirme que la loi suivi est bien normale.</p>
 </div>
@@ -645,6 +619,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

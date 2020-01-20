@@ -1,19 +1,13 @@
 ---
-title: "TP2 de Statistique"
+title: "MAKAROFF_NICOLAS_TPSTAT2"
 author: "Nicolas Makaroff"
-date: "01/03/2019"
+date: "04/03/2019"
+output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+#1 - Théorème Central Limite et Estimation de Monte Carlo
 
-# 1 - Théorème Central Limite et Estimation de Monte Carlo
-### Avant-propos
-
-  Pour la suite de l'exercice, on définit trois fonctions permettant d'une part pour un vecteur donné de calculer la moyenne empirique et la variance empirique, et d'autre part pour une loi donné de créer un échantillon de taille $N=1000$.
-  
-```{r}
+```{r,include=FALSE}
 N<-1000
 n<-c(5,30,100)
 #Fonction calculant la moyenne empirique pour un vecteur donné
@@ -22,7 +16,7 @@ moy_empirique <- function(vecteur){
  for (i in vecteur){
    sum<-sum + i
  }
- return (sum/(length(vecteur)))
+ return (sum/(length(vecteur)-1))
 }
 
 #Calcul de la variance emmpirique pour un vecteur donné
@@ -34,39 +28,24 @@ var_empirique <- function(vecteur){
   }
   return ( sum/(length(vecteur)-1))
 }
-
-
 ```
 
-  On introduit aussi une fonction permettant de calculer la moyenne empirique sur un échantillon en fonction de n'importe quelle loi et compare avec la loi normale.
-  
-### 1.1 Simulation de 1000 échantillon i.i.d Gaussien
-
-```{r,fig.width=4,fig.height=5}
-gen_echan_gauss <- function(n,N,mu,sigma){
-    x <- rnorm(n,mu,sigma)
-    aleatoire <- function(x1,n1){
-      y <- sample(x1,n1,replace=TRUE)
-      moy_sd <- c(moy_empirique(y),var_empirique(y))
-     return(moy_sd)
-    }
-  result <- sapply(1:N,function(w) aleatoire(x,n))
-  
-  return(result)
-}
-hist_mul <- function(n){
+```{r,include=FALSE}
+gen_echan_law <- function(law){
   for (i in n){
-    hist(gen_echan_gauss(i,N,1,2)[1,],breaks=i)
-    t <- seq(-10,10,by=0.5)
-x <- dnorm(t,1,2)
-par(new=TRUE)
-#plot(x)
-curve(dnorm(x,1,2),-5,5)
+    SampleMeans <- sapply(1:N,function(w) moy_empirique(sample(law(i),n,replace=TRUE)))
+    hist(SampleMeans,prob=FALSE,xlab="moyenne",breaks=i,main="Loi Gaussienne N(1,2)")
+    s <- seq(-8,10,0.1)
+    par(new=TRUE)
+    plot(dnorm(s,1,2),axes=FALSE,xlab={""},ylab={""},col="dark red")
   }
 }
-#hist_moy(function(n){return (rnorm(n,mean=1,sd=2))},"Distribution Gausienne N(1,2)")
-hist_mul(n)
+```
+  
+###1.1 Simulation de 1000 échantillon i.i.d Gaussien
 
+```{r,fig.show='hold',out.width='33%',dev='pdf'}
+gen_echan_law(function(n){return (rnorm(n,m=1,s=2))})
 ```
 
 Soit $S_{n}=\sum\limits_{i=1}^{n}X_{i}$ tq : $X_{i}$ i.i.d en loi de moyenne $\mu$ et variance $\sigma^{2}$.
@@ -83,177 +62,193 @@ Ce qui donne pour le cas présent : $(1,\frac{2}{\sqrt{n}})$
 
 Ainsi, on en déduit que $U_{n}=\frac{{X_{n}} - a_{n}}{b_{n}}$ suit une loi normale centrée réduite $\mathcal{N}(0,1)$.
 
-```{r,fig.height=3,fig.width=4}
-#Fonction que trace l'histogramme pour la loi centrée réduite. Pour varier, j'ai utilisé ici une autre manière de créer un échantillon.
-moy_norm_hist <- function(law,title){
-  for (j in n){
-    sample <-law(j*N)
-    Xn <- moy_empirique(sample)
-    Un <- c()
-    for (i in 1:N){
-      sample2 <- sample[((i-1)*j + 1): (i*j)]
-      ani <- moy_empirique(sample2)
-      bni <- var_empirique(sample2) / sqrt(j)
-      Uni <- (Xn - ani)/ bni
-      Un <- c(Un,Uni)
-    }
-    hist(Un, xlab=paste("Moyenne empirique centrée réduite pour une taille=",j),main=title,breaks=j)
-  }
-}
-mean(gen_echan_gauss(100,1000,1,2))
-#moy_empirique(gen_echan_gauss(10000,10000,1,2))
-moy_norm <- function(n,N,mu,sigma){
-  Xn <- gen_echan_gauss(n,N,mu,sigma)[1,]
-  Un <- c()
-  for (i in Xn){
-    an <- mu
-    bn <- sqrt(sigma*sigma/n)
-    Un <- c(Un,(i-an)/bn)
-  }
-  return(Un)
-}
-#hist(moy_norm(1000,10000,1,2),breaks=100)
-#moy_norm_hist(function(n) {return (rnorm(n , mean=1, sd=2))},"Distribution gaussienne N(1,2)")
-#t <- seq(-10,10,by=0.5)
-#x <- dnorm(t)
-#par(new=TRUE)
-#curve(dnorm(x),-3,3)
-```
-
-On obtient bien une loi centrée reduite. 
-On remarque que plus n est grand plus la loi suivi ce rapproche de la loi centré réduite.
-
-### 1.2 Loi de Pareto
-
-Soit $X$ une variable aléatoire suivant une loi de Pareto $\mathcal{P}(a, \alpha)$,où $\alpha > 2$.
-Alors, $\mathbb{E}[X]=\frac{\alpha \times a}{\alpha - 1}$ et $\mathbb{V}[X]=(\frac{\alpha \times a}{\alpha - 1})^2\frac{\alpha}{\alpha - 2}$
-On cherche encore une fois à appliquer le théorème centrale limite afin de mettre en avant que la loi de pareto peut-être approchée par un loi normale centrée réduite :
-On a déja une expression de l'espérance : $\mathbb{E}[X_{i}]=\frac{\alpha\times a}{\alpha - 1}=a_{n}$
-Pour l'expression de $b_n$, on a : $$b_{n}=\frac{\sigma}{\sqrt{n}}=\frac{\sqrt{\mathbb{V}[X_{i}]}}{\sqrt{n}}=\frac{\frac{\alpha\times a}{\alpha - 1}\frac{(\alpha)^{1/2}}{(\alpha - 2)^{1/2}}}{\sqrt{n}} $$
-
-
-Plus n est grand, plus la loi moyenne empirique renormalisé semble suivre une loi N(0, 1).
-```{r,fig.width=4,fig.heigth=5}
-library("rmutil")
-gen_echan_pareto <- function(n,N,a,alpha){
-    x <- rpareto(n,a,alpha)
-    aleatoire <- function(x1,n1){
-      y <- sample(x1,n1,replace=TRUE)
-      moy_sd <- c(moy_empirique(y),var_empirique(y))
-     return(moy_sd)
-    }
-  result <- sapply(1:N,function(w) aleatoire(x,n))
-  
-  return(result)
-}
-
-hist_mul <- function(n){
-  for (i in n){
-    hist(gen_echan_pareto(i,N,1.0,2.5)[1,],breaks=i)
-    t <- seq(-10,10,by=0.5)
-x <- dnorm(t,1,2)
-par(new=TRUE)
-plot(x)
-  }
-}
-gen_echan_law_norm <- function(law,a,alpha){
+```{r,fig.show='hold',out.width='33%',include=FALSE}
+gen_echan_law_norm <- function(law,mu,sigma){
+  SampleMeans <- c()
   for (i in n){
     SampleMeans <- sapply(1:N,function(i) moy_empirique(sample(law(i),n,replace=TRUE)))
     Un <-c()
-    an <- (a*alpha)/(alpha-1)
-    bn <- an*sqrt(alpha/(alpha-2))
-    Un <- (SampleMeans - an)/bn 
-    hist(Un,prob=TRUE,xlab="moyenne",breaks=i)
-    curve(dnorm(x,0,1),add=TRUE,col="blue",-5,5)
+     an <- mu
+     bn <- sigma/sqrt(i)
+    for (j in SampleMeans){
+     Un <- (SampleMeans - an)/bn 
+    }
+    hist(Un,prob=FALSE,xlab="moyenne",breaks=i)
+    s <- seq(-100,100,0.1)
+    par(new=TRUE)
+    plot(dnorm(s,0,1),col="dark red",axes=FALSE)
   }
 }
-l<-c(1000)
-gen_echan_law_norm(function(l) {return (rpareto(l,1,3))},1,3)
-#hist_moy(function(n){return (rnorm(n,mean=1,sd=2))},"Distribution Gausienne N(1,2)")
-#moy_norm_hist(function(n) rpareto(n,1,2.5),"AAA")
-#hist_mul(n)
-
-moy_norm_pareto <- function(n,N,a,alpha){
-  Xn <- gen_echan_pareto(n,N,a,alpha)[1,]
-  Un <- c()
-  #an <- mean(Xn) 
-  #bn <-sqrt(sd(Xn))
-  an <- alpha*a/(alpha-1)
-  bn <- (alpha*a)/(alpha-1)*sqrt(alpha/(alpha-2))/sqrt(n)
-  for (i in Xn){
-    
-    Un <- c(Un,(i-an)/bn)
+mean_norm_hist <- function(law, title) {
+  for (nj in n) {
+    sample <- law(nj * N)
+    Xn <- moy_empirique(sample)
+    Un <- c()
+    for (i in 1:N) {
+      subsample <- sample[((i-1)*nj + 1): (i * nj)]
+      ani       <- moy_empirique(subsample)
+      bni       <- var_empirique(subsample) / sqrt(nj)
+      Uni       <- (Xn - ani) / bni
+      Un        <- c(Un, Uni)
+    }
+    hist(Un, xlab=paste("Moyenne empirique centrée, enchantillon de taille n=", nj), main=title, breaks=nj)
+    s <- seq(-5,4,0.1)
+    par(new=TRUE)
+  plot(dnorm(s,0,1),col="dark red",xlab={""},ylab={""},axes=FALSE)
   }
-  return(Un)
 }
 
-hist(moy_norm_pareto(100,1000,1.0,3),breaks=100)
 ```
 
-### 1.3 Loi de Poisson
+```{r,out.width='33%',fig.show='hold',dev='pdf'}
+mean_norm_hist(function(n) { return (rnorm(n, mean=1, sd=2)) }, "Distribution centrée réduite Gaussienne N(1, 2)")
+```
 
-Soit X une variable aléatoire suivant une loi de Poisson qu'on notera $\mathcal{P}(\lambda)$.
+###1.2 Loi de Pareto
+
+  Soit $X$ une variable aléatoire suivant une loi de Pareto $\mathcal{P}(a, \alpha)$,où $\alpha > 2$.
+Alors, $\mathbb{E}[X]=\frac{\alpha \times a}{\alpha - 1}$ et $\mathbb{V}[X]=(\frac{\alpha \times a}{\alpha - 1})^2\frac{\alpha}{\alpha - 2}$
+
+En effet, on sait que $\mathbb{E}[X]=\int_0^\infty\mathbb{P}(X>t)$, donc $\mathbb{E}[X]=\int_0^\infty(\int_t^\infty f(x;a,\alpha)dx)dt=\int_0^\alpha(\int_a^\infty\lambda\frac{a^\alpha}{x^{\alpha+1}}dx)dt +\int_a^\infty(\int_t^\infty\alpha\frac{a^\alpha}{x^{\alpha+1}}dx)dt=a+[\frac{a^\alpha}{-\alpha+1}t^{-\alpha+1}]^\infty_a=\frac{a\times\alpha}{\alpha-1}$
+  On cherche encore une fois à appliquer le théorème centrale limite afin de mettre en avant que la loi de pareto peut-être approchée par un loi normale centrée réduite :
+On a déja une expression de l'espérance : $\mathbb{E}[X_{i}]=\frac{\alpha\times a}{\alpha - 1}=a_{n}$
+Pour l'expression de $b_n$, on a : $$b_{n}=\frac{\sigma}{\sqrt{n}}=\frac{\sqrt{\mathbb{V}[X_{i}]}}{\sqrt{n}}=\frac{\frac{\alpha\times a}{\alpha - 1}\frac{(\alpha)^{1/2}}{(\alpha - 2)^{1/2}}}{\sqrt{n}} $$
+
+```{r,fig.show='hold',out.width='33%',include=FALSE}
+knitr::opts_chunk$set(echo=TRUE,message=FALSE,warning=FALSE)
+library("rmutil")
+gen_echan_law_pareto <- function(law){
+  for (i in n){
+    SampleMeans <- sapply(1:N,function(w) moy_empirique(sample(law(i),n,replace=TRUE)))
+    hist(SampleMeans,xlab="moyenne",breaks=i,main="Loi de Pareto P(1,3)")
+    s <- seq(-1,25,0.1)
+    par(new=TRUE)
+    plot(dnorm(s,1,2),axes=FALSE,xlab={""},ylab={""})
+  }
+}
+```
+
+```{r,fig.show='hold',out.width='33%',dev='pdf'}
+gen_echan_law_pareto(function(n) {return(rpareto(n,1,3))})
+```
+
+```{r,fig.show='hold',out.width='33%',include=FALSE}
+library("rmutil")
+knitr::opts_chunk$set(echo=TRUE,message=FALSE,warning=FALSE)
+gen_echan_law_norm_pareto <- function(law,a,alpha){
+  for (i in n){
+    SampleMeans <- sapply(1:N,function(i) moy_empirique(sample(law(i),n,replace=TRUE)))
+    Un <-c()
+    for (j in SampleMeans){
+     an <- (a*alpha)/(alpha-1)
+      bn <- an*sqrt(alpha/(alpha-2))
+      Un <- c(Un,(SampleMeans - an)/bn) 
+    }
+    hist(Un,prob=FALSE,xlab="Moyenne",main="Loi de Pareto centrée  réduite",breaks=i)
+    s <- seq(-1,10,0.1)
+    par(new=TRUE)
+    plot(dnorm(s,0,1),axes=FALSE,xlab={""},ylab={""})
+  }
+}
+```
+
+```{r,fig.show='hold',out.width='33%',dev='pdf'}
+gen_echan_law_norm_pareto(function(n) {return(rpareto(n,1,3))},1,3)
+```
+
+
+###1.3 Loi de Poisson
+
+  Soit X une variable aléatoire suivant une loi de Poisson qu'on notera $\mathcal{P}(\lambda)$.
 Alors, $\mathbb{E}[X]=\lambda$ et $\mathbb{V}[X]=\lambda$
 On cherche de nouveau à impliquer le théorème centrale limite :
 On a alors rapidement : $a_n=\lambda$ et $b_n=\sqrt{\frac{\lambda}{n}}$
 
+  Comme pour les questions précédentes, on remarque que plus n est grand, plus la loi moyenne empirique normalisé semble suivre une loi N(0, 1).
 
-
-Comme pour les questions précédentes, on remarque que plus n est grand, plus la loi moyenne empirique normalisé semble suivre une loi N(0, 1).
-```{r,fig.width=2,fig.height=2}
-gen_echan_poisson <- function(n,N,lambda){
-    x <- rpois(n,lambda)
-    aleatoire <- function(x1,n1){
-      y <- sample(x1,n1,replace=TRUE)
-      moy_sd <- c(mean(y),sd(y))
-     return(moy_sd)
-    }
-  result <- sapply(1:N,function(w) aleatoire(x,n))
-  
-  return(result)
-}
-
-hist_mul <- function(n){
+```{r,fig.show='hold',out.width='33%',include=FALSE}
+gen_echan_law <- function(law){
   for (i in n){
-    hist(gen_echan_poisson(i,N,1)[1,],breaks=i)
-    t <- seq(-10,10,by=0.5)
-x <- dnorm(t,1,2)
-par(new=TRUE)
-plot(x)
+    SampleMeans <- sapply(1:N,function(w) moy_empirique(sample(law(i*N),n,replace=TRUE)))
+    hist(SampleMeans,xlab="moyenne",breaks=i)
+    s <- seq(-10,25,0.1)
+    par(new=TRUE)
+    plot(dnorm(s,3,3),axes=FALSE,xlab={""},ylab={""})
   }
 }
-#hist_moy(function(n){return (rnorm(n,mean=1,sd=2))},"Distribution Gausienne N(1,2)")
-#hist_mul(n)
-gen_echan_law_norm <- function(law,lambda){
-  for (i in n){
-    SampleMeans <- sapply(1:N,function(w) moy_empirique(sample(law(i),n,replace=TRUE)))
-    Un <-c()
-    an <- lambda
-    bn <- lambda/sqrt(i)
-    Un <- (SampleMeans - an)/bn 
-    hist(Un,prob=TRUE,xlab="moyenne",breaks=i)
-    curve(dnorm(x,0,1),add=TRUE,col="blue",-5,5)
-  }
-}
-
-gen_echan_law_norm(function(n) {return (rpois(n,3))},3)
-
-moy_norm_poisson <- function(n,N,lambda){
-  Xn <- gen_echan_poisson(n,N,lambda)[1,]
-  Un <- c()
-  an <- mean(Xn)
-  bn <- sqrt(sd(gen_echan_poisson(n,N,lambda)[,1]))
-  for (i in Xn){
-    
-    Un <- c(Un,(i-an)/bn)
-  }
-  return(Un)
-}
-
-#hist(moy_norm_poisson(100,1000,1),breaks=100)
+#gen_echan_law(function(n) {return(rpois(n,3))})
 ```
 
-### 1.4 Méthodologie d'estimation
+```{r,fig.show='hold',out.width='33%',include=FALSE}
+gen_echan_law_norm <- function(law,lambda){
+  for (i in n){
+    SampleMeans <- sapply(1:N,function(i) moy_empirique(sample(law(i),n,replace=TRUE)))
+    for (j in SampleMeans){
+      Un <-c()
+      an <- lambda
+      bn <- sqrt(lambda)/sqrt(i)
+      Un <- (SampleMeans - an)/bn 
+    }
+    hist(Un,xlab="moyenne",breaks=i)
+    s <- seq(-5,10,0.1)
+    par(new=TRUE)
+    plot(dnorm(s,0,1),axes=FALSE,xlab={""},ylab={""})
+  }
+}
+
+mean_hist <- function(law, title) {
+  for (nj in n) {
+    sample <- law(nj * N)
+    means <- c()
+    for (i in 1:N) {
+      subsample <- sample[((i-1)*nj + 1): (i * nj)]
+      Xni <- moy_empirique(subsample)
+      # vni <- empirical_var(subsample)
+      means <- c(means, Xni)
+    }
+    hist(means, xlab=paste("Moyenne empirique, enchantillon de taille n=", nj), main=title, breaks=nj)
+    s <- seq(-5,5,0.1)
+    par(new=TRUE)
+    plot(dnorm(s,0,1),axes=FALSE,xlab={""},ylab={""})
+  }
+}
+#gen_echan_law_norm(function(n) {return (rpois(n,2))},2)
+```
+
+
+```{r,out.width='33%',fig.show='hold',dev='pdf'}
+mean_hist(function(n) { return (rpois(n, lambda=3)) }, "Distribution suivant une loi de Poisson P(3)")
+```
+
+```{r,include=FALSE}
+mean_norm_hist_poisson <- function(law, title) {
+  for (nj in n) {
+    sample <- law(nj * N)
+    Xn <- moy_empirique(sample)
+    Un <- c()
+    for (i in 1:N) {
+      subsample <- sample[((i-1)*nj + 1): (i * nj)]
+      ani       <- moy_empirique(subsample)
+      bni       <- var_empirique(subsample) / sqrt(nj)
+      Uni       <- (Xn - ani) / bni
+      Un        <- c(Un, Uni)
+    }
+    hist(Un, xlab=paste("Moyenne empirique centrée, enchantillon de taille n=", nj), main=title, breaks=nj)
+    s <- seq(-3.5,5,0.1)
+    par(new=TRUE)
+  plot(dnorm(s,0,1),col="dark red",xlab={""},ylab={""},axes=FALSE)
+  }
+}
+```
+
+
+```{r,out.width='33%',fig.show='hold',dev='pdf'}
+mean_norm_hist_poisson(function(n) { return (rpois(n, lambda=3)) }, "Distribution centrée réduite d'une loi de Poisson P(3)")
+
+```
+
+
+###1.4 Méthodologie d'estimation
 
 Soit $X=(X_1, ..., X_n)$, où $n \in \mathbb{R}$, un échantillon.
 De plus, on suppose que tous les $X_{i}$ son i.i.d de même loi.
@@ -261,35 +256,274 @@ De plus, on suppose que tous les $X_{i}$ son i.i.d de même loi.
 Soit $T : \Omega^n \rightarrow \mathbb{R}$ statistique sur un echantillon de taille n.
 
 Pour trouver une approximation, on fait : 
-1. Soit $N \in \mathbb{N}$ tq $N \gg 1$ et soit $N$ échantillons de taille n, notés $X^i = (X^i_1, ..., X^i_n)$ tel que $1 \leq i \leq N$
-On introduit :$  T_{N} = \frac{1}{N}\sum\limits_{i=1}^{N}{T(X^{i})} $
-D'après le théorème centrale limite, on en déduit que lorsque N devient grand alors: D'une part, on a : $\mathbb{E}[ T_N] \xrightarrow[N \gg 1]{} \mathbb{E}[T(X)]$
-et, d'autre part, on a aussi : $\mathbb{V}[ T_N] \xrightarrow[N \gg 1]{} \frac{1}{N}\mathbb{V}[T(X)] \xrightarrow[N \rightarrow +\infty]{} 0$
-Avec ce qui précéde, on a finalement $ T_n{\xrightarrow[N \rightarrow +\infty]{\mathbb {L} ^{2}} \mathbb{E}[T(X)] = c^{te}}$.
+1. Soit $N\in\mathbb{N}$ tq $N\gg1$ et soit N échantillons de taille n, notés $X^i = (X^i_1, ..., X^i_n)$ tel que $1\leq i\leq N$
+On introduit :$T_{N} = \frac{1}{N}\sum\limits_{i=1}^{N}{T(X^{i})}$
+
+D'après le théorème centrale limite, on en déduit que lorsque N devient grand alors: D'une part, on a : $\mathbb{E}[ T_N] \xrightarrow[N \gg 1]{}\mathbb{E}[T(X)]$
+et, d'autre part, on a aussi : $\mathbb{V}[T_N] \xrightarrow[N\gg 1]{} \frac{1}{N}\mathbb{V}[T(X)] \xrightarrow[N\rightarrow +\infty]{}0$
+Avec ce qui précéde, on a finalement $T_n{\xrightarrow[N \rightarrow +\infty]{\mathbb {L}^{2}} \mathbb{E}[T(X)] = c^{te}}$.
 
 N influence a qualité de l'approximation dans le sens où, comme observé dans les précédentes question, plus il est grand plus celle-ci est de bonne qualité.
 
-# 2. Moyenne et dispersion
+#2. Moyenne et dispersion
 
-### 2.1 Inégalité de Tchebytchev
+###2.1 Inégalité de Tchebytchev
 
 On considère une variable aléatoire X qui admet un moment d'ordre 2. 
 On a alors l'inégalité bien connu :
 $$\forall \delta > 0, \mathbb{P}(|X-\mathbb{E}[X]|\geq\delta)<\frac{\mathbb{V}[X]}{\delta^{2}}$$
 
-Dans le cas d'une loi Gaussienne, on a alors : $$\forall \delta > 0, \mathbb{P}(|X-\mu|\geq \delta)<\frac{\sigma^{2}}{\delta^{2}}$$
-Dans le cas d'une loi de Poisson, c'est : $$\forall \delta >0, \mathbb{P}(|X-\lambda|\geq \delta)<\frac{\lambda}{\delta^{2}}$$
+Dans le cas d'une loi Gaussienne, on a alors : $\forall \delta > 0, \mathbb{P}(|X-\mu|\geq \delta)<\frac{\sigma^{2}}{\delta^{2}}$
+Dans le cas d'une loi de Poisson, c'est : $\forall \delta >0, \mathbb{P}(|X-\lambda|\geq \delta)<\frac{\lambda}{\delta^{2}}$
 
-### 2.2 Monte-Carlo
-#### 2.2.1
-  On a immédiatement que $$\mathbb{P}(|X-\mu|\geq\delta)=\mathbb{E}[\mathbb{1}_{|X-\mu|\geq\delta}]$$
-  On pose alors $$Z=1_{|X-\mu|\geq\delta}$$
+###2.2 Monte-Carlo
+####2.2.1
+  On a immédiatement que $\mathbb{P}(|X-\mu|\geq\delta)=\mathbb{E}[1_{|X-\mu|\geq\delta}]$
+  On pose alors $Z=1_{|X-\mu|\geq\delta}$
   
-#### 2.2.2
+####2.2.2
 
- Par hypothèse N est supposé grand, on peut alors en réutilisant les conclusion de la partie 1, estimer $\mathbb{E}[Z]$ par la moyenne empirique : $$Z_{n}= \frac{1}{n}\sum\limits_{i=1}^{n}T(Z^{i})$$
+ Par hypothèse N est supposé grand, on peut alors en réutilisant les conclusion de la partie 1, estimer $\mathbb{E}[Z]$ par la moyenne empirique : $Z_{n}= \frac{1}{n}\sum\limits_{i=1}^{n}T(Z^{i})$
+ 
+ 
+```{r,echo=FALSE}
+library("rmutil")
+# effectue une estimation de Monte Carlo sur une loi Gaussienne, de Pareto, et de Poisson.
+# delta : verifiant (a)
+# renvoie une liste contenant :
+#           - les distributions générées
+#           - la moyenne empirique de ces distributions
+#           - les distributions transformées Z (voir (a))
+#           - les espérances empirique de Z, approximation de (a)
+estimation_monte_carlo <- function(N, delta, mu, sigma, a, alpha, lambda) {
+  # On genere des distributions
+  XN       <- list("Gauss" = rnorm(N, mu, sigma), "Pareto" = rpareto(N, a, alpha),"Poisson" = rpois(N, lambda))
+  XN_moy   <- list("Gauss" = mu,"Pareto" = alpha*a/(alpha - 1),"Poisson" = lambda)
+  ZN       <- list()
+  ZN_moy   <- list()
+  # Pour chaque distributions
+  for (distrib in names(XN)) {
+    # on recupere la distribution
+    XNi      <- XN[[distrib]]
+    XNi_moy <- XN_moy[[distrib]]
+    # on génère la variable aléatoire Z correspondante
+    ZN[[distrib]] <- unlist(sapply(XNi, function(xi) {
+                              if (abs(xi-XNi_moy) >= delta) {return (1)}
+                              return (0)
+                            }))
+    ZN_moy[[distrib]] <- moy_empirique(ZN[[distrib]])
+  }
+  return (list("XN" = XN, "XN_moy" = XN_moy, "ZN" = ZN, "ZN_moy" = ZN_moy))
+}
+```
+ 
+ On obtient alors en appliquant aux différentes lois :
+ 
+```{r,echo=FALSE}
+knitr::opts_chunk$set(echo=TRUE,message=FALSE,warning=FALSE)
+library(knitr)
+N <- 10000
+estimation <- estimation_monte_carlo(N,delta=1,mu=0,sigma=1,a=1,alpha=3,lambda=3)
+kable(data.frame(estimation[["ZN_moy"]]))
 
+```
+ 
+ On considère la moyenne empirique comme une variable aléatoire.
+Or : $\mathbb{E}[Z_N]=\mathbb{E}[Z]$ et $\mathbb{V}[Z_N]=\frac{1}{N}\mathbb{V}[Z]$
+On injecte dans l'inégalité de Tchebytchev pour finalement obtenir avec la précision : $\mathbb{P}(|X-\mu|\geq\delta)=\mathbb{E}[Z]\simeq \mathbb{E}[Z_N]$,
+$$\forall\delta>0, \mathbb{P}(|Z_N-\mathbb{E}[Z]|\geq\delta)\leq\frac{1}{\delta\times N}\mathbb{V}[Z]$$
+ 
+#### 2.2.3 Comparaison avec Tchebytchev
 
+Soit $\delta=1\times 10^{-4}$
 
+```{r,echo=FALSE}
+delta <- 0.0001
+borne_sup_tchebytchev <- function(Z, N, delta) {
+  return (var(Z) / (delta * N));
+}
+```
+En fonction des loi de X précèdentes, notre estimation de $Z_N \simeq \mathbb{E}[Z]$ vérifie:
+$\mathbb{P}[|Z_N -\mathbb{E}[Z]|\geq\delta] = \mathbb{P}(Z_N\notin [\mathbb{E}[Z] - \delta , \mathbb{E}[Z] + \delta])$
+```{r,echo=FALSE}
+knitr::opts_chunk$set(echo=TRUE,message=FALSE,warning=FALSE)
+library(knitr)
+XN <- estimation[["XN"]]
+ZN <- estimation[["ZN"]]
+estimate<-c()
+for (distrib in names(XN)) {
+  estimate <- c(estimate,paste(distrib, ":", borne_sup_tchebytchev(ZN[[distrib]], N, delta)))
+}
+kable(data.frame(Loi=estimate))
+```
+ 
+ Pour plusieurs valeurs de $\delta$ et $\sigma$:
+ 
+```{r,out.width='33%',fig.show='hold',echo=FALSE}
+knitr::opts_chunk$set(echo=TRUE,message=FALSE,warning=FALSE)
+library(knitr)
+library(kableExtra)
+a<-c()
+b<-c()
+c<-c()
+d<-c()
+e<-c()
+f<-c()
+g<-c()
+h<-c()
+i<-c()
+for (distrib in names(XN)){
+  
+    
+    a <- c(a,borne_sup_tchebytchev( estimation_monte_carlo(N, 0.0001, mu=0, 1, a=1.0, alpha=2.5, lambda=1)[["ZN"]][[distrib]],N,0.0001))
+    b<-c(b,borne_sup_tchebytchev( estimation_monte_carlo(N, 0.01, mu=0, 1, a=1.0, alpha=2.5, lambda=1)[["ZN"]][[distrib]],N,0.01))
+   c<-c(c,borne_sup_tchebytchev( estimation_monte_carlo(N, 1, mu=0, 1, a=1.0, alpha=2.5, lambda=1)[["ZN"]][[distrib]],N,1))
+   d<-c(d,borne_sup_tchebytchev( estimation_monte_carlo(N, 0.0001, mu=0, 10, a=1.0, alpha=2.5, lambda=1)[["ZN"]][[distrib]],N,0.0001))
+   e<-c(e,borne_sup_tchebytchev( estimation_monte_carlo(N, 0.01, mu=0, 10, a=1.0, alpha=2.5, lambda=1)[["ZN"]][[distrib]],N,0.01))
+   f<-c(f,borne_sup_tchebytchev( estimation_monte_carlo(N, 1, mu=0, 10, a=1.0, alpha=2.5, lambda=1)[["ZN"]][[distrib]],N,1))
+   g<-c(g,borne_sup_tchebytchev( estimation_monte_carlo(N, 0.0001, mu=0, 100, a=1.0, alpha=2.5, lambda=1)[["ZN"]][[distrib]],N,0.0001))
+   h<-c(h,borne_sup_tchebytchev( estimation_monte_carlo(N, 0.01, mu=0, 100, a=1.0, alpha=2.5, lambda=1)[["ZN"]][[distrib]],N,0.01))
+   i<-c(i,borne_sup_tchebytchev( estimation_monte_carlo(N,1,mu=0, 100 , a=1.0, alpha=2.5, lambda=1)[["ZN"]][[distrib]],N,1))
+  
+}
+out<-kable(data.frame("d:0.0001_s:1"=a,"d:0.01_s:1"=b,"d:1_s:1"=c,"d:0.0001_s:10"=d,"d:0.01_s:10"=e,"d:1_s:10"=f,"d:0.0001_s:100"=g,"d:0.01_s:100"=h,"d:1_s:100"=i,row.names =c("Gauss","Pareto","Poisson")))
+row_spec(out,row=0, angle = 90)
+```
+On remarque que, plus $\delta$ est négligeable devant 1, plus la précision diminue et plus $\sigma$ est grand devant $\delta$, plus la précision sera incertaine.
+ 
+####2.2.4 Inégalité de Chernoff
+ 
+ Soit X une variable aléatoire admettant une fonction génératrice.
+L'inégalité de Chernoff donne:
+$\forall \delta \in \mathbb{R}, \forall t\in \mathbb{R}^*_+$ tq $\phi(t)=\mathbb E[e^{tX}]<+\infty,$ $\mathbb{P}(X\geq \delta) \leq e^{t\delta} \mathbb{E}[e^{tX]}]$
+ et, $\mathbb{P}(X \leq -\delta) \leq e^{-t\delta} \mathbb{E}[e^{tX}]$
+Donc,
+Pour une variable Gaussienne : $\mathbb{P}(X \geq \delta) \leq e^{\frac{-\delta^2}{2\sigma^2}}$
+Pour une variable de Poisson : $\mathbb{P}(X \geq \delta) \leq e^{\frac{-\delta^2}{2\lambda}}$
 
+```{r,echo=FALSE}
+   library(knitr)
+knitr::opts_chunk$set(echo=FALSE,message=FALSE,warning=FALSE)
+    aa <-c(exp(-0.0001 * 0.0001 / (2 * 1)),exp(-0.0001 * 0.0001 / (2 * 1)))
+    bb <-c(exp(-0.01 * 0.01 / (2 * 1)),exp(-0.01 * 0.01 / (2 * 1)))
+    cc<-c(exp(-1 * 1 / (2 * 1)),exp(-1 * 1 / (2 * 1)))
+    dd<-c(exp(-0.0001 * 0.0001 / (2 * 100)),exp(-0.0001 * 0.0001 / (2 * 10)))
+    ee<-c(exp(-0.01 * 0.01 / (2 * 100)),exp(-0.01 * 0.01 / (2 * 10)))
+    ff<-c(exp(-1 * 1 / (2 * 100)),exp(-1 * 1 / (2 * 10)))
+    gg<-c(exp(-0.0001 * 0.0001 / (2 * 10000)),exp(-0.0001 * 0.0001 / (2 * 100)))
+    hh<-c(exp(-0.01 * 0.01 / (2 * 10000)),exp(-0.01 * 0.01 / (2 * 100)))
+    ii<-c(exp(-1 * 1 / (2 * 10000)),exp(-1 * 1 / (2 * 100)))
+    
+   out<- kable(data.frame("d:0.0001_s:1"=aa,"d:0.01_s:1"=bb,"d:1_s:1"=cc,"d:0.0001_s:10"=dd,"d:0.01_s:10"=ee,"d:1_s:10"=ff,"d:0.0001_s:100"=gg,"d:0.01_s:100"=hh,"d:1_s:100"=ii,row.names = c("Gauss","Poisson")))
+    row_spec(out,row=0, angle = 90)
+```
 
+####2.3.1
+On a l'inégalité de Chernoff : $\mathbb{P}(Xn>t)\leq\exp(-\frac{n\delta^2}{2\sigma^2})$
+On obtient plusieurs valeurs pour $\delta=(0.0001,0.01,1)$:
+```{r,echo=FALSE}
+library(knitr)
+knitr::opts_chunk$set(echo=TRUE,message=FALSE,warning=FALSE)
+gen_echan <- function(law){
+    x <- law
+    result <- c()
+    aleatoire <- function(x1,n1){
+        y <- sample(x1,n1,replace=TRUE)
+       moy_sd <- c(mean(y),sd(y))
+       return(moy_sd)
+      }
+    for (i in n){
+    result <- c(result,sapply(1:N,function(w) aleatoire(x,i)))
+    }
+  return(result)
+}
+
+#k_1<-gen_echan(rnorm(20,mean=0,sd=1))
+#k_2<-gen_echan(rnorm(100,mean=0,sd=1))
+#k_3<-gen_echan(rnorm(1000,mean=0,sd=1))
+#k_11<-gen_echan(rpois(20,1))
+#k_22<-gen_echan(rpois(100,1))
+#k_33<-gen_echan(rpois(1000,1))
+#mean_1<-moy_empirique(k_11[1])
+#mean_2<-moy_empirique(k_22[1])
+#mean_3<-moy_empirique(k_33[1])
+#var_1<-var_empirique(k_1[2])
+#var_2<-var_empirique(k_2[2])
+#var_3<-var_empirique(k_3[2])
+ #   a <-c(exp(-0.0001 * 0.0001*20 / (2 * var_1*var_1)),exp(-0.0001 * 0.0001*20 / (2 * mean_1)))
+  #  b <-c(exp(-0.01 * 0.01*20 / (2 * var_1*var_1)),exp(-0.01 * 0.01 *20/ (2 * mean_1)))
+   # c<-c(exp(-1 * 1*20 / (2 * var_1*var_1)),exp(-1 * 1*20 / (2 * mean_1)))
+    #d<-c(exp(-0.0001 * 0.0001*100 / (2 * var_2*var_2)),exp(-0.0001 * 0.0001*100 / (2 * mean_2)))
+#    e<-c(exp(-0.01 * 0.01*100 / (2 * var_2*var_2)),exp(-0.01 * 0.01*100 / (2 * mean_2)))
+ #   f<-c(exp(-1 * 1*100 / (2 * var_2*var_2)),exp(-1 * 1*100 / (2 * mean_2)))
+  #  g<-c(exp(-0.0001 * 0.0001 *1000/ (2 * var_3*var_3)),exp(-0.0001 * 0.0001*1000 / (2 * mean_3)))
+   # h<-c(exp(-0.01 * 0.01*1000 / (2 * var_3*var_3)),exp(-0.01 * 0.01*1000 / (2 * mean_3)))
+    #i<-c(exp(-1 * 1*1000 / (2 * var_3*var_3)),exp(-1 * 1*1000 / (2 * mean_3)))
+    #kable(data.frame(a,b,c,d,e,f,g,h,i,row.names = c("N(0,1)","P(1)")))
+    print(paste("Pour n=20:",exp(-20*1/2)))
+    print(paste("Pour n=20:",exp(-100*1/2)))
+    print(paste("Pour n=20:",exp(-1000*1/2)))
+```
+
+####2.3.2
+
+On déduit que la moyenne empirique est un estimateur pour $\mu$ et $\lambda$.
+
+####2.4.1
+
+```{r,echo=FALSE}
+
+a<-moy_empirique(rcauchy(20, location=0, scale=1))
+b<-moy_empirique(rcauchy(100, location=0, scale=1))
+c<-moy_empirique(rcauchy(1000, location=0, scale=1))
+d<-moy_empirique(rcauchy(10000, location=0, scale=1))
+kable(data.frame("20"=a,"100"=b,"1000"=c,"10000"=d,row.names = "moyenne empirique"))
+```
+La moyenne empirique donne des valeurs très différentes selon 'n', et ne semble pas converger.
+
+####2.4.2
+Une variable aléatoire $X$ suivant une loi de Cauchy $C(\theta)$ n'admet pas d'espérance:
+$f_X(x, \theta) = \frac{1}{\pi}\frac{1}{1 + (x - \theta)^2}$, et quand $x \rightarrow +\infty$, $xf_X(x, \theta) \sim \frac{1}{x}$, donc:
+$\mathbb{E}[X] = \int_{-\infty}^{+\infty}|xf_X(x, \theta)|dx$ diverge.
+Donc le théorème central limite ne s'applique pas: il n'y a pas d'espérance, donc la moyenne empirique ne converge pas.
+Ceci s'explique par le fait que la probabilité d'obtenir une valeur éloigné de $\theta$ (la médiane) est trop elévé pour que la moyenne converge.
+
+####2.4.3
+La médiane d'une loi de Cauchy $C(\theta)$ est $\theta$.
+Si l'on sait qu'un phénomène suit une loi de Cauchy, il est possible de déterminer son paramètre $\theta$ en suivant ce protocole:
+1. Fixer $n \in \mathbb{N}, n \gg 1$.
+2. Générer un échantillon de taille $n$.
+3. Trier les valeurs de cette échantillon par ordre croissant. (ou décroissant)
+4. La valeur au centre de l'échantillon trié (en $\frac{n}{2}$ ) est un estimateur de $\theta$.
+Application:
+On fait varier $\theta$ dans {-1,0,1}.
+```{r, include=TRUE, echo=FALSE, fig.height=5, fig.width=8}
+library(knitr)
+knitr::opts_chunk$set(echo=TRUE,message=FALSE,warning=FALSE)
+theta <- 0
+tab_n<-c()
+tab_s<-c()
+for (theta in c(-1, 0, 1)) {
+  for (n in c(20, 100, 1000, 10000)) {
+    cauchy <- rcauchy(n, location=theta, scale=1)
+    sorted <- sort(cauchy)
+    a <- c(sort(rcauchy(20, location=-1, scale=1))[20 / 2 + 1])
+    b <-c(sort(rcauchy(100, location=-1, scale=1))[100 / 2 + 1])
+    c<-c(sort(rcauchy(1000, location=-1, scale=1))[1000 / 2 + 1])
+    d<-c(sort(rcauchy(10000, location=-1, scale=1))[10000 / 2 + 1])
+    e<-c(sort(rcauchy(20, location=0, scale=1))[20 / 2 + 1])
+    f<-c(sort(rcauchy(100, location=0, scale=1))[100 / 2 + 1])
+    g<-c(sort(rcauchy(1000, location=0, scale=1))[1000  / 2 + 1])
+    h<-c(sort(rcauchy(10000, location=0, scale=1))[10000 / 2 + 1])
+    i<-c(sort(rcauchy(20, location=1, scale=1))[20 / 2 + 1])
+    j<-c(sort(rcauchy(100, location=1, scale=1))[100 / 2 + 1])
+    k<-c(sort(rcauchy(1000, location=1, scale=1))[1000 / 2 + 1])
+    l<-c(sort(rcauchy(10000, location=1, scale=1))[10000 / 2 + 1])
+    #print(paste("la médiane de l'échantillon n=", n, " vaut:", sorted[n / 2 + 1], sep=""))
+    
+  }
+}
+kable(data.frame("20"=a,"100"=b,"1000"=c,"10000"=d,"20"=e,"100"=f,row.names="médiane" ))
+kable(data.frame("1000"=g,"10000"=h,"20"=i,"100"=j,"1000"=k,"10000"=l,row.names="médiane"))
+```
+Les valeurs obtenus par la simulation sont en accord avec celle attendu par notre protocole.

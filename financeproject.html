@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
@@ -69,9 +69,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -85,7 +83,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -190,8 +187,6 @@ $(document).ready(function () {
 });
 </script>
 
-<div class="container-fluid main-container">
-
 <!-- tabsets -->
 
 <style type="text/css">
@@ -236,6 +231,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -248,20 +244,17 @@ $(document).ready(function () {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
 
 
 
@@ -389,14 +382,17 @@ $(document).ready(function () {
 <div id="question" class="section level4">
 <h4><strong>Question</strong></h4>
 <p>[language=Python,caption={Implémentation de Price1}]</p>
-<pre class="python"><code>from scipy import special
+<pre><code>from scipy import special
 
 def price1(N,rN,hN,bN,s,f):
     qN = (rN-bN)/(hN-bN)
     return 1.0/((1.0+rN)**N) * sum([special.comb(N,i)*f(s*((1+hN)**i)*((1+bN)**(N-i)))*(qN**i)*((1-qN)**(N-i)) for i in range(N)])
     
 def f(x):
-    return max(x-90,0)</code></pre>
+    return max(x-90,0)
+    
+print(price1(30,0.01,0.05,-0.05,100,f))
+</code></pre>
 <pre><code>The output for the following value $s=100$, $h_N=0.05$, $b_N=-0.05$, $r_N=0.01$, $N=30$ et $f(x)=max(x-90,0)$</code></pre>
 
 </div>
@@ -406,7 +402,9 @@ def f(x):
 <div id="question-3" class="section level4">
 <h4><strong>Question</strong></h4>
 <p>[language=Python,caption=Implémentation de Price2]</p>
-<pre class="python"><code>def price2(N,rN,hN,bN,s,f):
+<pre><code>import numpy as np
+
+def price2(N,rN,hN,bN,s,f):
     cst=1/(1+rN)
     qN=(rN-bN)/(hN-bN)
     M =np.zeros((N+2,N+2),float)
@@ -416,7 +414,12 @@ def f(x):
         for k in range(1,j+1):
             M[k,j]=cst*(M[k,j+1]*qN+M[k+1,j+1]*(1-qN)) 
     
-    return M[1,1] </code></pre>
+    return M[1,1]
+
+def f(x):
+    return max(x-90,0)
+    
+print(price2(30,0.01,0.05,-0.05,100,f))</code></pre>
 </div>
 <div id="question-4" class="section level4">
 <h4><strong>Question</strong></h4>
@@ -429,13 +432,14 @@ def f(x):
 <div id="question-5" class="section level4">
 <h4><strong>Question</strong></h4>
 <p>[language=Python,caption=Comparaison de Price1 et Price2]</p>
-<pre class="python"><code>import random
+<pre><code>import random
 
 def compare(rN,hN,bN,s,f):
     N=random.randint(5,15)
     print(N)
     print(price1(N,rN,hN,bN,s,f))
-    print(price2(N,rN,hN,bN,s,f))</code></pre>
+    print(price2(N,rN,hN,bN,s,f))
+    </code></pre>
 
 </div>
 </div>
@@ -465,7 +469,7 @@ def compare(rN,hN,bN,s,f):
 <div id="question-7" class="section level4">
 <h4><strong>Question</strong></h4>
 <p>[language=Python,caption=Comparison of Price1 and Price2]</p>
-<pre class="python"><code>def couverture(N,s,rN,hN,bN,f):
+<pre><code>def couverture(N,s,rN,hN,bN,f):
     Sh = price2(N,rN,hN,bN,(1+hN)*s,f);
     Sb = price2(N,rN,hN,bN,(1+bN)*s,f);
     alpha =  (Sh-Sb)/(s*(hN-bN));
@@ -495,7 +499,7 @@ $$dg(S_t)=g^{&#39;}(S_t)dS_t + \frac{|\sigma S_t|^2}{2}g^{&#39;&#39;}(S_t)dt$$</
 <div id="question-9" class="section level4">
 <h4><strong>Question</strong></h4>
 <p>[language=Python,caption=Price3]</p>
-<pre class="python"><code>def price3(n, s, r, o, T, f):
+<pre><code>def price3(n, s, r, o, T, f):
     return 1.0 / n * exp(-r * T) * sum([f(s * exp((r - o*o/2.0)*T + o * sqrt(T) * ksi)) for ksi in rnorm(0.0, 1.0, n)])</code></pre>
 </div>
 <div id="question-10" class="section level4">
@@ -517,7 +521,7 @@ Moreover we should check if <span class="math inline">\(\mathbb{E}[X_1]\)</span>
 <div id="question-12" class="section level4">
 <h4><strong>Question</strong></h4>
 <p>[language=Python,caption=Put function]</p>
-<pre class="python"><code>def put(s,r,sigma,T,K):
+<pre><code>def put(s,r,sigma,T,K):
     d = 1/(sigma*sqrt(T))*(log(s/K)+(r+sigma**2/2)*T);
     va = norm()
     F1 = va.cdf(-d+sigma*sqrt(T))
@@ -599,6 +603,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

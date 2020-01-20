@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="Nicolas Makaroff" />
@@ -70,9 +70,7 @@ h6 {
 </style>
 
 
-</head>
 
-<body>
 
 <style type = "text/css">
 .main-container {
@@ -86,7 +84,6 @@ code {
 }
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -191,8 +188,6 @@ $(document).ready(function () {
 });
 </script>
 
-<div class="container-fluid main-container">
-
 <!-- tabsets -->
 
 <style type="text/css">
@@ -237,6 +232,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -249,20 +245,17 @@ $(document).ready(function () {
 }
 </style>
 
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
-
 <!-- code folding -->
 
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
 
 
 
@@ -360,8 +353,8 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">MAKAROFF_NICOLAS_TPSTAT4</h1>
-<h4 class="author"><em>Nicolas Makaroff</em></h4>
-<h4 class="date"><em>19/04/2019</em></h4>
+<h4 class="author">Nicolas Makaroff</h4>
+<h4 class="date">19/04/2019</h4>
 
 </div>
 
@@ -410,7 +403,7 @@ for (i in 1:100){
   }
 }
 print(paste(&quot;nombre de rejet du test = &quot;,acc,sep = &quot;&quot;))</code></pre>
-<pre><code>## [1] &quot;nombre de rejet du test = 3&quot;</code></pre>
+<pre><code>## [1] &quot;nombre de rejet du test = 4&quot;</code></pre>
 <p>On remarque que le nombre de rejet varie accès peu et qu’il vaut généralement 4.</p>
 </div>
 <div id="b-1" class="section level3">
@@ -436,9 +429,9 @@ for (i in alpha_list){
     }
     print(paste(&quot;alpha = &quot;,i,&quot; nombre de rejet du test = &quot;,acc,sep = &quot;&quot;))
 }</code></pre>
-<pre><code>## [1] &quot;alpha = 0.2 nombre de rejet du test = 17&quot;
-## [1] &quot;alpha = 0.1 nombre de rejet du test = 9&quot;
-## [1] &quot;alpha = 0.05 nombre de rejet du test = 4&quot;
+<pre><code>## [1] &quot;alpha = 0.2 nombre de rejet du test = 24&quot;
+## [1] &quot;alpha = 0.1 nombre de rejet du test = 8&quot;
+## [1] &quot;alpha = 0.05 nombre de rejet du test = 11&quot;
 ## [1] &quot;alpha = 0.01 nombre de rejet du test = 2&quot;</code></pre>
 </div>
 </div>
@@ -454,10 +447,10 @@ for (i in alpha_list){
     }
     print(paste(&quot;alpha = &quot;,i,&quot; nombre de rejet du test = &quot;,acc,sep = &quot;&quot;))
 }</code></pre>
-<pre><code>## [1] &quot;alpha = 0.2 nombre de rejet du test = 75&quot;
-## [1] &quot;alpha = 0.1 nombre de rejet du test = 58&quot;
+<pre><code>## [1] &quot;alpha = 0.2 nombre de rejet du test = 80&quot;
+## [1] &quot;alpha = 0.1 nombre de rejet du test = 60&quot;
 ## [1] &quot;alpha = 0.05 nombre de rejet du test = 41&quot;
-## [1] &quot;alpha = 0.01 nombre de rejet du test = 11&quot;</code></pre>
+## [1] &quot;alpha = 0.01 nombre de rejet du test = 13&quot;</code></pre>
 <p>On remarque dans un premier que logiquement que rejeté beaucoup plus que précédemment. D’autre part, <span class="math inline">\(\alpha\)</span> influe encore car plus <span class="math inline">\(\alpha\)</span> est grand plus on se trompe sur le testde décision.</p>
 </div>
 <div id="b-2" class="section level3">
@@ -478,15 +471,15 @@ for(i in mu_liste){
     test &lt;- c(test,acc)
     print(paste(&quot;alpha = &quot;,i,&quot; nombre de rejet du test = &quot;,acc,sep = &quot;&quot;))
 }</code></pre>
-<pre><code>## [1] &quot;alpha = 1.2 nombre de rejet du test = 41&quot;
-## [1] &quot;alpha = 1.3 nombre de rejet du test = 44&quot;
-## [1] &quot;alpha = 1.4 nombre de rejet du test = 44&quot;
-## [1] &quot;alpha = 1.5 nombre de rejet du test = 48&quot;
-## [1] &quot;alpha = 1.6 nombre de rejet du test = 47&quot;
-## [1] &quot;alpha = 1.7 nombre de rejet du test = 44&quot;
-## [1] &quot;alpha = 1.8 nombre de rejet du test = 41&quot;
-## [1] &quot;alpha = 1.9 nombre de rejet du test = 49&quot;
-## [1] &quot;alpha = 2 nombre de rejet du test = 37&quot;</code></pre>
+<pre><code>## [1] &quot;alpha = 1.2 nombre de rejet du test = 39&quot;
+## [1] &quot;alpha = 1.3 nombre de rejet du test = 49&quot;
+## [1] &quot;alpha = 1.4 nombre de rejet du test = 48&quot;
+## [1] &quot;alpha = 1.5 nombre de rejet du test = 34&quot;
+## [1] &quot;alpha = 1.6 nombre de rejet du test = 49&quot;
+## [1] &quot;alpha = 1.7 nombre de rejet du test = 40&quot;
+## [1] &quot;alpha = 1.8 nombre de rejet du test = 46&quot;
+## [1] &quot;alpha = 1.9 nombre de rejet du test = 40&quot;
+## [1] &quot;alpha = 2 nombre de rejet du test = 48&quot;</code></pre>
 <pre class="r"><code>plot(mu_liste,100 - test,xlab = &quot;Valeurs prises par mu1&quot;,ylab = &quot;nombre de rejet obtenu&quot;,main = &quot;Pourcentage de bonne décision&quot;,type = &quot;l&quot;)</code></pre>
 <p><img src="tp4_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 </div>
@@ -500,13 +493,13 @@ for(i in mu_liste){
 ##  One Sample t-test
 ## 
 ## data:  rnorm(20, 1, sqrt(2))
-## t = -0.82953, df = 19, p-value = 0.4171
+## t = 1.1827, df = 19, p-value = 0.2515
 ## alternative hypothesis: true mean is not equal to 1
 ## 95 percent confidence interval:
-##  -0.02031589  1.44111054
+##  0.7739473 1.8134719
 ## sample estimates:
 ## mean of x 
-## 0.7103973</code></pre>
+##   1.29371</code></pre>
 <p><span class="math inline">\(t\)</span> est la valeur correspondant à la statistique donnée par Neyman-Pearson. <span class="math inline">\(df\)</span> est le degré de liberté de la loi de Student.</p>
 </div>
 <div id="b-3" class="section level3">
@@ -523,49 +516,49 @@ for(i in mu_liste){
 ##  One Sample t-test
 ## 
 ## data:  rnorm(20, 1, sqrt(2))
-## t = -1.06, df = 19, p-value = 0.3024
+## t = 0.16433, df = 19, p-value = 0.8712
 ## alternative hypothesis: true mean is not equal to 1
 ## 80 percent confidence interval:
-##  0.1461769 1.0957400
+##  0.6399739 1.4617310
 ## sample estimates:
 ## mean of x 
-## 0.6209584 
+##  1.050852 
 ## 
 ## 
 ##  One Sample t-test
 ## 
 ## data:  rnorm(20, 1, sqrt(2))
-## t = -0.032237, df = 19, p-value = 0.9746
+## t = -0.34881, df = 19, p-value = 0.7311
 ## alternative hypothesis: true mean is not equal to 1
 ## 90 percent confidence interval:
-##  0.4292244 1.5498829
+##  0.4198415 1.3853856
 ## sample estimates:
 ## mean of x 
-## 0.9895536 
+## 0.9026135 
 ## 
 ## 
 ##  One Sample t-test
 ## 
 ## data:  rnorm(20, 1, sqrt(2))
-## t = 0.5439, df = 19, p-value = 0.5928
+## t = -0.50765, df = 19, p-value = 0.6175
 ## alternative hypothesis: true mean is not equal to 1
 ## 95 percent confidence interval:
-##  0.4346629 1.9623168
+##  0.1618133 1.5109616
 ## sample estimates:
 ## mean of x 
-##   1.19849 
+## 0.8363874 
 ## 
 ## 
 ##  One Sample t-test
 ## 
 ## data:  rnorm(20, 1, sqrt(2))
-## t = 0.31918, df = 19, p-value = 0.7531
+## t = -0.51194, df = 19, p-value = 0.6146
 ## alternative hypothesis: true mean is not equal to 1
 ## 99 percent confidence interval:
-##  0.1488183 2.0649571
+##  -0.1742578  1.8177977
 ## sample estimates:
 ## mean of x 
-##  1.106888</code></pre>
+##   0.82177</code></pre>
 </div>
 <div id="d" class="section level3">
 <h3>(d)</h3>
@@ -592,6 +585,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
